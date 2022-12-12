@@ -1,7 +1,13 @@
 <slot />
 
 <style>
-  :global(body, body > div) {
+  :global(body) {
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
+  :global(body > div) {
     min-height: 100vh;
     justify-content: space-between;
   }

@@ -15,5 +15,8 @@
     "svelte": "^3.54.0",
     "unocss": "^0.47.5",
     "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "highlight.js": "^11.7.0"
   }
 }
