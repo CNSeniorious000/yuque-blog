@@ -7,7 +7,7 @@
   export let lastUpdate;
 </script>
 
-<a class="flex items-center justify-between rounded-lg h-8 pl-2 bg-blue-gray-900 bg-opacity-0 hover:bg-opacity-3 active:scale-99 easeou transition-all duration-50" href="/blog/{slug}" data-sveltekit-preload-code="eager" data-sveltekit-preload-data="hover">
+<a class="flex items-center justify-between rounded-lg h-8 pl-2 bg-blue-gray-900 bg-opacity-0 hover:bg-opacity-3 active:scale-99 easeou transition-all duration-50" href="/blog/{slug}">
   <div class="flex flex-row items-center overflow-overlay gap-2">
     <p>{title}</p>
     <p class="text-blue-gray-900 text-opacity-20">{new Date(lastUpdate).getDate()}</p>
