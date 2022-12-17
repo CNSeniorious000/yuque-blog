@@ -31,6 +31,10 @@
   <div class="text-sm text-blue-gray-500 m-10 flex-row justify-between">
     <p>共{data.items_count}篇文章</p>
     <p class="opacity-50">Last Modified: {data.updated_at}</p>
-    <p class="hidden sm:display-[unset]">rate limit: {data.remaining} / {data.limit}</p>
+    <p class="hidden sm:display-[unset]">Rate Limit: Not Available</p>
   </div>
 </footer>
+
+<svelte:head>
+  <title>Muspi Merol's Blog</title>
+</svelte:head>

@@ -14,3 +14,7 @@
     </p>
   </div>
 </div>
+
+<svelte:head>
+  <title>Muspi Merol</title>
+</svelte:head>

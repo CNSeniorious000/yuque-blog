@@ -3,6 +3,7 @@
   import "@unocss/reset/antfu.css";
   import Progress from "./Progress.svelte";
   import { isDark } from "$lib/store";
+  import { apiBaseurl } from "../lib/common";
   import { startBar, finishBar } from "../lib/progressFunction";
   import { beforeNavigate, afterNavigate } from "$app/navigation";
 
@@ -16,3 +17,7 @@
   </div>
   <Progress />
 </div>
+
+<svelte:head>
+  <link rel="dns-prefetch" href={apiBaseurl} />
+</svelte:head>
