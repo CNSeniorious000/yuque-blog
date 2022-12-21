@@ -12,7 +12,7 @@
     <p>{title}</p>
     <p class="text-blue-gray-900 text-opacity-20">{new Date(lastUpdate).getDate()}</p>
   </div>
-  <div class="flex flex-row gap-1 items-center">
+  <div class="flex flex-row gap-1 items-center opacity-0 sm:opacity-100 transition-all">
     <div class="bg-blue-gray-900 bg-opacity-3 px-1 py-0.5 rounded grid place-items-center">
       <p class="text-blue-gray-900 text-opacity-30 text-xs">{format}</p>
     </div>

@@ -12,11 +12,13 @@
     "@iconify/json": "^2.1.153",
     "@sveltejs/adapter-auto": "^1.0.0",
     "@sveltejs/kit": "^1.0.1",
+    "@types/markdown-it": "^12.2.3",
     "svelte": "^3.55.0",
     "unocss": "^0.47.6",
     "vite": "^4.0.1"
   },
   "dependencies": {
-    "highlight.js": "^11.7.0"
+    "highlight.js": "^11.7.0",
+    "markdown-it": "^13.0.1"
   }
 }

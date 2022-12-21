@@ -6,6 +6,6 @@ export async function load({ params, fetch, setHeaders }) {
   let { data } = await res.json();
 
   setHeaders({ age: res.headers.get("age") ?? 60, "cache-control": res.headers.get("cache-control") ?? "max-age=60" });
-
+  
   return data;
 }
