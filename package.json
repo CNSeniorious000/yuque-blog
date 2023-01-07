@@ -9,13 +9,13 @@
   },
   "type": "module",
   "devDependencies": {
-    "@iconify/json": "^2.1.153",
+    "@iconify/json": "^2.2.3",
     "@sveltejs/adapter-auto": "^1.0.0",
-    "@sveltejs/kit": "^1.0.1",
+    "@sveltejs/kit": "^1.0.7",
     "@types/markdown-it": "^12.2.3",
     "svelte": "^3.55.0",
-    "unocss": "^0.47.6",
-    "vite": "^4.0.1"
+    "unocss": "^0.48.2",
+    "vite": "^4.0.4"
   },
   "dependencies": {
     "highlight.js": "^11.7.0",

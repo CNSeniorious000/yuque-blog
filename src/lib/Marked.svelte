@@ -97,4 +97,9 @@
       padding: 0.8rem 1.5rem;
     }
   }
+
+  :global(hr) {
+    margin-top: 1em !important;
+    border-bottom: 2px dashed #80808030 !important;
+  }
 </style>
