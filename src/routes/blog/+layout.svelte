@@ -8,4 +8,4 @@
 
 <Header {breadcrumb} right={$rightTop} />
 <slot />
-<Fotter title={$leftBottom} lastUpdateDate={$rightBottom} />
+<Fotter title={$leftBottom} edit={$rightBottom} />

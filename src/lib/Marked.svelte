@@ -98,8 +98,18 @@
     }
   }
 
-  :global(hr) {
+  :global(.prose hr) {
     margin-top: 1em !important;
-    border-bottom: 2px dashed #80808030 !important;
+    border-bottom: 2px dashed #80808030;
+  }
+
+  :global(.prose a) {
+    transition: all 300ms;
+    text-decoration: none;
+    color: rgb(3, 105, 161);
+  }
+
+  :global(.prose a:hover) {
+    color: rgb(13, 148, 136);
   }
 </style>

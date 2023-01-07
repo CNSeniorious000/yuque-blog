@@ -1,4 +1,5 @@
 <script>
+  import { baseurl, namespace } from "$lib/common";
   import { breadcrumbStore, rightTop, leftBottom, rightBottom } from "$lib/store";
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";
@@ -13,7 +14,7 @@
 
   $rightTop = data.title;
   $leftBottom = `共 ${data.items_count} 篇文章`;
-  $rightBottom = data.updated_at;
+  $rightBottom = baseurl + "/" + namespace;
 </script>
 
 <Main>

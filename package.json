@@ -9,7 +9,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@iconify/json": "^2.2.3",
+    "@iconify/svelte": "^3.0.1",
     "@sveltejs/adapter-auto": "^1.0.0",
     "@sveltejs/kit": "^1.0.7",
     "@types/markdown-it": "^12.2.3",

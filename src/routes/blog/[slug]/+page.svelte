@@ -1,4 +1,5 @@
 <script>
+  import { baseurl, namespace, formatDate } from "$lib/common";
   import { breadcrumbStore, rightTop, leftBottom, rightBottom } from "../../../lib/store";
   import Marked from "$lib/Marked.svelte";
 
@@ -11,11 +12,9 @@
     ["/blog/" + slug, slug],
   ];
 
-  $rightTop = data.update_time;
-
-  $rightTop = data.created_at;
+  $rightTop = "最后更新于：" + formatDate(data.updated_at);
   $leftBottom = title;
-  $rightBottom = data.updated_at;
+  $rightBottom = `${baseurl}/${namespace}/${slug}`;
 </script>
 
 <Marked {title} {description} {markdown} />

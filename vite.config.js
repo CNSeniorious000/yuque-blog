@@ -6,7 +6,7 @@ const config = {
   plugins: [
     Unocss({
       extractors: [extractorSvelte],
-      presets: [presetIcons(), presetUno(), presetTypography()],
+      presets: [presetUno(), presetTypography()],
     }),
     sveltekit(),
   ],
