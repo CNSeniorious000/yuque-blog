@@ -31,7 +31,7 @@
 
 <Main>
   <Title {title} {description} />
-  <div class="prose xl:text-lg dark:prose-invert dark:text-blue-gray-300 min-w-full max-w-full">
+  <div class="prose xl:text-lg dark:prose-invert text-blue-gray-800 dark:text-blue-gray-300 min-w-full max-w-full">
     {@html html}
   </div>
 </Main>
@@ -122,16 +122,28 @@
   }
 
   :global(.prose table :where(td, th)) {
-    border: 1px solid #80808010;
+    border-bottom: 1px solid rgb(226, 232, 240); /* blue-gray-200 */
     text-align: start;
     vertical-align: text-top;
   }
 
+  :global(.prose table tr:last-child :where(td, th)) {
+    border-bottom: none;
+  }
+
   :global(.prose thead) {
-    background: #80808007;
+    background: rgb(248, 250, 252); /* blue-gray-50 */
   }
 
   :global(.prose table td:first-child) {
     white-space: nowrap;
+  }
+
+  :global(.prose tbody tr) {
+    transition: all 150ms ease-out;
+  }
+
+  :global(.prose tbody:has(:hover) tr:not(:hover)) {
+    opacity: 40%;
   }
 </style>
