@@ -69,6 +69,10 @@
     border-left: solid 2px #80808040;
   }
 
+  :global(.prose a) {
+    font-weight: unset;
+  }
+
   :global(.prose:last-child) {
     margin-bottom: 1.5rem;
   }
@@ -111,5 +115,23 @@
 
   :global(.prose a:hover) {
     color: rgb(13, 148, 136);
+  }
+
+  :global(.prose table) {
+    border-radius: 0.375rem;
+  }
+
+  :global(.prose table :where(td, th)) {
+    border: 1px solid #80808010;
+    text-align: start;
+    vertical-align: text-top;
+  }
+
+  :global(.prose thead) {
+    background: #80808007;
+  }
+
+  :global(.prose table td:first-child) {
+    white-space: nowrap;
   }
 </style>
