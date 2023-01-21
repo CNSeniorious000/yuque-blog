@@ -51,6 +51,11 @@
     border-radius: 0.375rem;
   }
 
+  :global(.prose p:has(img)) {
+    display: flex;
+    justify-content: center;
+  }
+
   :global(.prose pre) {
     padding: 0.8em 1.2em;
     border: solid 1px #80808020;
@@ -127,12 +132,20 @@
     vertical-align: text-top;
   }
 
+  :global(.dark .prose table :where(td, th)) {
+    border-color: rgb(30, 41, 59); /* blue-gray-800 */
+  }
+
   :global(.prose table tr:last-child :where(td, th)) {
     border-bottom: none;
   }
 
   :global(.prose thead) {
     background: rgb(248, 250, 252); /* blue-gray-50 */
+  }
+
+  :global(.dark .prose thead) {
+    background: rgba(30, 41, 59, 0.5); /* blue-gray-800 */
   }
 
   :global(.prose table td:first-child) {
@@ -145,5 +158,9 @@
 
   :global(.prose tbody:has(:hover) tr:not(:hover)) {
     opacity: 40%;
+  }
+
+  :global(.dark .prose code) {
+    filter: brightness(200%);
   }
 </style>

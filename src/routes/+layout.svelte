@@ -11,7 +11,7 @@
   afterNavigate(finishBar);
 </script>
 
-<div class:dark={$isDark} class="min-h-[100vh]">
+<div class:dark={$isDark} class="min-h-[100vh] min-h-[100dvh]">
   <div class="flex-grow justify-center bg-white dark:bg-coolgray-900 text-cool-gray-500 transition-all duration-300" class:duration-800={!$isDark}>
     <slot />
   </div>

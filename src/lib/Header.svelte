@@ -4,7 +4,7 @@
 </script>
 
 <header>
-  <div class="transition-all text-sm text-blue-gray-400 m-6 sm:m-10 flex-row justify-between overflow-hidden">
+  <div class="transition-all text-sm text-blue-gray-400 m-6 sm:m-10 !mb-3 flex-row justify-between overflow-hidden">
     <p class="flex gap-1.5">
       {#each breadcrumb as [href, title], index (href)}
         <a class="transition-all hover:text-teal-600" {href}>{title}</a>
