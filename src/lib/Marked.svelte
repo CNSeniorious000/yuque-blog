@@ -7,8 +7,10 @@
 
   import { onMount } from "svelte";
   import MarkdownIt from "markdown-it";
+  import Clipboard from "./Clipboard.svelte";
   let md = new MarkdownIt({ typographer: 1 });
-  let html = md.render(markdown.replaceAll("<br />", "\n\n").replaceAll(new RegExp("<a name.*</a>\n", "g"), "")); // markdown preprocessing and rendering
+  let cleaned_markdown = markdown.replaceAll("<br />", "\n\n").replaceAll(new RegExp("<a name.*</a>\n", "g"), ""); // preprocessing
+  let html = md.render(cleaned_markdown);
 
   // patch code blocks at client side
   onMount(async () => {
@@ -30,7 +32,12 @@
 </script>
 
 <Main>
-  <Title {title} {description} />
+  <div class="relative flex flex-row">
+    <Title {title} {description} />
+    <div class="absolute right-0 buttom-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
+      <Clipboard toCopy={cleaned_markdown} />
+    </div>
+  </div>
   <div class="prose xl:text-lg dark:prose-invert text-blue-gray-800 dark:text-blue-gray-300 min-w-full max-w-full">
     {@html html}
   </div>

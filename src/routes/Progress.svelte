@@ -26,7 +26,7 @@
 </script>
 
 <div style:--r={blurRadius} class="backdrop-blur-$r fixed grid place-items-center w-full h-full overflow-hidden transition-all duration-800 bg-white dark:bg-coolgray-900 !bg-opacity-0" class:!bg-opacity-100={blur} class:backdrop-saturate-150={!blur} class:pointer-events-none={!blur}>
-  <div class="text-cool-gray-500 dark:text-light-blue-400 flex items-center gap-3 lg:gap-4 transition-all duration-500" class:opacity-0={!blur}>
+  <div class="text-cool-gray-500 dark:text-light-blue-400 flex items-center gap-3 lg:gap-4 transition-all duration-800" class:opacity-0={!blur}>
     {#if blur}
       <Icon icon="svg-spinners:pulse-multiple" width="4vh" />
       <div class="flex flex-row gap-2 md:gap-4 uppercase font-semibold lg:text-lg">
