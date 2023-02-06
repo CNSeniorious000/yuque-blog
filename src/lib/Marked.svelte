@@ -63,6 +63,10 @@
     line-height: 1.5rem;
   }
 
+  :global(.prose pre::-webkit-scrollbar) {
+    display: none;
+  }
+
   :global(.prose blockquote) {
     padding-left: 0;
   }
@@ -115,11 +119,19 @@
   :global(.prose a) {
     transition: all 300ms;
     text-decoration: none;
-    color: rgb(3, 105, 161);
+    color: rgb(3, 105, 161); /* light-blue-700 */
   }
 
   :global(.prose a:hover) {
-    color: rgb(13, 148, 136);
+    color: rgb(13, 148, 136); /* teal-600 */
+  }
+
+  :global(.dark .prose a) {
+    color: rgb(56, 189, 248); /* light-blue-400 */
+  }
+
+  :global(.dark .prose a:hover) {
+    color: rgb(45, 212, 191); /* teal-400 */
   }
 
   :global(.prose table) {
@@ -160,7 +172,7 @@
     opacity: 40%;
   }
 
-  :global(.dark .prose code) {
+  :global(.dark .prose pre > code) {
     filter: brightness(200%);
   }
 </style>

@@ -44,7 +44,7 @@ export function finishBar() {
   if (!loading) return resetBar();
 
   stopIncreasing();
-  progressStore.set({ progress: 1.2, loading: false });
+  progressStore.set({ progress: 2, loading: false });
 
   animationTimeout = setTimeout(() => {
     if (!loading) return;
