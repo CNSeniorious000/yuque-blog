@@ -9,7 +9,7 @@
   <div class="flex flex-col justify-center text-center gap-1 text-light-blue-700 dark:text-light-blue-300 transition-all">
     <button class="self-center text-xl w-3.1em rounded-full p-0.3em transition-all ease-out bg-cool-gray-100 hover:bg-cool-gray-200 dark:bg-cool-gray-800 dark:!bg-opacity-40 hover:dark:bg-cool-gray-700 active:scale-90" on:click={() => (($isDark = !$isDark), (firstTime = false))}>
       <!-- container -> w - p = translate-x + w <- child -->
-      <div class="dark:translate-x-1em w-1.5em h-1.5em rounded-full items-center justify-center transition-all bg-white shadow-lg dark:shadow-none dark:bg-opacity-10">
+      <div class="dark:translate-x-1em w-1.5em h-1.5em rounded-full flex items-center justify-center transition-all bg-white shadow-lg dark:shadow-none dark:bg-opacity-10">
         {#if $isDark} <Icon icon={firstTime ? "line-md:moon-loop" : "line-md:sunny-outline-to-moon-loop-transition"} /> {:else} <Icon icon={firstTime ? "line-md:sunny-outline" : "line-md:moon-to-sunny-outline-transition"} /> {/if}
       </div>
     </button>
