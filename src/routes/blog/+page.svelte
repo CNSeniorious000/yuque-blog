@@ -1,5 +1,5 @@
 <script>
-  import { baseurl, namespace } from "$lib/common";
+  import { baseurl, namespace } from "$lib/utils";
   import { breadcrumbStore, rightTop, leftBottom, rightBottom } from "$lib/store";
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";

@@ -1,5 +1,5 @@
 <script>
-  import { baseurl, namespace, formatDate } from "$lib/common";
+  import { baseurl, namespace, formatDate } from "$lib/utils";
   import { breadcrumbStore, rightTop, leftBottom, rightBottom } from "../../../lib/store";
   import Marked from "$lib/Marked.svelte";
 

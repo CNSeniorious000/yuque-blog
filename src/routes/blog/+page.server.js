@@ -1,4 +1,4 @@
-import { apiBaseurl, headers, namespace } from "$lib/common";
+import { apiBaseurl, headers, namespace } from "$lib/utils";
 
 async function fetchBookInfo(fetch) {
   let res = await fetch(`${apiBaseurl}/repos/${namespace}`, { headers });
@@ -16,7 +16,7 @@ async function fetchArticles(fetch) {
 export async function load({ fetch, setHeaders }) {
   let [{ user, items_count, updated_at, slug, description }, articles] = await Promise.all([fetchBookInfo(fetch), fetchArticles(fetch)]);
 
-  setHeaders({ age: 30, "cache-control": "max-age=30" });
+  setHeaders({ "cache-control": "max-age=30" });
 
   return { user, namespace, items_count, updated_at, slug, description, articles };
 }

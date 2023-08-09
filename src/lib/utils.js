@@ -1,7 +1,10 @@
-export const apiBaseurl = "https://lark.muspimerol.site/api/v2";
+import { PUBLIC_API_BASE as apiBase, PUBLIC_ACCESS_TOKEN as ak } from "$env/static/public"
+
+
+export const apiBaseurl = apiBase + "/api/v2";
 export const baseurl = "//www.yuque.com";
 export const namespace = "muspi_merol/blog";
-export const headers = {}; // no need for token now
+export const headers = { "X-Auth-Token": ak };
 
 export function formatDate(string) {
   let date = new Date(string);

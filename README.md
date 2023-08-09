@@ -1,1 +1,3 @@
-# vite-svelte-unocss template
+# SvelteKit + Unocss + Yuque
+
+> a simple blog template using Yuque as CMS

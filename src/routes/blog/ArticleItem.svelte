@@ -1,5 +1,5 @@
 <script>
-  import { formatDate } from "$lib/common";
+  import { formatDate } from "$lib/utils";
 
   export let slug;
   export let title;

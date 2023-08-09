@@ -38,7 +38,7 @@
       <Clipboard toCopy={cleaned_markdown} />
     </div>
   </div>
-  <div class="prose xl:text-lg dark:prose-invert text-blue-gray-800 dark:text-blue-gray-300 min-w-full max-w-full">
+  <div class="prose flex flex-col xl:text-lg dark:prose-invert text-blue-gray-800 dark:text-blue-gray-300 max-w-full">
     {@html html}
   </div>
 </Main>
@@ -89,16 +89,11 @@
     font-weight: unset;
   }
 
-  :global(.prose:last-child) {
-    margin-bottom: 1.5rem;
+  :global(.prose *:last-child) {
+    margin-bottom: 2rem;
   }
 
   @media (max-width: 768px) {
-    :global(.prose > *) {
-      margin-left: 2.5rem;
-      margin-right: 2.5rem;
-    }
-
     :global(.prose > pre) {
       border-radius: 0;
       margin-left: -1px;
