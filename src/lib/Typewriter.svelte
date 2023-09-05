@@ -6,5 +6,5 @@
 </script>
 
 {#each word as letter, index}
-  <span in:fly={{ ...config, opacity: 0, delay: interval * index }} out:fade={config}>{letter}</span>
+  <span in:fly|global={{ ...config, opacity: 0, delay: interval * index }} out:fade|global={config}>{letter}</span>
 {/each}
