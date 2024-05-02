@@ -44,57 +44,57 @@
 </Main>
 
 <style>
-  :global(.prose *) {
+  .prose :global(*) {
     margin-top: 0;
   }
 
-  :global(.prose > *) {
+  .prose :global(> *) {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
     transition: all 150ms;
   }
 
-  :global(.prose img) {
+  .prose :global(img) {
     border-radius: 0.375rem;
   }
 
-  :global(.prose p:has(img)) {
+  .prose :global(p:has(img)) {
     display: flex;
     justify-content: center;
   }
 
-  :global(.prose pre) {
+  .prose :global(pre) {
     padding: 0.8em 1.2em;
     border: solid 1px #80808020;
     background-color: #80808007;
     line-height: 1.5rem;
   }
 
-  :global(.prose pre::-webkit-scrollbar) {
+  .prose :global(pre::-webkit-scrollbar) {
     display: none;
   }
 
-  :global(.prose blockquote) {
+  .prose :global(blockquote) {
     padding-left: 0;
   }
 
-  :global(.prose blockquote > *) {
+  .prose :global(blockquote > *) {
     padding-left: 1rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     border-left: solid 2px #80808040;
   }
 
-  :global(.prose a) {
+  .prose :global(a) {
     font-weight: unset;
   }
 
-  :global(.prose *:last-child) {
+  .prose :global(*:last-child) {
     margin-bottom: 2rem;
   }
 
   @media (max-width: 768px) {
-    :global(.prose > pre) {
+    .prose :global(> pre) {
       border-radius: 0;
       margin-left: -1px;
       margin-right: -1px;
@@ -103,78 +103,78 @@
   }
 
   @media (max-width: 639px) {
-    :global(.prose > *) {
+    .prose > :global(*) {
       margin-left: 1.5rem;
       margin-right: 1.5rem;
     }
 
-    :global(.prose > pre) {
+    .prose > :global(pre) {
       padding: 0.8rem 1.5rem;
     }
   }
 
-  :global(.prose hr) {
+  .prose :global(hr) {
     margin-top: 1em !important;
     border-bottom: 2px dashed #80808030;
   }
 
-  :global(.prose a) {
+  .prose :global(a) {
     transition: all 300ms;
     text-decoration: none;
     color: rgb(3, 105, 161); /* light-blue-700 */
   }
 
-  :global(.prose a:hover) {
+  .prose :global(a:hover) {
     color: rgb(13, 148, 136); /* teal-600 */
   }
 
-  :global(.dark .prose a) {
+  :global(.dark) .prose :global(a) {
     color: rgb(56, 189, 248); /* light-blue-400 */
   }
 
-  :global(.dark .prose a:hover) {
+  :global(.dark) .prose :global(a:hover) {
     color: rgb(45, 212, 191); /* teal-400 */
   }
 
-  :global(.prose table) {
+  .prose :global(table) {
     border-radius: 0.375rem;
   }
 
-  :global(.prose table :where(td, th)) {
+  .prose :global(table :where(td, th)) {
     border-bottom: 1px solid rgb(226, 232, 240); /* blue-gray-200 */
     text-align: start;
     vertical-align: text-top;
   }
 
-  :global(.dark .prose table :where(td, th)) {
+  :global(.dark) .prose :global(table :where(td, th)) {
     border-color: rgb(30, 41, 59); /* blue-gray-800 */
   }
 
-  :global(.prose table tr:last-child :where(td, th)) {
+  .prose :global(table tr:last-child :where(td, th)) {
     border-bottom: none;
   }
 
-  :global(.prose thead) {
+  .prose :global(thead) {
     background: rgb(248, 250, 252); /* blue-gray-50 */
   }
 
-  :global(.dark .prose thead) {
+  :global(.dark) .prose :global(thead) {
     background: rgba(30, 41, 59, 0.5); /* blue-gray-800 */
   }
 
-  :global(.prose table td:first-child) {
+  .prose :global(table td:first-child) {
     white-space: nowrap;
   }
 
-  :global(.prose tbody tr) {
+  .prose :global(tbody tr) {
     transition: all 150ms ease-out;
   }
 
-  :global(.prose tbody:has(:hover) tr:not(:hover)) {
+  .prose :global(tbody:has(:hover) tr:not(:hover)) {
     opacity: 40%;
   }
 
-  :global(.dark .prose pre > code) {
+  :global(.dark) .prose :global(pre > code) {
     filter: brightness(200%);
   }
 </style>

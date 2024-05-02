@@ -1,6 +1,6 @@
 <script>
   import "uno.css";
-  import "@unocss/reset/tailwind-compat.css";
+  import "@unocss/reset/tailwind.css";
   import Progress from "./Progress.svelte";
   import { isDark } from "$lib/store";
   import { apiBaseurl } from "$lib/utils";
