@@ -1,30 +1,32 @@
 <script>
-  import Title from "./Title.svelte";
   import Main from "./Main.svelte";
+  import Title from "./Title.svelte";
+
   export let markdown = "";
   export let title = "";
   export let description = "";
 
-  import { onMount } from "svelte";
-  import MarkdownIt from "markdown-it";
   import Clipboard from "./Clipboard.svelte";
-  let md = new MarkdownIt({ typographer: 1 });
-  let cleaned_markdown = markdown.replaceAll("<br />", "\n\n").replaceAll(new RegExp("<a name.*</a>\n", "g"), ""); // preprocessing
-  let html = md.render(cleaned_markdown);
+  import MarkdownIt from "markdown-it";
+  import { onMount } from "svelte";
+
+  const md = new MarkdownIt({ typographer: 1 });
+  const cleaned_markdown = markdown.replaceAll("<br />", "\n\n").replaceAll(/<a name.*<\/a>\n/g, ""); // preprocessing
+  const html = md.render(cleaned_markdown);
 
   // patch code blocks at client side
   onMount(async () => {
-    let codeBlocks = document.querySelectorAll(`code[class^="language-"]`);
+    const codeBlocks = document.querySelectorAll(`code[class^="language-"]`);
 
     if (codeBlocks.length) {
-      let hljsPromise = import("highlight.js");
+      const hljsPromise = import("highlight.js");
       import("highlight.js/styles/base16/google-light.css");
-      let hljs = await hljsPromise;
-      let { highlight } = hljs.default;
+      const hljs = await hljsPromise;
+      const { highlight } = hljs.default;
 
-      for (let code of codeBlocks) {
-        let language = code.className.slice(9); // after "language-" prefix
-        let { value } = highlight(code.innerText, { language });
+      for (const code of codeBlocks) {
+        const language = code.className.slice(9); // after "language-" prefix
+        const { value } = highlight(code.textContent, { language });
         code.innerHTML = value;
       }
     }
@@ -34,11 +36,11 @@
 <Main>
   <div class="relative flex flex-row">
     <Title {title} {description} />
-    <div class="absolute right-0 buttom-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
+    <div class="buttom-0 absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
       <Clipboard toCopy={cleaned_markdown} />
     </div>
   </div>
-  <div class="prose flex flex-col xl:text-lg dark:prose-invert text-blue-gray-800 dark:text-blue-gray-300 max-w-full">
+  <div class="max-w-full flex flex-col text-blue-gray-800 prose xl:text-lg dark:text-blue-gray-300 dark:prose-invert">
     {@html html}
   </div>
 </Main>

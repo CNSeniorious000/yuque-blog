@@ -1,11 +1,11 @@
 <script>
-  import { baseurl, namespace } from "$lib/utils";
-  import { breadcrumbStore, rightTop, leftBottom, rightBottom } from "$lib/store";
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";
+  import { breadcrumbStore, leftBottom, rightBottom, rightTop } from "$lib/store";
+  import { baseurl, namespace } from "$lib/utils";
 
   export let data;
-  let { user, articles } = data;
+  const { user, articles } = data;
 
   $breadcrumbStore = [
     ["/", user.login],
@@ -14,11 +14,11 @@
 
   $rightTop = data.title;
   $leftBottom = `共 ${data.items_count} 篇文章`;
-  $rightBottom = baseurl + "/" + namespace;
+  $rightBottom = `${baseurl}/${namespace}`;
 </script>
 
 <Main>
-  <div class="transition-all p-4 sm:p-8 md:p-2">
+  <div class="p-4 transition-all md:p-2 sm:p-8">
     {#each articles as { slug, title, word_count, content_updated_at: lastUpdate }}
       <ArticleItem {slug} {title} {word_count} {lastUpdate} />
     {/each}

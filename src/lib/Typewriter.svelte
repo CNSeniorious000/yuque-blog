@@ -1,5 +1,6 @@
 <script>
-  import { fly, fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
+
   export let word = "";
   export let config = { y: 10, duration: 500 };
   export let interval = 50;

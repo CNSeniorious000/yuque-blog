@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import Icon from "@iconify/svelte";
+  import { page } from "$app/stores";
 </script>
 
 <div class="grid h-screen w-full place-items-center">
   <main class="flex flex-row items-center">
     <a class="group flex flex-row items-center gap-1.5" href="/">
       <Icon icon="ic:twotone-arrow-back" class="op-30 group-not-hover:op-0" />
-      <img class="w-8 aspect-1" src="/svelte-lark.svg" alt="logo" />
+      <img class="aspect-1 w-8" src="/svelte-lark.svg" alt="logo" />
     </a>
 
     <hr class="mx-4 h-1.2em w-0 border-(1 current solid) rounded-full op-25" />

@@ -5,13 +5,15 @@ let loading = false;
 let animationTimeout = null;
 
 function startIncreasing() {
-  if (!loading) return console.warn({ loading });
+  if (!loading) {
+    return console.warn({ loading });
+  }
 
   let now = 0.2;
   progressStore.set({ progress: now, loading });
 
-  let target = 0.7;
-  let weight = 0.3;
+  const target = 0.7;
+  const weight = 0.3;
 
   placebo = setInterval(() => {
     now = now * (1 - weight) + target * weight;
@@ -29,7 +31,9 @@ function resetBar() {
     clearTimeout(animationTimeout);
     animationTimeout = null;
   }
-  if (placebo) console.warn({ placebo });
+  if (placebo) {
+    console.warn({ placebo });
+  }
   progressStore.set({ progress: 0, loading });
 }
 
@@ -41,13 +45,17 @@ export function startBar() {
 }
 
 export function finishBar() {
-  if (!loading) return resetBar();
+  if (!loading) {
+    return resetBar();
+  }
 
   stopIncreasing();
   progressStore.set({ progress: 2, loading: false });
 
   animationTimeout = setTimeout(() => {
-    if (!loading) return;
+    if (!loading) {
+      return;
+    }
     loading = false;
     resetBar();
   }, 500); // reset progress bar after 500ms animation
