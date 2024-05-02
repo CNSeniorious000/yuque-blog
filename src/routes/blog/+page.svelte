@@ -19,8 +19,8 @@
 
 <Main>
   <div class="transition-all m-4 sm:m-8 md:m-2">
-    {#each articles as { slug, title, format, content_updated_at: lastUpdate }}
-      <ArticleItem {slug} {title} {format} {lastUpdate} />
+    {#each articles as { slug, title, word_count, content_updated_at: lastUpdate }}
+      <ArticleItem {slug} {title} {word_count} {lastUpdate} />
     {/each}
   </div>
 </Main>
