@@ -1,11 +1,10 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import Unocss from "unocss/vite";
+import unocss from "unocss/vite";
+import { defineConfig } from "vite";
 
-const config = {
+export default defineConfig({
   plugins: [
-    Unocss(),
+    unocss(),
     sveltekit(),
   ],
-};
-
-export default config;
+});
