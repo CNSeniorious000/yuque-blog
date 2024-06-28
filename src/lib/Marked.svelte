@@ -36,7 +36,7 @@
 <Main>
   <div class="relative flex flex-row">
     <Title {title} {description} />
-    <div class="buttom-0 absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
+    <div class="absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
       <Clipboard toCopy={cleaned_markdown} />
     </div>
   </div>

@@ -3,7 +3,7 @@
   import { progressStore } from "$lib/store";
   import Typewriter from "$lib/Typewriter.svelte";
 
-  let blur = false; // delay 1s after loading turing ture
+  let blur = false; // delay 1s after loading turing true
   let blurTimer = null;
 
   $: loading = $progressStore.loading;
