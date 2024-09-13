@@ -1,12 +1,14 @@
 import { apiBaseurl, headers, namespace } from "$lib/utils";
 
-async function fetchBookInfo(fetch) {
+type Fetch = typeof fetch;
+
+async function fetchBookInfo(fetch: Fetch) {
   const res = await fetch(`${apiBaseurl}/repos/${namespace}`, { headers });
   const { data } = await res.json();
   return data;
 }
 
-async function fetchArticles(fetch) {
+async function fetchArticles(fetch: Fetch) {
   const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs`, { headers });
   const { data } = await res.json();
   return data;

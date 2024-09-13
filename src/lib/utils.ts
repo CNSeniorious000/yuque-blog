@@ -5,8 +5,8 @@ export const baseurl = "//www.yuque.com";
 export const namespace = "muspi_merol/blog";
 export const headers = { "X-Auth-Token": ak };
 
-export function formatDate(string) {
-  const date = new Date(string);
+export function formatDate(dateString: string) {
+  const date = new Date(dateString);
   const result = `${date.getMonth() + 1}月${date.getDate()}日`;
   return date.getFullYear() === new Date().getFullYear() ? result : `${date.getFullYear()}年${result}`;
 }

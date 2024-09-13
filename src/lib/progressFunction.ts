@@ -1,8 +1,10 @@
 import { progressStore } from "./store";
 
-let placebo = null;
-let loading = false;
-let animationTimeout = null;
+type Timeout = ReturnType<typeof setTimeout>;
+
+let placebo: Timeout | undefined;
+let loading: boolean = false;
+let animationTimeout: Timeout | undefined;
 
 function startIncreasing() {
   if (!loading) {
@@ -23,13 +25,13 @@ function startIncreasing() {
 
 function stopIncreasing() {
   clearInterval(placebo);
-  placebo = null;
+  placebo = undefined;
 }
 
 function resetBar() {
   if (animationTimeout) {
     clearTimeout(animationTimeout);
-    animationTimeout = null;
+    animationTimeout = undefined;
   }
   if (placebo) {
     console.warn({ placebo });
