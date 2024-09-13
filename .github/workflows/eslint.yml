@@ -8,6 +8,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: yarn install
-      - run: yarn check
-      - run: yarn lint
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install
+      - name: Run Svelte Check
+        run: bun -b check
+      - name: Run ESLint
+        run: bun lint
