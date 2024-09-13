@@ -1,14 +1,15 @@
 <script>
-  export let breadcrumb = [];
+  import { breadcrumb } from "$lib/store";
+
   export let right = "";
 </script>
 
 <header>
   <div class="m-6 flex flex-row justify-between overflow-hidden text-sm text-blue-gray-400 transition-all sm:m-10 !mb-3">
     <p class="flex gap-1.5">
-      {#each breadcrumb as [href, title], index (href)}
+      {#each $breadcrumb as [href, title], index (href)}
         <a class="whitespace-nowrap transition-all hover:text-teal-600 dark:hover:text-teal-400" {href}>{title}</a>
-        {#if index + 1 !== breadcrumb.length}
+        {#if index + 1 !== $breadcrumb.length}
           <span class="opacity-40"> / </span>
         {/if}
       {/each}

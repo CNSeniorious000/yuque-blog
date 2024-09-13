@@ -1,11 +1,9 @@
 <script>
   import Fotter from "../../lib/Fotter.svelte";
   import Header from "../../lib/Header.svelte";
-  import { breadcrumbStore, leftBottom, rightBottom, rightTop } from "../../lib/store";
-
-  $: breadcrumb = $breadcrumbStore;
+  import { leftBottom, rightBottom, rightTop } from "../../lib/store";
 </script>
 
-<Header {breadcrumb} right={$rightTop} />
+<Header right={$rightTop} />
 <slot />
 <Fotter title={$leftBottom} edit={$rightBottom} />

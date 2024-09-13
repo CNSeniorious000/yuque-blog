@@ -1,13 +1,13 @@
 <script>
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";
-  import { breadcrumbStore, leftBottom, rightBottom } from "$lib/store";
+  import { breadcrumb, leftBottom, rightBottom } from "$lib/store";
   import { baseurl, namespace } from "$lib/utils";
 
   export let data;
   const { user, articles } = data;
 
-  $breadcrumbStore = [
+  $breadcrumb = [
     ["/", user.login],
     ["/blog", data.slug],
   ];
