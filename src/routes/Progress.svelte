@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import Icon from "@iconify/svelte";
   import { progressStore } from "$lib/store";
   import Typewriter from "$lib/Typewriter.svelte";
 
   let blur = false; // delay 1s after loading turing true
-  let blurTimer = null;
+  let blurTimer: ReturnType<typeof setTimeout> | undefined;
 
   $: loading = $progressStore.loading;
   $: progress = $progressStore.progress;
@@ -16,14 +16,14 @@
       if (loading) {
         blur = true;
       } // then turn on the blur overlay
-      blurTimer = null;
+      blurTimer = undefined;
     }, 100);
   }
 
   $: if (!loading) {
     blur = false;
     clearTimeout(blurTimer);
-    blurTimer = null;
+    blurTimer = undefined;
   } // turn off the blur overlay when finish loading
 </script>
 

@@ -1,7 +1,7 @@
 <script>
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";
-  import { breadcrumbStore, leftBottom, rightBottom, rightTop } from "$lib/store";
+  import { breadcrumbStore, leftBottom, rightBottom } from "$lib/store";
   import { baseurl, namespace } from "$lib/utils";
 
   export let data;
@@ -12,7 +12,6 @@
     ["/blog", data.slug],
   ];
 
-  $rightTop = data.title;
   $leftBottom = `共 ${data.items_count} 篇文章`;
   $rightBottom = `${baseurl}/${namespace}`;
 </script>

@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import Icon from "@iconify/svelte";
 
   export let toCopy = "";
 
   let state = 0;
 
-  let willChangeState = null;
+  let willChangeState: ReturnType<typeof setTimeout>;
 
   async function handleClick() {
     await navigator.clipboard.writeText(toCopy);

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Main from "./Main.svelte";
   import Title from "./Title.svelte";
 
@@ -10,7 +10,7 @@
   import MarkdownIt from "markdown-it";
   import { onMount } from "svelte";
 
-  const md = new MarkdownIt({ typographer: 1 });
+  const md = new MarkdownIt({ typographer: true });
   const cleaned_markdown = markdown.replaceAll("<br />", "\n\n").replaceAll(/<a name.*<\/a>\n/g, ""); // preprocessing
   const html = md.render(cleaned_markdown);
 
@@ -26,7 +26,7 @@
 
       for (const code of codeBlocks) {
         const language = code.className.slice(9); // after "language-" prefix
-        const { value } = highlight(code.textContent, { language });
+        const { value } = highlight(code.textContent!, { language });
         code.innerHTML = value;
       }
     }
