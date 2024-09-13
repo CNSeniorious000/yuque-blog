@@ -1,4 +1,6 @@
-import { PUBLIC_ACCESS_TOKEN as ak, PUBLIC_API_BASE as apiBase } from "$env/static/public";
+import * as env from "$env/static/public";
+
+const { PUBLIC_ACCESS_TOKEN: ak = "", PUBLIC_API_BASE: apiBase = "https://yuque.com" } = env as { PUBLIC_ACCESS_TOKEN?: string; PUBLIC_API_BASE?: string };
 
 export const apiBaseurl = `${apiBase}/api/v2`;
 export const baseurl = "//www.yuque.com";
