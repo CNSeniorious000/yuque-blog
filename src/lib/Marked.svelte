@@ -77,8 +77,7 @@
 
   .prose :global(pre) {
     padding: 0.8em 1.2em;
-    border: solid 1px #80808020;
-    background-color: #80808007;
+    --uno: b-(1 zinc-5/13 solid) bg-zinc-5/3;
     line-height: 1.5rem;
   }
 
@@ -133,19 +132,7 @@
   .prose :global(a) {
     transition: 300ms;
     text-decoration: none;
-    color: rgb(3, 105, 161); /* light-blue-700 */
-  }
-
-  .prose :global(a:hover) {
-    color: rgb(13, 148, 136); /* teal-600 */
-  }
-
-  :global(.dark) .prose :global(a) {
-    color: rgb(56, 189, 248); /* light-blue-400 */
-  }
-
-  :global(.dark) .prose :global(a:hover) {
-    color: rgb(45, 212, 191); /* teal-400 */
+    --uno: text-light-blue-700 dark:text-light-blue-400 hover:text-teal-600 dark:hover:text-teal-400;
   }
 
   .prose :global(table) {
