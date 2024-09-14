@@ -157,7 +157,7 @@
     border-bottom: 1px solid rgb(226, 232, 240); /* blue-gray-200 */
     text-align: start;
     vertical-align: text-top;
-    --uno: transition-padding <md:px-10 <sm:px-6;
+    --uno: transition-padding <md:(first:pl-10 last:pr-10) <sm:(first:pl-6 last:pr-6);
   }
 
   :global(.dark) .prose :global(table :where(td, th)) {
