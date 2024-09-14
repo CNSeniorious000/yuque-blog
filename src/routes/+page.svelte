@@ -5,11 +5,11 @@
   let firstTime = true;
 </script>
 
-<div class="h-full flex flex-row justify-center transition-all">
-  <div class="flex flex-col justify-center gap-1 text-center text-light-blue-700 transition-all dark:text-light-blue-300">
-    <button class="mb-2.5 w-3.1em self-center rounded-full bg-cool-gray-100 p-0.3em text-xl transition-all ease-out active:scale-90 dark:bg-cool-gray-800 hover:bg-cool-gray-200 hover:dark:bg-cool-gray-700 dark:!bg-opacity-40" on:click={() => [(toggleMode()), (firstTime = false)]}>
+<div class="h-full flex flex-row justify-center transition">
+  <div class="flex flex-col justify-center gap-1 text-center text-light-blue-700 transition dark:text-light-blue-300">
+    <button class="mb-2.5 w-3.1em self-center rounded-full bg-cool-gray-100 p-0.3em text-xl transition ease-out active:scale-90 dark:bg-cool-gray-800 hover:bg-cool-gray-200 hover:dark:bg-cool-gray-700 dark:!bg-opacity-40" on:click={() => [(toggleMode()), (firstTime = false)]}>
       <!-- container -> w - p = translate-x + w <- child -->
-      <div class="h-1.5em w-1.5em flex items-center justify-center rounded-full bg-white shadow-lg transition-all dark:translate-x-1em dark:bg-opacity-10 dark:shadow-none">
+      <div class="h-1.5em w-1.5em flex items-center justify-center rounded-full bg-white shadow-lg transition dark:translate-x-1em dark:bg-opacity-10 dark:shadow-none">
         {#if $mode === "dark"} <Icon icon={firstTime ? "line-md:moon-loop" : "line-md:sunny-outline-to-moon-loop-transition"} /> {:else} <Icon icon={firstTime ? "line-md:sunny-outline" : "line-md:moon-to-sunny-outline-transition"} /> {/if}
       </div>
     </button>

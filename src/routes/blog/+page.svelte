@@ -19,7 +19,7 @@
   $editUrl = `${baseurl}/${namespace}`;
 </script>
 
-<div class="p-4 transition-all md:p-2 sm:p-8">
+<div class="p-4 transition md:p-2 sm:p-8">
   {#each articles as { slug, title, word_count, content_updated_at: lastUpdate }}
     <ArticleItem {slug} {title} {word_count} {lastUpdate} />
   {/each}

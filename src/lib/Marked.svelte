@@ -54,7 +54,7 @@
   .prose :global(> *) {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
-    transition: all 150ms;
+    transition: 150ms;
   }
 
   .prose :global(:where(img, iframe)) {
@@ -131,7 +131,7 @@
   }
 
   .prose :global(a) {
-    transition: all 300ms;
+    transition: 300ms;
     text-decoration: none;
     color: rgb(3, 105, 161); /* light-blue-700 */
   }
@@ -185,7 +185,7 @@
   }
 
   .prose :global(tbody tr) {
-    transition: all 150ms ease-out;
+    transition: 150ms ease-out;
   }
 
   .prose :global(tbody:has(:hover) tr:not(:hover)) {
