@@ -1,4 +1,5 @@
-import { apiBaseurl, headers, namespace } from "$lib/utils";
+import { apiBaseurl, headers } from "$lib/serverConstants.js";
+import { namespace } from "$lib/utils";
 
 type Fetch = typeof fetch;
 

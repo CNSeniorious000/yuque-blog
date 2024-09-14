@@ -6,7 +6,6 @@
   import Progress from "./Progress.svelte";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { isDark } from "$lib/store";
-  import { apiBaseurl } from "$lib/utils";
 
   beforeNavigate(startBar);
   afterNavigate(finishBar);
@@ -18,7 +17,3 @@
   </div>
   <Progress />
 </div>
-
-<svelte:head>
-  <link rel="dns-prefetch" href={apiBaseurl} />
-</svelte:head>
