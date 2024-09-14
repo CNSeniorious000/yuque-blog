@@ -2,11 +2,17 @@
   import type { PageServerData } from "./$types";
 
   import ArticleItem from "./ArticleItem.svelte";
+  import { breadcrumb } from "$lib/Breadcrumb.svelte";
   import { editUrl, leftBottom, pageDescription, pageTitle } from "$lib/store";
-  import { baseurl, namespace } from "$lib/utils";
+  import { baseurl, login, namespace, repo } from "$lib/utils";
 
   export let data: PageServerData;
   const { articles } = data;
+
+  $breadcrumb = [
+    ["/", login],
+    ["/blog", repo],
+  ];
 
   $pageTitle = "Muspi Merol's Blog";
   $pageDescription = $leftBottom = `共 ${articles.length} 篇文章`;
