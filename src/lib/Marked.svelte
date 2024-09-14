@@ -57,13 +57,22 @@
     transition: all 150ms;
   }
 
-  .prose :global(img) {
-    border-radius: 0.375rem;
+  .prose :global(:where(img, iframe)) {
+    --uno: md:rounded-0.375rem;
+  }
+
+  .prose :global(iframe) {
+    height: 70vh;
+    --uno: <md:mx-0;
   }
 
   .prose :global(p:has(img)) {
     display: flex;
     justify-content: center;
+  }
+
+  .prose :global(p:has(:where(img, iframe))) {
+    --uno: <md:mx-0;
   }
 
   .prose :global(pre) {
@@ -96,7 +105,7 @@
     margin-bottom: 2rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767.9px) {
     .prose :global(> pre) {
       border-radius: 0;
       margin-left: -1px;
@@ -105,7 +114,7 @@
     }
   }
 
-  @media (max-width: 639px) {
+  @media (max-width: 639.9px) {
     .prose > :global(*) {
       margin-left: 1.5rem;
       margin-right: 1.5rem;
@@ -141,12 +150,14 @@
 
   .prose :global(table) {
     border-radius: 0.375rem;
+    --uno: <md:(mx-0 w-full);
   }
 
   .prose :global(table :where(td, th)) {
     border-bottom: 1px solid rgb(226, 232, 240); /* blue-gray-200 */
     text-align: start;
     vertical-align: text-top;
+    --uno: transition-padding <md:px-10 <sm:px-6;
   }
 
   :global(.dark) .prose :global(table :where(td, th)) {
@@ -167,6 +178,10 @@
 
   .prose :global(table td:first-child) {
     white-space: nowrap;
+  }
+
+  .prose :global(table td:not(:first-child)) {
+    --uno: <md:w-full;
   }
 
   .prose :global(tbody tr) {
