@@ -3,19 +3,14 @@
 
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";
-  import { breadcrumb, leftBottom, rightBottom } from "$lib/store";
-  import { baseurl, login, namespace, repo } from "$lib/utils";
+  import { editUrl, leftBottom } from "$lib/store";
+  import { baseurl, namespace } from "$lib/utils";
 
   export let data: PageServerData;
   const { articles } = data;
 
-  $breadcrumb = [
-    ["/", login],
-    ["/blog", repo],
-  ];
-
   $leftBottom = `共 ${articles.length} 篇文章`;
-  $rightBottom = `${baseurl}/${namespace}`;
+  $editUrl = `${baseurl}/${namespace}`;
 </script>
 
 <Main>

@@ -1,9 +1,15 @@
 <script>
-  import Fotter from "../../lib/Fotter.svelte";
+  import Footer from "../../lib/Footer.svelte";
   import Header from "../../lib/Header.svelte";
-  import { leftBottom, rightBottom, rightTop } from "../../lib/store";
+  import { withBreadcrumb } from "$lib/Breadcrumb.svelte";
+  import { repo } from "$lib/utils";
+
+  withBreadcrumb("/blog", repo);
+
 </script>
 
-<Header right={$rightTop} />
+<Header />
+
 <slot />
-<Fotter title={$leftBottom} edit={$rightBottom} />
+
+<Footer />
