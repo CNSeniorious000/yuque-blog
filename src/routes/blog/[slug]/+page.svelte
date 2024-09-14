@@ -1,18 +1,23 @@
-<script>
-  import { breadcrumb, leftBottom, rightBottom, rightTop } from "../../../lib/store";
-  import Marked from "$lib/Marked.svelte";
-  import { baseurl, formatDate, namespace } from "$lib/utils";
+<script lang="ts">
+  import type { PageServerData } from "./$types";
 
-  export let data;
-  const { creator, book, slug, custom_description: description, title, body: markdown } = data;
+  import { page } from "$app/stores";
+  import Marked from "$lib/Marked.svelte";
+  import { breadcrumb, leftBottom, rightBottom, rightTop } from "$lib/store";
+  import { baseurl, formatDate, login, namespace, repo } from "$lib/utils";
+
+  export let data: PageServerData;
+
+  const { slug } = $page.params;
+  const { description, title, markdown, updated_at } = data;
 
   $breadcrumb = [
-    ["/", creator.login],
-    ["/blog", book.slug],
+    ["/", login],
+    ["/blog", repo],
     [`/blog/${slug}`, slug],
   ];
 
-  $rightTop = `最后更新于：${formatDate(data.updated_at)}`;
+  $rightTop = `最后更新于：${formatDate(updated_at)}`;
   $leftBottom = title;
   $rightBottom = `${baseurl}/${namespace}/${slug}`;
 </script>

@@ -1,18 +1,20 @@
-<script>
+<script lang="ts">
+  import type { PageServerData } from "./$types";
+
   import Main from "../../lib/Main.svelte";
   import ArticleItem from "./ArticleItem.svelte";
   import { breadcrumb, leftBottom, rightBottom } from "$lib/store";
-  import { baseurl, namespace } from "$lib/utils";
+  import { baseurl, login, namespace, repo } from "$lib/utils";
 
-  export let data;
-  const { user, articles } = data;
+  export let data: PageServerData;
+  const { articles } = data;
 
   $breadcrumb = [
-    ["/", user.login],
-    ["/blog", data.slug],
+    ["/", login],
+    ["/blog", repo],
   ];
 
-  $leftBottom = `共 ${data.items_count} 篇文章`;
+  $leftBottom = `共 ${articles.length} 篇文章`;
   $rightBottom = `${baseurl}/${namespace}`;
 </script>
 

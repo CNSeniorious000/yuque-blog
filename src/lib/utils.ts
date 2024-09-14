@@ -5,6 +5,7 @@ const { PUBLIC_ACCESS_TOKEN: ak = "", PUBLIC_API_BASE: apiBase = "https://yuque.
 export const apiBaseurl = `${apiBase}/api/v2`;
 export const baseurl = "//www.yuque.com";
 export const namespace = "muspi_merol/blog";
+export const [login, repo] = namespace.split("/");
 export const headers = { "X-Auth-Token": ak };
 
 export function formatDate(dateString: string) {
