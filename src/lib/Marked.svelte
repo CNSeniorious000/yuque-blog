@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Main from "./Main.svelte";
   import Title from "./Title.svelte";
 
   export let markdown = "";
@@ -33,17 +32,16 @@
   });
 </script>
 
-<Main>
-  <div class="relative flex flex-row">
-    <Title {title} {description} />
-    <div class="absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
-      <Clipboard toCopy={cleaned_markdown} />
-    </div>
+<div class="relative flex flex-row">
+  <Title {title} {description} />
+  <div class="absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
+    <Clipboard toCopy={cleaned_markdown} />
   </div>
-  <div class="max-w-full flex flex-col text-blue-gray-800 prose xl:text-lg dark:text-blue-gray-300 dark:prose-invert">
-    {@html html}
-  </div>
-</Main>
+</div>
+
+<article class="max-w-full flex flex-col text-blue-gray-800 prose xl:text-lg dark:text-blue-gray-300 dark:prose-invert">
+  {@html html}
+</article>
 
 <style>
   .prose :global(*) {
