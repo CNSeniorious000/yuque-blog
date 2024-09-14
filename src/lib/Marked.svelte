@@ -21,15 +21,21 @@
     const codeBlocks = document.querySelectorAll(`code[class^="language-"]`);
 
     if (codeBlocks.length) {
-      const hljsPromise = import("highlight.js");
-      import("highlight.js/styles/base16/google-light.css");
-      const hljs = await hljsPromise;
-      const { highlight } = hljs.default;
+      const shikiPromise = import("shiki");
+      import("./shiki-dark.css");
+      const { codeToHtml } = await shikiPromise;
 
       for (const code of codeBlocks) {
         const language = code.className.slice(9); // after "language-" prefix
-        const { value } = highlight(code.textContent!, { language });
-        code.innerHTML = value;
+        const value = await codeToHtml(code.textContent!, {
+          lang: language,
+          themes: {
+            light: "one-light",
+            dark: "vesper",
+          },
+          defaultColor: false,
+        });
+        code.parentElement!.outerHTML = value;
       }
     }
   });
@@ -77,7 +83,7 @@
 
   .prose :global(pre) {
     padding: 0.8em 1.2em;
-    --uno: b-(1 zinc-5/13 solid) bg-zinc-5/3;
+    --uno: \!b-zinc-5/13 \!bg-zinc-5/3 [&_span]:\!bg-transparent b-(1 solid);
     line-height: 1.5rem;
   }
 
@@ -168,9 +174,5 @@
 
   .prose :global(tbody:has(:hover) tr:not(:hover)) {
     opacity: 40%;
-  }
-
-  :global(.dark) .prose :global(pre > code) {
-    filter: brightness(200%);
   }
 </style>
