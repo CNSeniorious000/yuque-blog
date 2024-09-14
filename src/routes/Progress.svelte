@@ -27,8 +27,8 @@
   } // turn off the blur overlay when finish loading
 </script>
 
-<div style:--r={blurRadius} class="fixed inset-0 grid place-items-center overflow-hidden bg-white backdrop-blur-$r transition duration-800 dark:bg-coolgray-900 !bg-opacity-0" class:!bg-opacity-100={blur} class:backdrop-saturate-150={!blur} class:pointer-events-none={!blur}>
-  <div class="flex flex-col items-center gap-3 text-cool-gray-500 transition duration-800 lg:gap-4 dark:text-light-blue-400" class:opacity-0={!blur}>
+<div style:--r={blurRadius} class="fixed inset-0 grid place-items-center overflow-hidden bg-white backdrop-blur-$r transition duration-800 dark:bg-zinc-900 !bg-opacity-0" class:!bg-opacity-100={blur} class:backdrop-saturate-150={!blur} class:pointer-events-none={!blur}>
+  <div class="flex flex-col items-center gap-3 text-zinc-500 transition duration-800 lg:gap-4 dark:text-light-blue-400" class:opacity-0={!blur}>
     {#if blur}
       <Icon icon="svg-spinners:pulse-multiple" width="4vh" />
       <div class="flex flex-row gap-2 font-semibold uppercase md:gap-4 lg:text-lg">

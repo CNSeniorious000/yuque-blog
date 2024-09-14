@@ -42,7 +42,7 @@
   </div>
 </div>
 
-<article class="max-w-full flex flex-col text-blue-gray-800 prose xl:text-lg dark:text-blue-gray-300 dark:prose-invert">
+<article class="max-w-full flex flex-col text-zinc-800 prose xl:text-lg dark:text-zinc-300 dark:prose-invert">
   {@html html}
 </article>
 
@@ -57,7 +57,7 @@
     transition: 150ms;
   }
 
-  .prose :global(:where(img, iframe)) {
+  .prose :global(:where(img, iframe, table)) {
     --uno: md:rounded-0.375rem;
   }
 
@@ -149,19 +149,14 @@
   }
 
   .prose :global(table) {
-    border-radius: 0.375rem;
     --uno: <md:(mx-0 w-full);
   }
 
   .prose :global(table :where(td, th)) {
-    border-bottom: 1px solid rgb(226, 232, 240); /* blue-gray-200 */
+    --uno: b-(1 zinc-1 solid) dark:b-zinc-8;
     text-align: start;
     vertical-align: text-top;
-    --uno: transition-padding <md:(first:pl-10 last:pr-10) <sm:(first:pl-6 last:pr-6);
-  }
-
-  :global(.dark) .prose :global(table :where(td, th)) {
-    border-color: rgb(30, 41, 59); /* blue-gray-800 */
+    --uno: transition-padding <md:(first:b-l-none last:b-r-none first:pl-10 last:pr-10) <sm:(first:pl-6 last:pr-6);
   }
 
   .prose :global(table tr:last-child :where(td, th)) {
@@ -169,11 +164,7 @@
   }
 
   .prose :global(thead) {
-    background: rgb(248, 250, 252); /* blue-gray-50 */
-  }
-
-  :global(.dark) .prose :global(thead) {
-    background: rgba(30, 41, 59, 0.5); /* blue-gray-800 */
+    --uno: bg-zinc-1/50 dark:bg-zinc-8/25;
   }
 
   .prose :global(table td:first-child) {
