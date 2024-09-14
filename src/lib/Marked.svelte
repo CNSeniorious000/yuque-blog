@@ -1,3 +1,9 @@
+<script context="module">
+  import MarkdownIt from "markdown-it";
+
+  const md = new MarkdownIt({ typographer: true, html: true, linkify: true });
+</script>
+
 <script lang="ts">
   import Title from "./Title.svelte";
 
@@ -6,12 +12,9 @@
   export let description = "";
 
   import Clipboard from "./Clipboard.svelte";
-  import MarkdownIt from "markdown-it";
   import { onMount } from "svelte";
 
-  const md = new MarkdownIt({ typographer: true });
-  const cleaned_markdown = markdown.replaceAll("<br />", "\n\n").replaceAll(/<a name.*<\/a>\n/g, ""); // preprocessing
-  const html = md.render(cleaned_markdown);
+  const html = md.render(markdown);
 
   // patch code blocks at client side
   onMount(async () => {
@@ -35,7 +38,7 @@
 <div class="relative flex flex-row">
   <Title {title} {description} />
   <div class="absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
-    <Clipboard toCopy={cleaned_markdown} />
+    <Clipboard content={markdown} />
   </div>
 </div>
 
