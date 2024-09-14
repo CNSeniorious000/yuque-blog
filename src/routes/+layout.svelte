@@ -22,8 +22,8 @@
   $language = data.language;
 </script>
 
-<div class:dark={$mode ? $mode === "dark" : data.mode === "dark"} class="min-h-[100dvh] min-h-[100vh] flex">
-  <div class="w-full flex-grow justify-center bg-white text-cool-gray-500 transition-all duration-300 dark:bg-coolgray-900" class:duration-800={$mode === "light"}>
+<div class:dark={$mode ? $mode === "dark" : data.mode === "dark"} class="contents">
+  <div class="min-h-screen w-full flex flex-col items-stretch justify-center bg-white text-cool-gray-500 transition duration-300 !min-h-[100dvh] dark:bg-coolgray-900" class:duration-800={$mode === "light"}>
     <slot />
   </div>
   <Progress />
