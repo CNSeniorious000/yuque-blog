@@ -5,7 +5,7 @@
   import { finishBar, startBar } from "../lib/progressFunction";
   import Progress from "./Progress.svelte";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
-  import { isDark } from "$lib/store";
+  import { isDark, pageDescription, pageTitle } from "$lib/store";
 
   beforeNavigate(startBar);
   afterNavigate(finishBar);
@@ -17,3 +17,10 @@
   </div>
   <Progress />
 </div>
+
+<svelte:head>
+  <title>{$pageTitle}</title>
+  {#if $pageDescription}
+    <meta name="description" content={$pageDescription} />
+  {/if}
+</svelte:head>

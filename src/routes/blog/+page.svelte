@@ -2,13 +2,14 @@
   import type { PageServerData } from "./$types";
 
   import ArticleItem from "./ArticleItem.svelte";
-  import { editUrl, leftBottom } from "$lib/store";
+  import { editUrl, leftBottom, pageDescription, pageTitle } from "$lib/store";
   import { baseurl, namespace } from "$lib/utils";
 
   export let data: PageServerData;
   const { articles } = data;
 
-  $leftBottom = `共 ${articles.length} 篇文章`;
+  $pageTitle = "Muspi Merol's Blog";
+  $pageDescription = $leftBottom = `共 ${articles.length} 篇文章`;
   $editUrl = `${baseurl}/${namespace}`;
 </script>
 
@@ -17,7 +18,3 @@
     <ArticleItem {slug} {title} {word_count} {lastUpdate} />
   {/each}
 </div>
-
-<svelte:head>
-  <title>Muspi Merol's Blog</title>
-</svelte:head>

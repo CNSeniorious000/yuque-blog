@@ -37,10 +37,6 @@
   </div>
 </div>
 
-<svelte:head>
-  <title>Muspi Merol</title>
-</svelte:head>
-
 <style>
   button,
   button > div {

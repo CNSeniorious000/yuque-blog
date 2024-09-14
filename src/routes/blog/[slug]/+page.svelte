@@ -4,7 +4,7 @@
   import { page } from "$app/stores";
   import { withBreadcrumb } from "$lib/Breadcrumb.svelte";
   import Marked from "$lib/Marked.svelte";
-  import { editUrl, leftBottom, rightTop } from "$lib/store";
+  import { editUrl, leftBottom, pageDescription, pageTitle, rightTop } from "$lib/store";
   import { baseurl, formatDate, namespace } from "$lib/utils";
 
   export let data: PageServerData;
@@ -17,6 +17,9 @@
   $rightTop = `最后更新于：${formatDate(updated_at)}`;
   $leftBottom = title;
   $editUrl = `${baseurl}/${namespace}/${slug}`;
+
+  $pageTitle = title;
+  $pageDescription = description || $rightTop;
 </script>
 
 <Marked {title} {description} {markdown} />
