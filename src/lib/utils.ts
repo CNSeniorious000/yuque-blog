@@ -1,3 +1,6 @@
+import { language } from "./store";
+import { get } from "svelte/store";
+
 export const baseurl = "https://www.yuque.com";
 
 export const namespace = "muspi_merol/blog";
@@ -6,6 +9,9 @@ export const [login, repo] = namespace.split("/");
 
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
-  const result = `${date.getMonth() + 1}月${date.getDate()}日`;
-  return date.getFullYear() === new Date().getFullYear() ? result : `${date.getFullYear()}年${result}`;
+  return date.toLocaleDateString(get(language), {
+    month: "long",
+    day: "numeric",
+    year: date.getFullYear() === new Date().getFullYear() ? undefined : "numeric",
+  });
 }

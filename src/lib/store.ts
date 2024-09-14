@@ -8,3 +8,5 @@ export const editUrl = writable("");
 
 export const pageTitle = writable("Muspi Merol");
 export const pageDescription = writable("");
+
+export const language = writable<string | undefined>();
