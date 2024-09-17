@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/nlark/:path*",
-      "destination": "https://cdn.nlark.com/:path*"
-    }
-  ]
-}
