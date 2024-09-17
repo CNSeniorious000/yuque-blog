@@ -14,6 +14,8 @@
   import Clipboard from "./Clipboard.svelte";
   import { onMount } from "svelte";
 
+  markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
+
   const html = md.render(markdown);
 
   // patch code blocks at client side
@@ -44,7 +46,7 @@
 <div class="relative flex flex-row">
   <Title {title} {description} />
   <div class="absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
-    <Clipboard content={markdown} />
+    <Clipboard content={() => markdown.replaceAll("/nlark/", new URL("/nlark/", location.origin).href)} />
   </div>
 </div>
 

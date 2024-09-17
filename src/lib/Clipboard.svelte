@@ -1,14 +1,14 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
 
-  export let content: string;
+  export let content: string | (() => string);
 
   let state = 0;
 
   let willChangeState: ReturnType<typeof setTimeout>;
 
   async function handleClick() {
-    await navigator.clipboard.writeText(content);
+    await navigator.clipboard.writeText(typeof content === "string" ? content : content());
     state = 1;
     clearTimeout(willChangeState);
     willChangeState = setTimeout(() => (state = 2), 1000);

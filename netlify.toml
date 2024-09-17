@@ -1,0 +1,4 @@
+[[redirects]]
+from = "/nlark/*"
+to = "https://cdn.nlark.com/:splat"
+status = 200
