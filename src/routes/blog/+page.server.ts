@@ -18,7 +18,8 @@ interface Article {
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ fetch }) {
-  const articles: Article[] = await fetchArticles(fetch);
+  let articles: Article[] = await fetchArticles(fetch);
+  articles = articles.map(({ slug, title, word_count, content_updated_at }) => ({ slug, title, word_count, content_updated_at }));
 
   return { articles };
 }
