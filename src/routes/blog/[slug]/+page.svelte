@@ -20,7 +20,7 @@
 
   $rightTop = `最后更新于：${formatDate(updated_at)}`;
   $leftBottom = title;
-  $editUrl = `${baseurl}/${namespace}/${slug}`;
+  $editUrl = `${baseurl}/${namespace}/${slug}/edit`;
 
   $pageTitle = title;
   $pageDescription = description || $rightTop;
