@@ -11,6 +11,7 @@
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { language, pageDescription, pageTitle } from "$lib/store";
   import { mode, ModeWatcher, setMode } from "mode-watcher";
+  import Seo from "sk-seo";
 
   export let data: LayoutServerData;
 
@@ -32,9 +33,4 @@
 
 <ModeWatcher darkClassNames={[]} />
 
-<svelte:head>
-  <title>{$pageTitle}</title>
-  {#if $pageDescription}
-    <meta name="description" content={$pageDescription} />
-  {/if}
-</svelte:head>
+<Seo title={$pageTitle} description={$pageDescription} />
