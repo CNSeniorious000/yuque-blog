@@ -1,46 +1,15 @@
-<script context="module">
-  import MarkdownIt from "markdown-it";
-
-  const md = new MarkdownIt({ typographer: true, html: true, linkify: true });
-</script>
-
 <script lang="ts">
+  import Code from "./Code.svelte";
   import Title from "./Title.svelte";
+  import SvelteMarkdown from "svelte-markdown";
 
   export let markdown = "";
   export let title = "";
   export let description = "";
 
   import Clipboard from "./Clipboard.svelte";
-  import { onMount } from "svelte";
 
   markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
-
-  const html = md.render(markdown);
-
-  // patch code blocks at client side
-  onMount(async () => {
-    const codeBlocks = document.querySelectorAll(`code[class^="language-"]`);
-
-    if (codeBlocks.length) {
-      const shikiPromise = import("shiki");
-      import("./shiki-dark.css");
-      const { codeToHtml } = await shikiPromise;
-
-      for (const code of codeBlocks) {
-        const language = code.className.slice(9); // after "language-" prefix
-        const value = await codeToHtml(code.textContent!, {
-          lang: language,
-          themes: {
-            light: "one-light",
-            dark: "vesper",
-          },
-          defaultColor: false,
-        });
-        code.parentElement!.outerHTML = value;
-      }
-    }
-  });
 </script>
 
 <div class="relative flex flex-row">
@@ -51,7 +20,7 @@
 </div>
 
 <article class="max-w-full flex flex-col text-zinc-800 prose xl:text-lg dark:text-zinc-300 dark:prose-invert">
-  {@html html}
+  <SvelteMarkdown renderers={{ code: Code }} source={markdown} />
 </article>
 
 <style>
