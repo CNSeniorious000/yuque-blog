@@ -4,6 +4,7 @@
   import "@unocss/reset/tailwind.css";
   import "uno.css";
   import "$lib/global.css";
+  import "@fontsource-variable/fira-code";
 
   import { finishBar, startBar } from "../lib/progressFunction";
   import Progress from "./Progress.svelte";
@@ -24,8 +25,8 @@
   $language = data.language;
 </script>
 
-<div class:dark={$mode ? $mode === "dark" : data.mode === "dark"} class="contents">
-  <div class="min-h-screen w-full flex flex-col items-stretch justify-center bg-white text-zinc-500 transition duration-300 !min-h-[100dvh] dark:bg-zinc-900" class:duration-800={$mode === "light"}>
+<div class:dark={$mode ? $mode === "dark" : data.mode === "dark"} class="contents" id="root">
+  <div class="min-h-screen w-full flex flex-col items-stretch justify-center bg-white text-zinc-4 transition duration-300 !min-h-[100dvh] dark:bg-zinc-900" class:duration-800={$mode === "light"}>
     <slot />
   </div>
   <Progress />
