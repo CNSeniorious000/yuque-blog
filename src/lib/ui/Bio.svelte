@@ -7,7 +7,7 @@
 
 <div class="max-w-full flex flex-row gap-7 rounded-lg p-10 text-pretty leading-relaxed tracking-wide <2xl:text-sm sm:shadow-(lg zinc-9/5)">
 
-  <div role="presentation" class="font-calt text-zinc-8 transition-color <md:hidden dark:text-zinc-1">
+  <div aria-hidden="true" class="font-calt text-zinc-8 transition-color <md:hidden dark:text-zinc-1">
     <TokenSquare length={16} isHighlighted={() => Math.random() < 0.07} />
   </div>
 
