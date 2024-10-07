@@ -19,9 +19,9 @@
     "@sveltejs/adapter-auto": "^3.2.4",
     "@sveltejs/kit": "^2.5.26",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
-    "@unocss/eslint-plugin": "^0.62.3",
-    "@unocss/extractor-svelte": "^0.62.3",
-    "@unocss/reset": "^0.62.3",
+    "@unocss/eslint-plugin": "^0.63.3",
+    "@unocss/extractor-svelte": "^0.63.3",
+    "@unocss/reset": "^0.63.3",
     "bits-ui": "^0.21.16",
     "eslint": "^9.10.0",
     "eslint-plugin-format": "^0.1.2",
@@ -33,7 +33,7 @@
     "svelte-check": "^4.0.2",
     "svelte-eslint-parser": "^0.41.1",
     "svelte-markdown": "^0.4.1",
-    "unocss": "^0.62.3",
+    "unocss": "^0.63.3",
     "vite": "^5.4.5"
   }
 }
