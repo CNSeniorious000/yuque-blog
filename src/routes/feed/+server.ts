@@ -12,6 +12,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
       <id>${id}</id>
       <title>${escape(title)}</title>
       <link href="${origin}/blog/${slug}" />
+      <content src="${origin}/blog/${slug}" type="text/html" />
       <summary>${escape(description)}</summary>
       <published>${created_at}</published>
       <updated>${content_updated_at}</updated>
