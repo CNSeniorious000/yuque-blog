@@ -35,3 +35,7 @@
 <ModeWatcher darkClassNames={[]} />
 
 <Seo title={$pageTitle} description={$pageDescription} />
+
+<svelte:head>
+  <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed" />
+</svelte:head>
