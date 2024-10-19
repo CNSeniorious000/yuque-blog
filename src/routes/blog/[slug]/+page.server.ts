@@ -1,12 +1,13 @@
-import { apiBaseurl, headers } from "$lib/serverConstants.js";
-import { namespace } from "$lib/utils";
+import { getPost } from "$lib/api/each.js";
+import { load as loadCheerio } from "cheerio";
+import { parseDocument } from "htmlparser2";
 
-export async function load({ params, fetch }) {
+export async function load({ params }) {
   const { slug } = params;
-  const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs/${slug}`, { headers });
-  const { data } = await res.json();
+  const { description, title, body: markdown, body_html, updated_at } = await getPost(slug);
 
-  const { custom_description: description, title, body: markdown, updated_at } = data;
+  const $ = loadCheerio(parseDocument(body_html));
+  const fullText = $("div.lake-content").text();
 
-  return { description, title, markdown, updated_at };
+  return { description: fullText.startsWith(description.replace(/\.\.\.$/, "")) ? undefined : description, title, markdown, updated_at };
 }

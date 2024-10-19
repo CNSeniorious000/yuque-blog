@@ -13,6 +13,6 @@ interface Document {
 
 export async function listPosts() {
   const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs`, { headers });
-  const { data: articles }: { data: Document[] } = await res.json();
-  return articles;
+  const { data } = await res.json();
+  return data as Document[];
 }
