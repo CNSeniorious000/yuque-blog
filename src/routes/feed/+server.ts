@@ -1,38 +1,18 @@
 import type { RequestHandler } from "./$types";
 
 import { text } from "@sveltejs/kit";
-import { apiBaseurl, headers } from "$lib/serverConstants";
-import { namespace } from "$lib/utils";
+import { listPosts } from "$lib/api/list";
+import { escape } from "$lib/xml";
 
-function escapeXml(unsafe: string) {
-  return unsafe.replace(/[<>&'"]/g, c => `&${({
-    "<": "lt",
-    ">": "gt",
-    "&": "amp",
-    "'": "apos",
-    "\"": "quot",
-  })[c]};`);
-};
-
-interface Document {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  created_at: string;
-  content_updated_at: string;
-}
-
-export const GET: RequestHandler = async ({ fetch, url: { origin } }) => {
-  const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs`, { headers });
-  const { data: articles }: { data: Document[] } = await res.json();
+export const GET: RequestHandler = async ({ url: { origin } }) => {
+  const articles = await listPosts();
 
   const entries = articles.map(({ id, slug, title, description, created_at, content_updated_at }) => `
     <entry>
       <id>${id}</id>
-      <title>${escapeXml(title)}</title>
+      <title>${escape(title)}</title>
       <link href="${origin}/blog/${slug}" />
-      <summary>${escapeXml(description)}</summary>
+      <summary>${escape(description)}</summary>
       <published>${created_at}</published>
       <updated>${content_updated_at}</updated>
     </entry>`).join("\n");
