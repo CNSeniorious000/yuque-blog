@@ -16,7 +16,9 @@
 
   export let data: LayoutServerData;
 
-  beforeNavigate(startBar);
+  beforeNavigate(({ willUnload }) => {
+    !willUnload && startBar();
+  });
   afterNavigate(finishBar);
 
   browser && data.mode && setMode(data.mode);
