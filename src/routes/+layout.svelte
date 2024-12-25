@@ -10,7 +10,6 @@
   import Progress from "./Progress.svelte";
   import { browser } from "$app/environment";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
-  import { language } from "$lib/store";
   import { mode, ModeWatcher, setMode } from "mode-watcher";
 
   export let data: LayoutServerData;
@@ -22,8 +21,6 @@
 
   browser && data.mode && setMode(data.mode);
   $: browser && (document.cookie = `mode=${$mode};path=/`);
-
-  $language = data.language;
 </script>
 
 <div class:dark={$mode ? $mode === "dark" : data.mode === "dark"} class="contents" id="root">

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LayoutServerData } from "./$types";
+  import type { LayoutParentData, LayoutServerData } from "./$types";
 
   import { navigating, page } from "$app/stores";
   import Footer from "$lib/Footer.svelte";
@@ -7,7 +7,7 @@
   import Main from "$lib/Main.svelte";
   import { baseurl, formatDate, login, namespace, repo } from "$lib/utils";
 
-  export let data: LayoutServerData;
+  export let data: LayoutServerData & LayoutParentData;
 
   let breadcrumb: [string, string][];
   let editUrl: string;
@@ -21,7 +21,7 @@
       editUrl = `${baseurl}/${namespace}/${slug}/edit`;
       const { title, updated_at } = data.article!;
       leftBottom = title;
-      rightTop = `最后更新于：${formatDate(updated_at)}`;
+      rightTop = `最后更新于：${formatDate(updated_at, data.language)}`;
     } else {
       breadcrumb = [["/", login], ["/blog", repo]];
       editUrl = `${baseurl}/${namespace}`;
