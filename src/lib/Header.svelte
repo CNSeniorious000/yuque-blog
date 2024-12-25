@@ -1,25 +1,18 @@
-<script>
+<script lang="ts">
   import Breadcrumb from "./Breadcrumb.svelte";
-  import { rightTop } from "./store";
+
+  export let breadcrumb: [string, string][];
+  export let rightTop = "";
 </script>
 
 <header>
   <nav class="m-6 flex flex-row justify-between overflow-hidden text-sm text-zinc-400 transition-margin sm:m-10 !mb-3">
     <ol class="flex gap-1.5">
-      <Breadcrumb let:href let:title let:index let:total>
-        <li class="contents">
-          <a {href} class="ws-nowrap transition hover:text-teal-600 dark:hover:text-teal-400">
-            {title}
-          </a>
-          {#if index !== total - 1}
-            <span class="opacity-40">/</span>
-          {/if}
-        </li>
-      </Breadcrumb>
+      <Breadcrumb {breadcrumb} />
     </ol>
-    {#if $rightTop}
+    {#if rightTop}
       <div class="max-w-50% overflow-hidden text-ellipsis whitespace-nowrap opacity-0 transition duration-500 sm:opacity-100">
-        {$rightTop}
+        {rightTop}
       </div>
     {/if}
   </nav>

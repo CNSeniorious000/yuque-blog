@@ -11,8 +11,8 @@ interface Document {
   content_updated_at: string;
 }
 
-export async function listPosts() {
+export async function listPosts() { // TODO: pagination support
   const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs`, { headers });
-  const { data } = await res.json();
-  return data as Document[];
+  const { data, meta: { total } } = await res.json() as { data: Document[]; meta: { total: number } };
+  return { total, articles: data };
 }

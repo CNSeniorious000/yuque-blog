@@ -8,7 +8,7 @@ import { load } from "cheerio";
 import { parseDocument } from "htmlparser2";
 
 export const GET: RequestHandler = async ({ url: { origin } }) => {
-  const articles = await listPosts();
+  const { articles } = await listPosts();
 
   const entries = (await Promise.all(articles.map(async ({ id, slug, title, description, created_at, content_updated_at }) => {
     const { body_html } = await getPost(slug);

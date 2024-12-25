@@ -10,9 +10,8 @@
   import Progress from "./Progress.svelte";
   import { browser } from "$app/environment";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
-  import { language, pageDescription, pageTitle } from "$lib/store";
+  import { language } from "$lib/store";
   import { mode, ModeWatcher, setMode } from "mode-watcher";
-  import Seo from "sk-seo";
 
   export let data: LayoutServerData;
 
@@ -35,8 +34,6 @@
 </div>
 
 <ModeWatcher darkClassNames={[]} />
-
-<Seo title={$pageTitle} description={$pageDescription} />
 
 <svelte:head>
   <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed" />

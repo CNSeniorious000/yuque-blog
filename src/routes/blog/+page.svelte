@@ -1,23 +1,11 @@
 <script lang="ts">
-  import type { PageServerData } from "./$types";
+  import type { LayoutServerData } from "./$types";
 
   import ArticleItem from "./ArticleItem.svelte";
-  import { breadcrumb } from "$lib/Breadcrumb.svelte";
-  import { editUrl, leftBottom, pageDescription, pageTitle, rightTop } from "$lib/store";
-  import { baseurl, login, namespace, repo } from "$lib/utils";
+  import Seo from "sk-seo";
 
-  export let data: PageServerData;
-  const { articles } = data;
-
-  $breadcrumb = [
-    ["/", login],
-    ["/blog", repo],
-  ];
-
-  $pageTitle = "Muspi Merol's Blog";
-  $pageDescription = $leftBottom = `共 ${articles.length} 篇文章`;
-  $rightTop = "";
-  $editUrl = `${baseurl}/${namespace}`;
+  export let data: LayoutServerData;
+  const { articles, total } = data.list!;
 </script>
 
 <div class="p-4 transition md:p-2 sm:p-8">
@@ -25,3 +13,5 @@
     <ArticleItem {slug} {title} {word_count} {lastUpdate} />
   {/each}
 </div>
+
+<Seo title="Muspi Merol's Blog" description="共 {total} 篇文章" />

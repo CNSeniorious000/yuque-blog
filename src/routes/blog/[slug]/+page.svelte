@@ -1,29 +1,15 @@
 <script lang="ts">
-  import type { PageServerData } from "./$types";
+  import type { LayoutServerData } from "../$types";
 
-  import { page } from "$app/stores";
-  import { breadcrumb } from "$lib/Breadcrumb.svelte";
   import Marked from "$lib/Marked.svelte";
-  import { editUrl, leftBottom, pageDescription, pageTitle, rightTop } from "$lib/store";
-  import { baseurl, formatDate, login, namespace, repo } from "$lib/utils";
+  import { formatDate } from "$lib/utils";
+  import Seo from "sk-seo";
 
-  export let data: PageServerData;
+  export let data: LayoutServerData;
 
-  const { slug } = $page.params;
-  const { description, title, markdown, updated_at } = data;
-
-  $breadcrumb = [
-    ["/", login],
-    ["/blog", repo],
-    [`/blog/${slug}`, slug],
-  ];
-
-  $rightTop = `最后更新于：${formatDate(updated_at)}`;
-  $leftBottom = title;
-  $editUrl = `${baseurl}/${namespace}/${slug}/edit`;
-
-  $pageTitle = title;
-  $pageDescription = description || $rightTop;
+  const { description, title, markdown, updated_at } = data.article!;
 </script>
 
 <Marked {title} {description} {markdown} />
+
+<Seo {title} description={description || `最后更新于：${formatDate(updated_at)}`} />
