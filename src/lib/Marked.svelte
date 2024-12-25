@@ -9,7 +9,7 @@
 
   import Clipboard from "./Clipboard.svelte";
 
-  markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
+  $: markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
 </script>
 
 <div class="relative flex flex-row">

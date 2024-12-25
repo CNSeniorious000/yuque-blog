@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { LayoutParentData, LayoutServerData } from "./$types";
 
-  import { navigating, page } from "$app/stores";
+  import { afterNavigate } from "$app/navigation";
+  import { page } from "$app/stores";
   import Footer from "$lib/Footer.svelte";
   import Header from "$lib/Header.svelte";
   import Main from "$lib/Main.svelte";
@@ -14,7 +15,7 @@
   let leftBottom: string;
   let rightTop: string;
 
-  $: if (!$navigating) {
+  function update() {
     if ($page.route.id === "/blog/[slug]") {
       const { slug } = $page.params;
       breadcrumb = [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]];
@@ -26,8 +27,17 @@
       breadcrumb = [["/", login], ["/blog", repo]];
       editUrl = `${baseurl}/${namespace}`;
       leftBottom = `共 ${data.list!.total} 篇文章`;
+      rightTop = "";
     }
   }
+
+  update();
+
+  afterNavigate(({ from }) => {
+    if (from?.route.id?.startsWith("/blog")) {
+      update(); // don't trigger twice if navigating from other routes
+    }
+  });
 </script>
 
 <Header {breadcrumb} {rightTop} />
