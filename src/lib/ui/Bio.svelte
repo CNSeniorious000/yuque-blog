@@ -18,8 +18,8 @@
     <h1>
       <Inline markdown="**庄毅辉**，aka " />
 
-      <WithTooltip tips="The reverse of **lorem ipsum**" let:builder>
-        <strong {...builder} use:builder.action>
+      <WithTooltip tips="The reverse of **lorem ipsum**" let:builder let:open let:close>
+        <strong {...builder} use:builder.action on:mouseenter={open} on:mouseleave={close}>
           Muspi Merol
         </strong>
       </WithTooltip>

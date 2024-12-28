@@ -5,11 +5,12 @@
 
   export let disableHoverableContent = true;
   export let tips: string;
+  let open: boolean;
 </script>
 
-<Tooltip.Root openDelay={0} closeDelay={0} {disableHoverableContent} portal="#root">
+<Tooltip.Root openDelay={0} closeDelay={0} {disableHoverableContent} portal="#root" bind:open>
   <Tooltip.Trigger asChild let:builder>
-    <slot {builder} />
+    <slot {builder} open={() => open = true} close={() => open = false} />
   </Tooltip.Trigger>
   <Tooltip.Content sideOffset={4} collisionPadding={4} asChild let:builder>
     <div transition:fly={{ y: 2, duration: 300 }} class="rounded bg-white px-0.5em py-0.3em text-xs text-zinc-7 shadow shadow-zinc-7/10 dark:(bg-zinc-7/40 text-zinc-3 backdrop-blur)" {...builder} use:builder.action>
