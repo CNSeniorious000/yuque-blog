@@ -14,6 +14,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^3.6.0",
     "@fontsource-variable/fira-code": "^5.1.0",
+    "@giscus/svelte": "^3.0.0",
     "@iconify/svelte": "^4.0.2",
     "@promplate/pattern": "^0.0.1",
     "@sveltejs/adapter-auto": "^3.2.4",
