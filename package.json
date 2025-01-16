@@ -17,7 +17,7 @@
     "@giscus/svelte": "^3.0.0",
     "@iconify/svelte": "^4.0.2",
     "@promplate/pattern": "^0.0.1",
-    "@sveltejs/adapter-auto": "^3.2.4",
+    "@sveltejs/adapter-auto": "^4.0.0",
     "@sveltejs/kit": "^2.5.26",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@unocss/eslint-plugin": "^0.62.3",
