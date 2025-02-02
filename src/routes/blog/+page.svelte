@@ -1,10 +1,16 @@
-<script lang="ts">
+<script module>
   import type { LayoutParentData, LayoutServerData } from "./$types";
 
+  interface Props {
+    data: LayoutServerData & LayoutParentData;
+  }
+</script>
+
+<script lang="ts">
   import ArticleItem from "./ArticleItem.svelte";
   import Seo from "sk-seo";
 
-  export let data: LayoutServerData & LayoutParentData;
+  const { data }: Props = $props();
   const { articles, total } = data.list!;
 </script>
 

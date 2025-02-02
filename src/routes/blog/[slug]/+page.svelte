@@ -1,12 +1,18 @@
-<script lang="ts">
+<script module>
   import type { LayoutParentData, LayoutServerData } from "../$types";
 
+  interface Props {
+    data: LayoutServerData & LayoutParentData;
+  }
+</script>
+
+<script lang="ts">
   import Marked from "$lib/Marked.svelte";
   import Giscus from "$lib/ui/Giscus.svelte";
   import { formatDate } from "$lib/utils";
   import Seo from "sk-seo";
 
-  export let data: LayoutServerData & LayoutParentData;
+  const { data }: Props = $props();
 </script>
 
 {#if data.article}

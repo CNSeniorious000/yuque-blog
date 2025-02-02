@@ -1,10 +1,16 @@
+<script module>
+  interface Props {
+    lang: string;
+    text: string;
+  }
+</script>
+
 <script lang="ts">
   import { onMount } from "svelte";
 
-  export let lang: string;
-  export let text: string;
+  const { lang, text }: Props = $props();
 
-  let html: string;
+  let html = $state<string>();
 
   onMount(async () => {
     const shikiPromise = import("shiki");

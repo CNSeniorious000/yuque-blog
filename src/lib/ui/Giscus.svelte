@@ -1,14 +1,27 @@
+<script module>
+  interface Props {
+    id: number;
+    strict?: boolean;
+    reactionsEnabled?: boolean;
+    emitMetadata?: any;
+    inputPosition?: "top" | "bottom";
+    lang?: string;
+  }
+</script>
+
 <script lang="ts">
   import Giscus from "@giscus/svelte";
   import { dev } from "$app/environment";
   import { mode } from "mode-watcher";
 
-  export let id: number;
-  export let strict = false;
-  export let reactionsEnabled = true;
-  export let emitMetadata = dev;
-  export let inputPosition: "top" | "bottom" = "top";
-  export let lang = "zh-CN";
+  const {
+    id,
+    strict = false,
+    reactionsEnabled = true,
+    emitMetadata = dev,
+    inputPosition = "top",
+    lang = "zh-CN",
+  }: Props = $props();
 </script>
 
 <div class="m-6 transition-margin sm:m-10">

@@ -1,6 +1,13 @@
-<script lang="ts">
+<script module>
   import type { LayoutServerData } from "./$types";
 
+  interface Props {
+    data: LayoutServerData;
+    children?: import("svelte").Snippet;
+  }
+</script>
+
+<script lang="ts">
   import "@unocss/reset/tailwind.css";
   import "uno.css";
   import "$lib/global.css";
@@ -12,7 +19,7 @@
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { mode, ModeWatcher, setMode } from "mode-watcher";
 
-  export let data: LayoutServerData;
+  const { data, children }: Props = $props();
 
   beforeNavigate(({ willUnload }) => {
     !willUnload && startBar();
@@ -20,12 +27,14 @@
   afterNavigate(finishBar);
 
   browser && data.mode && setMode(data.mode);
-  $: browser && (document.cookie = `mode=${$mode};path=/`);
+  $effect(() => {
+    browser && (document.cookie = `mode=${$mode};path=/`);
+  });
 </script>
 
 <div class:dark={$mode ? $mode === "dark" : data.mode === "dark"} class="contents" id="root">
   <div class="min-h-screen w-full flex flex-col items-stretch justify-center bg-white text-zinc-4 transition duration-300 !min-h-[100dvh] dark:bg-zinc-900" class:duration-800={$mode === "light"}>
-    <slot />
+    {@render children?.()}
   </div>
   <Progress />
 </div>

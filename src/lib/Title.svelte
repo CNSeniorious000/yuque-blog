@@ -1,6 +1,12 @@
-<script>
-  export let title = "";
-  export let description = "";
+<script module>
+  interface Props {
+    title?: string;
+    description?: string;
+  }
+</script>
+
+<script lang="ts">
+  const { title = "", description = "" }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-1">
