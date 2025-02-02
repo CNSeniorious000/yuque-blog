@@ -15,6 +15,7 @@
     "@antfu/eslint-config": "^4.1.0",
     "@fontsource-variable/fira-code": "^5.1.0",
     "@giscus/svelte": "^3.0.0",
+    "@humanspeak/svelte-markdown": "^0.7.14",
     "@iconify/svelte": "^4.0.2",
     "@promplate/pattern": "^0.0.1",
     "@sveltejs/adapter-auto": "^4.0.0",
@@ -35,7 +36,6 @@
     "svelte": "^5.19.6",
     "svelte-check": "^4.0.2",
     "svelte-eslint-parser": "^0.43.0",
-    "svelte-markdown": "^0.4.1",
     "unocss": "^65.4.3",
     "vite": "^6.0.11"
   }

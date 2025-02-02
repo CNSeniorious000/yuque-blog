@@ -1,7 +1,7 @@
 <script lang="ts">
   import Code from "./Code.svelte";
   import Title from "./Title.svelte";
-  import SvelteMarkdown from "svelte-markdown";
+  import SvelteMarkdown from "@humanspeak/svelte-markdown";
 
   export let markdown = "";
   export let title = "";
