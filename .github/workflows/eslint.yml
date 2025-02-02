@@ -12,6 +12,6 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Run Svelte Check
-        run: bun -b check
+        run: bun check
       - name: Run ESLint
         run: bun lint
