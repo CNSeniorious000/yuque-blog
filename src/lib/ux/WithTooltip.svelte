@@ -1,31 +1,36 @@
 <script module>
   interface Props {
-    disableHoverableContent?: boolean;
     tips: string;
-    children?: import("svelte").Snippet<[{ props: Record<string, any>; open: () => true; close: () => false }]>;
+    children?: import("svelte").Snippet<[{ props: Record<string, any> }]>;
   }
 </script>
 
 <script lang="ts">
   import InlineMarkdown from "$lib/ui/InlineMarkdown.svelte";
-  import { Tooltip } from "bits-ui";
+  import { Popover } from "bits-ui";
   import { fly } from "svelte/transition";
 
-  const { disableHoverableContent = true, tips, children }: Props = $props();
+  const { tips, children }: Props = $props();
   let open = $state(false);
+
+  function show() {
+    open = true;
+  }
+
+  function hide() {
+    open = false;
+  }
 </script>
 
-<Tooltip.Provider delayDuration={0} {disableHoverableContent}>
-  <Tooltip.Root bind:open>
-    <Tooltip.Trigger>
-      {#snippet child({ props })}
-        {@render children?.({ props, open: () => open = true, close: () => open = false })}
-      {/snippet}
-    </Tooltip.Trigger>
-    <Tooltip.Content sideOffset={4} collisionPadding={4}>
-      <div transition:fly|global={{ y: 2, duration: 300 }} class="rounded bg-white px-0.5em py-0.3em text-xs text-zinc-7 shadow shadow-zinc-7/10 dark:(bg-zinc-7/40 text-zinc-3 backdrop-blur)">
-        <InlineMarkdown markdown={tips} />
-      </div>
-    </Tooltip.Content>
-  </Tooltip.Root>
-</Tooltip.Provider>
+<Popover.Root bind:open>
+  <Popover.Trigger>
+    {#snippet child({ props: { onclick: _1, onpointerdown: _2, ...props } })}
+      {@render children?.({ props: { ...props, onfocus: show, onblur: hide, onmouseenter: show, onmouseleave: hide } })}
+    {/snippet}
+  </Popover.Trigger>
+  <Popover.Content sideOffset={4} collisionPadding={4} trapFocus={false} side="top" onOpenAutoFocus={e => e.preventDefault()} onCloseAutoFocus={e => e.preventDefault()}>
+    <div transition:fly|global={{ y: 2, duration: 300 }} class="rounded bg-white px-0.5em py-0.3em text-xs text-zinc-7 shadow shadow-zinc-7/10 dark:(bg-zinc-7/40 text-zinc-3 backdrop-blur)">
+      <InlineMarkdown markdown={tips} />
+    </div>
+  </Popover.Content>
+</Popover.Root>

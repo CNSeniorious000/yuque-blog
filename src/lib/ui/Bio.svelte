@@ -19,8 +19,9 @@
       <Inline markdown="**庄毅辉**，aka " />
 
       <WithTooltip tips="The reverse of **lorem ipsum**">
-        {#snippet children({ props, open, close })}
-          <strong {...props} onmouseenter={open} onmouseleave={close}>
+        {#snippet children({ props })}
+          <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+          <strong {...props} tabindex="0">
             Muspi Merol
           </strong>
         {/snippet}
