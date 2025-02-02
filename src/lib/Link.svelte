@@ -16,8 +16,8 @@
 
 {#if title}
   <WithTooltip tips={title}>
-    {#snippet children({ builder })}
-      <a {href} {...builder} use:builder.action>{@render children_render?.()}</a>
+    {#snippet children({ props })}
+      <a {href} {...props}>{@render children_render?.()}</a>
     {/snippet}
   </WithTooltip>
 {:else}

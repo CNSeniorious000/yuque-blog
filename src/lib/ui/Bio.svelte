@@ -19,8 +19,8 @@
       <Inline markdown="**庄毅辉**，aka " />
 
       <WithTooltip tips="The reverse of **lorem ipsum**">
-        {#snippet children({ builder, open, close })}
-          <strong {...builder} use:builder.action onmouseenter={open} onmouseleave={close}>
+        {#snippet children({ props, open, close })}
+          <strong {...props} onmouseenter={open} onmouseleave={close}>
             Muspi Merol
           </strong>
         {/snippet}
