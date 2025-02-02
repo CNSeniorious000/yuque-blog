@@ -32,7 +32,7 @@
     "mode-watcher": "^0.5.0",
     "shiki": "^2.1.0",
     "sk-seo": "^0.5.0",
-    "svelte": "^4.2.19",
+    "svelte": "^5.19.6",
     "svelte-check": "^4.0.2",
     "svelte-eslint-parser": "^0.43.0",
     "svelte-markdown": "^0.4.1",
