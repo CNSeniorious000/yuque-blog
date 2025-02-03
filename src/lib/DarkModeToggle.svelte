@@ -17,9 +17,9 @@
 </button>
 
 <style>
-    button,
-    button > div {
-      transition-timing-function: cubic-bezier(0, 0, 0, 1);
-      transition-duration: 0.3s;
-    }
-  </style>
+  button,
+  button > div {
+    transition-timing-function: cubic-bezier(0, 0, 0, 1);
+    transition-duration: 0.3s;
+  }
+</style>
