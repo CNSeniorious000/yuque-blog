@@ -27,11 +27,7 @@
   };
 
   onMount(async () => {
-    if ($progressStore.loading) {
-      afterAnimationEnd.push(wait);
-    } else {
-      ready = true;
-    }
+    afterAnimationEnd.push(wait);
   });
 
   onDestroy(() => {
