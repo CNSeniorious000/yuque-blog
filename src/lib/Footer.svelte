@@ -1,6 +1,12 @@
+<script module>
+  interface Props {
+    editUrl: string;
+    leftBottom: string;
+  }
+</script>
+
 <script lang="ts">
-  export let editUrl: string;
-  export let leftBottom: string;
+  const { editUrl, leftBottom }: Props = $props();
 </script>
 
 <footer class="overflow-hidden">

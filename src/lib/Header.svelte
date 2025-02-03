@@ -1,8 +1,14 @@
+<script module>
+  interface Props {
+    breadcrumb: [string, string][];
+    rightTop?: string;
+  }
+</script>
+
 <script lang="ts">
   import Breadcrumb from "./Breadcrumb.svelte";
 
-  export let breadcrumb: [string, string][];
-  export let rightTop = "";
+  const { breadcrumb, rightTop = "" }: Props = $props();
 </script>
 
 <header>

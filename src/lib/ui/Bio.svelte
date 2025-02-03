@@ -18,10 +18,13 @@
     <h1>
       <Inline markdown="**庄毅辉**，aka " />
 
-      <WithTooltip tips="The reverse of **lorem ipsum**" let:builder let:open let:close>
-        <strong {...builder} use:builder.action on:mouseenter={open} on:mouseleave={close}>
-          Muspi Merol
-        </strong>
+      <WithTooltip tips="The reverse of **lorem ipsum**">
+        {#snippet children({ props })}
+          <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+          <strong {...props} tabindex="0">
+            Muspi Merol
+          </strong>
+        {/snippet}
       </WithTooltip>
 
       <Inline markdown="是一名 [BNUZ](https://www.bnuzh.edu.cn/ '北京师范大学（珠海校区）') 的 undergraduate、一个 opinionated 的开源爱好者。" />

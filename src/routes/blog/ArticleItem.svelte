@@ -1,11 +1,7 @@
-<script>
+<script lang="ts">
   import { formatDate } from "$lib/utils";
 
-  export let slug;
-  export let title;
-  export let word_count;
-  export let lastUpdate;
-  export let language;
+  const { slug, title, word_count, lastUpdate, language } = $props();
 </script>
 
 <a class="easeou h-8 flex items-center justify-between gap-5 ws-nowrap rounded-lg bg-zinc-900 bg-opacity-0 pl-2 transition duration-50 active:scale-99 dark:bg-zinc-100 dark:bg-opacity-0 hover:bg-opacity-3" href="/blog/{slug}">

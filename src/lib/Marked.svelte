@@ -1,15 +1,22 @@
+<script module>
+  interface Props {
+    markdown?: string;
+    title?: string;
+    description?: string;
+  }
+</script>
+
 <script lang="ts">
+  import Clipboard from "./Clipboard.svelte";
   import Code from "./Code.svelte";
   import Title from "./Title.svelte";
-  import SvelteMarkdown from "svelte-markdown";
+  import SvelteMarkdown from "@humanspeak/svelte-markdown";
 
-  export let markdown = "";
-  export let title = "";
-  export let description = "";
+  let { markdown = $bindable(""), title = "", description = "" }: Props = $props();
 
-  import Clipboard from "./Clipboard.svelte";
-
-  $: markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
+  $effect(() => {
+    markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
+  });
 </script>
 
 <div class="relative flex flex-row">

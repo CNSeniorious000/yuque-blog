@@ -1,23 +1,30 @@
-<script lang="ts">
+<script module>
   import type { LayoutParentData, LayoutServerData } from "./$types";
 
+  interface Props {
+    data: LayoutServerData & LayoutParentData;
+    children?: import("svelte").Snippet;
+  }
+</script>
+
+<script lang="ts">
   import { afterNavigate } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import Footer from "$lib/Footer.svelte";
   import Header from "$lib/Header.svelte";
   import Main from "$lib/Main.svelte";
   import { baseurl, formatDate, login, namespace, repo } from "$lib/utils";
 
-  export let data: LayoutServerData & LayoutParentData;
+  const { data, children }: Props = $props();
 
-  let breadcrumb: [string, string][];
-  let editUrl: string;
-  let leftBottom: string;
-  let rightTop: string;
+  let breadcrumb = $state<[string, string][]>()!;
+  let editUrl = $state<string>()!;
+  let leftBottom = $state<string>()!;
+  let rightTop = $state<string>()!;
 
   function update() {
-    if ($page.route.id === "/blog/[slug]") {
-      const { slug } = $page.params;
+    if (page.route.id === "/blog/[slug]") {
+      const { slug } = page.params;
       breadcrumb = [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]];
       editUrl = `${baseurl}/${namespace}/${slug}/edit`;
       const { title, updated_at } = data.article!;
@@ -43,7 +50,7 @@
 <Header {breadcrumb} {rightTop} />
 
 <Main>
-  <slot />
+  {@render children?.()}
 </Main>
 
 <Footer {editUrl} {leftBottom} />

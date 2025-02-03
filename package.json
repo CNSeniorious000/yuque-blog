@@ -15,15 +15,16 @@
     "@antfu/eslint-config": "^4.1.0",
     "@fontsource-variable/fira-code": "^5.1.0",
     "@giscus/svelte": "^3.0.0",
+    "@humanspeak/svelte-markdown": "^0.7.14",
     "@iconify/svelte": "^4.0.2",
-    "@promplate/pattern": "^0.0.1",
+    "@promplate/pattern": "^0.0.3",
     "@sveltejs/adapter-auto": "^4.0.0",
     "@sveltejs/kit": "^2.5.26",
-    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@unocss/eslint-plugin": "^65.4.3",
     "@unocss/extractor-svelte": "^65.4.3",
     "@unocss/reset": "^65.4.3",
-    "bits-ui": "^0.22.0",
+    "bits-ui": "^1.0.0-next.84",
     "cheerio": "^1.0.0",
     "eslint": "^9.10.0",
     "eslint-plugin-format": "^1.0.1",
@@ -32,11 +33,10 @@
     "mode-watcher": "^0.5.0",
     "shiki": "^2.1.0",
     "sk-seo": "^0.5.0",
-    "svelte": "^4.2.19",
+    "svelte": "^5.19.6",
     "svelte-check": "^4.0.2",
     "svelte-eslint-parser": "^0.43.0",
-    "svelte-markdown": "^0.4.1",
     "unocss": "^65.4.3",
-    "vite": "^5.4.5"
+    "vite": "^6.0.11"
   }
 }

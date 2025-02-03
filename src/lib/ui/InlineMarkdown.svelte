@@ -1,8 +1,14 @@
+<script module>
+  interface Props {
+    markdown: string;
+  }
+</script>
+
 <script lang="ts">
   import Link from "../Link.svelte";
-  import SvelteMarkdown from "svelte-markdown";
+  import SvelteMarkdown from "@humanspeak/svelte-markdown";
 
-  export let markdown: string;
+  const { markdown }: Props = $props();
 </script>
 
 <article class="contents">

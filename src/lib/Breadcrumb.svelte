@@ -1,12 +1,18 @@
+<script module>
+  interface Props {
+    breadcrumb: [string, string][];
+  }
+</script>
+
 <script lang="ts">
   import { afterAnimationEnd } from "../routes/Progress.svelte";
   import { progressStore } from "$lib/store";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
 
-  export let breadcrumb: [string, string][];
+  const { breadcrumb }: Props = $props();
 
-  let ready = false;
+  let ready = $state(false);
   let destroyed = false;
 
   const wait = () => {
@@ -21,11 +27,7 @@
   };
 
   onMount(async () => {
-    if ($progressStore.loading) {
-      afterAnimationEnd.push(wait);
-    } else {
-      ready = true;
-    }
+    afterAnimationEnd.push(wait);
   });
 
   onDestroy(() => {
