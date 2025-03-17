@@ -71,13 +71,25 @@
 
   .prose :global(blockquote) {
     padding-left: 0;
+    border-left: solid 3px #80808020;
+    font-style: normal !important;
+    --uno: text-sm op-80 py-1;
+  }
+
+  .prose :global(blockquote :last-child) {
+    margin-bottom: 0;
   }
 
   .prose :global(blockquote > *) {
     padding-left: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-left: solid 2px #80808040;
+  }
+
+  .prose :global(p) {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose :global(:where(ul, ol)) {
+    padding-left: 2rem !important;
   }
 
   .prose :global(a) {
