@@ -96,7 +96,7 @@
     font-weight: unset;
   }
 
-  .prose :global(*:last-child) {
+  .prose > :global(*:last-child) {
     margin-bottom: 2rem;
   }
 
