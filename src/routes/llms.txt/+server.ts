@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ url: { origin }, request: { headers 
   blocks.push(`## Posts / more like Random Thoughts (top ${posts.articles.length}/${posts.total})`);
 
   blocks.push(posts.articles.map(({ slug, title, created_at }) => {
-    return `- [${title}](/blog/${slug})` + ` (${formatDate(created_at, language)})`;
+    return `- [${title}](/blog/${slug}/llms.txt)` + ` (${formatDate(created_at, language)})`;
   }).join("\n"));
 
   const markdownOutput = blocks.join("\n\n");
