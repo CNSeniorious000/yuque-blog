@@ -14,6 +14,6 @@
   {#if description}
     <h2 class="px-6 pb-6 text-sm transition-padding sm:px-10 sm:pb-10">{description}</h2>
   {:else}
-    <br />
+    <br class="select-none" />
   {/if}
 </div>
