@@ -24,7 +24,7 @@
   }: Props = $props();
 </script>
 
-<div class="m-6 transition-margin sm:m-10">
+<div class="m-6 transition-margin sm:m-10 -translate-y-0.5rem sm:-translate-y-2rem">
   <Giscus
     id="giscus"
     repo="CNSeniorious000/yuque-blog"
