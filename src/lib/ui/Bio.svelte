@@ -5,7 +5,7 @@
   import WithTooltip from "$lib/ux/WithTooltip.svelte";
 </script>
 
-<div class="max-w-full flex flex-row gap-7 rounded-lg p-10 text-pretty leading-relaxed tracking-wide <2xl:text-sm sm:shadow-(lg zinc-9/5)">
+<div class="max-w-full flex flex-row gap-7 rounded-lg p-10 text-pretty tracking-wide <2xl:text-sm !leading-relaxed sm:shadow-(lg zinc-9/5)">
 
   <div aria-hidden="true" class="font-calt text-zinc-8 transition-color <md:hidden dark:text-zinc-1">
     <TokenSquare length={16} isHighlighted={() => Math.random() < 0.07} />
