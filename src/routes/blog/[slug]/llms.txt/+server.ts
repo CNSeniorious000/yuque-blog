@@ -6,12 +6,12 @@ import { formatDate } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ params: { slug }, request: { headers } }) => {
   const language = headers.get("accept-language")?.split(",")[0];
-  const { description, title, body, created_at } = await getPost(slug);
+  const { title, body, created_at } = await getPost(slug);
 
   return text(`
 
 # ${title} (${formatDate(created_at, language)})
-${description ? `\n> ${description.replaceAll("\n", " ")}\n` : ""}
+
 ${body.replaceAll("https://cdn.nlark.com/", "/nlark/")}
 
     `.trim(), { headers: {
