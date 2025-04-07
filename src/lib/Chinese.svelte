@@ -1,9 +1,9 @@
 <script module lang="ts">
   export const language = $state({
-    forceEnglish: false,
+    forceEnglish: null as boolean | null,
     defaultIsChinese: false,
     get isChinese() {
-      return this.forceEnglish ? false : this.defaultIsChinese;
+      return this.forceEnglish === null ? this.defaultIsChinese : !this.forceEnglish;
     },
   });
 </script>
