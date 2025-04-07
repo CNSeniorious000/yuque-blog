@@ -7,6 +7,7 @@
 </script>
 
 <script lang="ts">
+  import { language } from "$lib/Chinese.svelte";
   import Marked from "$lib/Marked.svelte";
   import Giscus from "$lib/ui/Giscus.svelte";
   import { formatDate } from "$lib/utils";
@@ -21,7 +22,7 @@
 
   <Marked {title} {description} {markdown} />
 
-  <Seo {title} description={description || `最后更新于：${formatDate(updated_at, data.language)}`} />
+  <Seo {title} description={description || (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language)} />
 
   <Giscus {id} lang={data.language} />
 {/if}

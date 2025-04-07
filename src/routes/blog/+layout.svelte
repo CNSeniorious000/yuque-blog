@@ -10,6 +10,7 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/state";
+  import { language } from "$lib/Chinese.svelte";
   import Footer from "$lib/Footer.svelte";
   import Header from "$lib/Header.svelte";
   import Main from "$lib/Main.svelte";
@@ -29,11 +30,11 @@
       editUrl = `${baseurl}/${namespace}/${slug}/edit`;
       const { title, updated_at } = data.article!;
       leftBottom = title;
-      rightTop = `最后更新于：${formatDate(updated_at, data.language)}`;
+      rightTop = (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language);
     } else {
       breadcrumb = [["/", login], ["/blog", repo]];
       editUrl = `${baseurl}/${namespace}`;
-      leftBottom = `共 ${data.list!.total} 篇文章`;
+      leftBottom = language.isChinese ? `共 ${data.list!.total} 篇文章` : `${data.list!.total} articles`;
       rightTop = "";
     }
   }

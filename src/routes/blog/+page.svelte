@@ -1,6 +1,8 @@
 <script module>
   import type { LayoutParentData, LayoutServerData } from "./$types";
 
+  import { language } from "$lib/Chinese.svelte";
+
   interface Props {
     data: LayoutServerData & LayoutParentData;
   }
@@ -20,4 +22,4 @@
   {/each}
 </div>
 
-<Seo title="Muspi Merol's Blog" description="共 {total} 篇文章" />
+<Seo title="Muspi Merol's Blog" description={language.isChinese ? `共 ${total} 篇文章` : `${total} articles`} />
