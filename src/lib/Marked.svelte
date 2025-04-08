@@ -13,10 +13,6 @@
   import SvelteMarkdown from "@humanspeak/svelte-markdown";
 
   let { markdown = $bindable(""), title = "", description = "" }: Props = $props();
-
-  $effect(() => {
-    markdown = markdown.replaceAll("https://cdn.nlark.com/", "/nlark/");
-  });
 </script>
 
 <div class="relative flex flex-row">
