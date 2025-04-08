@@ -37,6 +37,6 @@
     emitMetadata={emitMetadata ? "1" : "0"}
     inputPosition={inputPosition}
     theme="noborder_{$mode === "dark" ? "dark" : "light"}"
-    lang={lang}
+    lang={lang.startsWith("zh") ? lang : lang.split("-")[0]}
   />
 </div>
