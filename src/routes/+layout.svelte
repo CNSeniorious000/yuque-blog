@@ -17,10 +17,12 @@
   import Progress from "./Progress.svelte";
   import { browser } from "$app/environment";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
-  import Chinese from "$lib/Chinese.svelte";
+  import { language } from "$lib/Chinese.svelte";
   import { mode, ModeWatcher, setMode } from "mode-watcher";
 
   const { data, children }: Props = $props();
+
+  language.init(data.language);
 
   beforeNavigate(({ willUnload }) => {
     !willUnload && startBar();
@@ -41,7 +43,6 @@
 </div>
 
 <ModeWatcher darkClassNames={[]} />
-<Chinese acceptLanguage={data.language} />
 
 <svelte:head>
   <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed" />
