@@ -161,4 +161,12 @@
   .prose :global(tbody:has(:hover) tr:not(:hover)) {
     opacity: 40%;
   }
+
+  .prose :global(:where(h1, h2, h3, h4, h5, h6)) {
+    --uno: mb-0.6em mt-1.2em;
+  }
+
+  .prose :global(hr + :where(h1, h2, h3, h4, h5, h6)) {
+    --uno: mt-0;
+  }
 </style>
