@@ -1,4 +1,8 @@
 <script>
+  import moon from "@iconify-icons/line-md/moon-loop";
+  import moonToSunny from "@iconify-icons/line-md/moon-to-sunny-outline-transition";
+  import sunny from "@iconify-icons/line-md/sunny-outline";
+  import sunnyToMoon from "@iconify-icons/line-md/sunny-outline-to-moon-loop-transition";
   import Icon from "@iconify/svelte";
   import { mode, setMode, systemPrefersMode, toggleMode } from "mode-watcher";
 
@@ -17,9 +21,9 @@
   <!-- container -> w - p = translate-x + w <- child -->
   <div class="h-1.5em w-1.5em flex items-center justify-center rounded-full bg-white shadow-lg transition dark:translate-x-1em dark:bg-opacity-10 dark:shadow-none">
     {#if mode.current === "dark"}
-      <Icon icon={firstTime ? "line-md:moon-loop" : "line-md:sunny-outline-to-moon-loop-transition"} />
+      <Icon icon={firstTime ? moon : sunnyToMoon} />
     {:else}
-      <Icon icon={firstTime ? "line-md:sunny-outline" : "line-md:moon-to-sunny-outline-transition"} />
+      <Icon icon={firstTime ? sunny : moonToSunny} />
     {/if}
   </div>
 </button>

@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import pulse from "@iconify-icons/svg-spinners/pulse-multiple";
   import Icon from "@iconify/svelte";
   import { progressStore } from "$lib/store";
   import Typewriter from "$lib/Typewriter.svelte";
@@ -50,7 +51,7 @@
 <div style:--r={blurRadius} ontransitionend={({ propertyName: p }) => p === "backdrop-filter" && handleTransitionEnd()} class="fixed inset-0 grid place-items-center overflow-hidden bg-white backdrop-blur-$r transition duration-800 dark:bg-zinc-900 !bg-opacity-0" class:!bg-opacity-100={blur} class:backdrop-saturate-150={!blur} class:pointer-events-none={!blur}>
   <div class="flex flex-col items-center gap-3 text-zinc-500 transition duration-800 lg:gap-4 dark:text-zinc-400" class:opacity-0={!blur}>
     {#if blur}
-      <Icon icon="svg-spinners:pulse-multiple" width="4vh" />
+      <Icon icon={pulse} width="4vh" />
       <div class="flex flex-row gap-2 font-semibold uppercase md:gap-4 lg:text-lg">
         <Typewriter word="navigating" interval={20} />
       </div>
