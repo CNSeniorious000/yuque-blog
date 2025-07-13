@@ -34,7 +34,7 @@
     "sk-seo": "^0.5.3",
     "svelte": "^5.20.1",
     "unocss": "^66.0.0",
-    "vite": "^6.1.0",
+    "vite": "^7.0.0",
     "xsfetch": "^0.2.2"
   },
   "devDependencies": {
