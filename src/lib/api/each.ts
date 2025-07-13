@@ -1,5 +1,6 @@
 import { apiBaseurl, headers } from "$lib/serverConstants.js";
 import { namespace } from "$lib/utils";
+import { createFetch } from "xsfetch";
 
 interface User {
   id: number;
@@ -74,8 +75,14 @@ interface Document {
   _serializer: string;
 }
 
+const fetch = createFetch({ debug: true }); // with retry
+
 export async function getPost(slug: string) {
   const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs/${slug}`, { headers });
+  if (!res.ok) {
+    console.error(await res.json());
+    throw new Error(`Failed to fetch post ${slug}: ${res.statusText}`);
+  }
   const { data } = await res.json();
   return data as Document;
 }
