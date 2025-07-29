@@ -25,7 +25,7 @@
 
   function update() {
     if (page.route.id === "/blog/[slug]") {
-      const { slug } = page.params;
+      const { slug } = page.params as { slug: string };
       breadcrumb = [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]];
       editUrl = `${baseurl}/${namespace}/${slug}/edit`;
       const { title, updated_at } = data.article!;
