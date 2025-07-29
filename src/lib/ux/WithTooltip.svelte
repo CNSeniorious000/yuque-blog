@@ -29,7 +29,7 @@
     {/snippet}
   </Popover.Trigger>
   <Popover.Content sideOffset={4} collisionPadding={4} trapFocus={false} side="top" onOpenAutoFocus={e => e.preventDefault()} onCloseAutoFocus={e => e.preventDefault()}>
-    <div transition:fly|global={{ y: 2, duration: 300 }} class="rounded bg-white px-0.5em py-0.3em text-xs text-zinc-7 shadow shadow-zinc-7/10 backdrop-blur dark:(bg-zinc-7/40 text-zinc-3) transition-colors">
+    <div transition:fly|global={{ y: 2, duration: 300 }} class="rounded bg-white px-0.5em py-0.3em text-xs text-zinc-7 shadow shadow-zinc-7/10 backdrop-blur transition-colors dark:(bg-zinc-7/40 text-zinc-3)">
       <InlineMarkdown markdown={tips} />
     </div>
   </Popover.Content>

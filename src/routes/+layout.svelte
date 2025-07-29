@@ -36,7 +36,7 @@
   });
 </script>
 
-<div class="min-h-screen w-full flex flex-col items-stretch justify-center bg-white text-zinc-4 !min-h-[100dvh] dark:bg-zinc-900 transition-background-color">
+<div class="min-h-screen w-full flex flex-col items-stretch justify-center bg-white text-zinc-4 transition-background-color !min-h-[100dvh] dark:bg-zinc-900">
   {@render children?.()}
 </div>
 <Progress />
