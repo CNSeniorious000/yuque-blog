@@ -27,4 +27,4 @@ export const GET: RequestHandler = async ({ url: { origin }, request: { headers 
   } });
 };
 
-export const config = { isr: { expiration: 10 } };
+export const config = { isr: { expiration: 300 } };

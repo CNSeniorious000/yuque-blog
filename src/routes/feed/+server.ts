@@ -59,4 +59,4 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
   `.trim(), { headers: { "Content-Type": "application/xml; charset=utf-8" } });
 };
 
-export const config = { isr: { expiration: 10 } };
+export const config = { isr: { expiration: 300 } };
