@@ -16,6 +16,7 @@
   import { finishBar, startBar } from "../lib/progressFunction";
   import Progress from "./Progress.svelte";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
+  import { page } from "$app/state";
   import { language } from "$lib/Chinese.svelte";
   import { mode, ModeWatcher, setMode, systemPrefersMode, userPrefersMode } from "mode-watcher";
   import { untrack } from "svelte";
@@ -45,4 +46,5 @@
 
 <svelte:head>
   <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed" />
+  <link rel="alternate" type="text/markdown" title="LLM-friendly version of this page" href={page.route.id === "/blog/[slug]" ? `/blog/${page.params.slug}/llms.txt` : "/llms.txt"} />
 </svelte:head>
