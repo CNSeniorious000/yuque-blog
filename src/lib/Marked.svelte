@@ -10,6 +10,7 @@
   import Clipboard from "./Clipboard.svelte";
   import Code from "./Code.svelte";
   import Title from "./Title.svelte";
+  import Url from "./Url.svelte";
   import SvelteMarkdown from "@humanspeak/svelte-markdown";
 
   let { markdown = $bindable(""), title = "", description = "" }: Props = $props();
@@ -23,7 +24,7 @@
 </div>
 
 <article class="max-w-full flex flex-col text-zinc-800 prose xl:text-lg dark:text-zinc-300 dark:prose-invert">
-  <SvelteMarkdown renderers={{ code: Code }} source={markdown} />
+  <SvelteMarkdown renderers={{ code: Code, link: Url }} source={markdown} />
 </article>
 
 <style>
