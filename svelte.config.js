@@ -10,6 +10,9 @@ const config = {
     output: {
       preloadStrategy: "preload-mjs",
     },
+    prerender: {
+      origin: "https://muspimerol.site",
+    },
   },
 };
 
