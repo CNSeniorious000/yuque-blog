@@ -39,6 +39,9 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
         <id>${id}</id>
         <title>${escape(title)}</title>
         <link href="${origin}/blog/${slug}" />
+        <author>
+          <name>Muspi Merol 庄毅辉</name>
+        </author>
         <summary>${escape(description)}</summary>
         <content type="html">${escape(content)}</content>
         <published>${created_at}</published>
