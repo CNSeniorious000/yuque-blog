@@ -23,6 +23,7 @@
 
   const { data, children }: Props = $props();
 
+  // svelte-ignore state_referenced_locally
   language.init(data.language);
 
   beforeNavigate(({ willUnload }) => {

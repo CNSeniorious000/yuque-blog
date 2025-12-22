@@ -13,6 +13,7 @@
   import Seo from "sk-seo";
 
   const { data }: Props = $props();
+  // svelte-ignore state_referenced_locally
   const { articles, total } = data.list!;
 </script>
 
