@@ -1,17 +1,11 @@
-<script module>
-  interface Props {
-    href?: string;
-    title: any;
-    children?: import("svelte").Snippet;
-  }
-</script>
-
 <script lang="ts">
+  import type { LinkSnippetProps } from "@humanspeak/svelte-markdown";
+
   import UrlHighlighter from "./UrlHighlighter.svelte";
   import WithTooltip from "./ux/WithTooltip.svelte";
   import { page } from "$app/state";
 
-  const { href = "", title, children }: Props = $props();
+  const { href = "", title, children }: LinkSnippetProps = $props();
 
   const isUrl = $derived(URL.canParse(href, page.url));
   const children_render = $derived(children);

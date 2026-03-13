@@ -1,14 +1,9 @@
-<script module>
-  interface Props {
-    lang: string;
-    text: string;
-  }
-</script>
-
 <script lang="ts">
+  import type { CodeSnippetProps } from "@humanspeak/svelte-markdown";
+
   import { onMount } from "svelte";
 
-  const { lang, text }: Props = $props();
+  const { lang, text }: CodeSnippetProps = $props();
 
   let html = $state<string>();
 
