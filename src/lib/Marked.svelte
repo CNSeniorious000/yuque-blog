@@ -9,6 +9,7 @@
 <script lang="ts">
   import Clipboard from "./Clipboard.svelte";
   import Code from "./Code.svelte";
+  import Image from "./Image.svelte";
   import Title from "./Title.svelte";
   import Url from "./Url.svelte";
   import SvelteMarkdown from "@humanspeak/svelte-markdown";
@@ -24,7 +25,7 @@
 </div>
 
 <article class="max-w-full flex flex-col text-zinc-800 prose xl:text-lg dark:text-zinc-300 dark:prose-invert">
-  <SvelteMarkdown renderers={{ code: Code, link: Url }} source={markdown} />
+  <SvelteMarkdown renderers={{ code: Code, link: Url, image: Image }} source={markdown} />
 </article>
 
 <style>
