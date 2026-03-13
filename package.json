@@ -8,6 +8,7 @@
     "fix": "eslint . --fix",
     "lint": "eslint .",
     "build": "vite build",
+    "collect": "bun run src/lib/collect-image-sizes.ts",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check"
   },
@@ -29,6 +30,7 @@
     "bits-ui": "^2.0.0",
     "cheerio": "^1.0.0",
     "htmlparser2": "^10.0.0",
+    "image-size": "^2.0.2",
     "mode-watcher": "^1.0.0",
     "shiki": "^4.0.0",
     "sk-seo": "^0.5.3",
