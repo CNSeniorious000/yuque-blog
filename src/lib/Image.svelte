@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { ImageSnippetProps } from "@humanspeak/svelte-markdown";
 
+  import imageDimensions from "./image-dimensions.json";
+
   type ImageDimensions = [number, number];
   type ImageDimensionsMap = Record<string, ImageDimensions>;
 
@@ -8,9 +10,7 @@
 
   let error = $state(false);
 
-  // Keep the component build-safe when the generated dimensions file is absent.
-  const imageDimensionsModules = import.meta.glob<{ default: ImageDimensionsMap }>("./image-dimensions.json", { eager: true });
-  const dimensionsMap: ImageDimensionsMap = Object.values(imageDimensionsModules)[0]?.default ?? {};
+  const dimensionsMap = imageDimensions as unknown as ImageDimensionsMap;
   const dimensions = $derived(!href ? undefined : dimensionsMap[href] || dimensionsMap[`https://cdn.nlark.com/${href.replace(/^\/nlark\//, "")}`]);
 
   const handleLoad = (event: Event) => {
