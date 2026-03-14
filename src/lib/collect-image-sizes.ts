@@ -235,9 +235,19 @@ async function writeDimensions(dimensions: Record<string, [number, number]>) {
   await fs.writeFile(OUTPUT_PATH, nextContent);
 }
 
+async function readDimensions(): Promise<Record<string, [number, number]>> {
+  try {
+    const content = await fs.readFile(OUTPUT_PATH, "utf8");
+    return JSON.parse(content) as Record<string, [number, number]>;
+  } catch {
+    return {};
+  }
+}
+
 async function collectImageSizes(
   posts: PostSummary[],
   ui: CollectorUi,
+  existingDimensions: Record<string, [number, number]>,
   postConcurrency = POST_CONCURRENCY,
   imageConcurrency = IMAGE_CONCURRENCY,
 ) {
@@ -272,6 +282,7 @@ async function collectImageSizes(
         ui.appendLog("error", `${truncateMiddle(postLabel, 36)} body_html missing`);
       } else {
         const imageUrls = extractImageUrls(fullPost.body_html);
+        let cachedImageCount = 0;
         let newImageCount = 0;
 
         for (const imageUrl of imageUrls) {
@@ -280,12 +291,21 @@ async function collectImageSizes(
           }
 
           seenImageUrls.add(imageUrl);
+          const cachedSize = existingDimensions[imageUrl];
+          if (cachedSize) {
+            dimensions[imageUrl] = cachedSize;
+            imagesProcessed += 1;
+            successCount += 1;
+            cachedImageCount += 1;
+            continue;
+          }
+
           imageQueue.push(imageUrl);
           newImageCount += 1;
         }
 
-        if (newImageCount > 0) {
-          ui.appendLog("info", `${truncateMiddle(postLabel, 36)} ${newImageCount} new`);
+        if (newImageCount > 0 || cachedImageCount > 0) {
+          ui.appendLog("info", `${truncateMiddle(postLabel, 36)} ${newImageCount} new, ${cachedImageCount} cached`);
           ui.setImageProgress({
             processed: imagesProcessed,
             total: seenImageUrls.size,
@@ -370,8 +390,9 @@ async function runCollection(ui: CollectorUi) {
   }
 
   ui.appendLog("info", `Found ${posts.length} posts`);
+  const existingDimensions = await readDimensions();
 
-  const { dimensions, successCount, totalCount } = await collectImageSizes(posts, ui);
+  const { dimensions, successCount, totalCount } = await collectImageSizes(posts, ui, existingDimensions);
 
   if (totalCount === 0) {
     ui.setPhase("write", "writing empty output");
