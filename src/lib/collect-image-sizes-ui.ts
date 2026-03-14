@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 import process from "node:process";
 
 const CSI = "\u001B[";
@@ -33,6 +34,7 @@ const TUI_MARGIN_TEXT = " ".repeat(TUI_MARGIN);
 
 export type LogKind = "info" | "ok" | "error";
 type AnsiColorName = Exclude<keyof typeof ANSI_CODE, "clearLine" | "hideCursor" | "reset" | "showCursor">;
+type RawWriter = (text: string) => void;
 
 interface LogLine {
   kind: LogKind;
@@ -130,8 +132,52 @@ function ansiColorize(color: AnsiColorName, text: string) {
   return `${ANSI_CODE[color]}${text}${ANSI_CODE.reset}`;
 }
 
+function defaultRawWriter(text: string) {
+  process.stdout.write(text);
+}
+
 function writeStdout(line: string) {
   process.stdout.write(`${line}\n`);
+}
+
+async function createPreferredRawWriter(): Promise<RawWriter> {
+  const moduleId = "bun:ffi";
+
+  try {
+    const { dlopen, ptr } = await import(moduleId) as {
+      dlopen: (library: string, symbols: Record<string, { args: string[]; returns: string }>) => {
+        symbols: Record<string, (...args: unknown[]) => number | boolean>;
+      };
+      ptr: (value: ArrayBufferView) => number;
+    };
+    const kernel32 = dlopen("kernel32.dll", {
+      GetStdHandle: { args: ["i32"], returns: "ptr" },
+      WriteConsoleW: { args: ["ptr", "ptr", "u32", "ptr", "ptr"], returns: "bool" },
+    });
+    const stdoutHandle = kernel32.symbols.GetStdHandle(-11);
+
+    if (!stdoutHandle) {
+      return defaultRawWriter;
+    }
+
+    return (text: string) => {
+      const buffer = Buffer.from(text, "utf16le");
+      const charsWritten = new Uint32Array(1);
+      const ok = kernel32.symbols.WriteConsoleW(
+        stdoutHandle,
+        ptr(buffer),
+        buffer.byteLength / 2,
+        ptr(charsWritten),
+        0,
+      );
+
+      if (!ok) {
+        defaultRawWriter(text);
+      }
+    };
+  } catch {
+    return defaultRawWriter;
+  }
 }
 
 function parseHexColor(hex: string) {
@@ -290,7 +336,6 @@ class InlineCollectorUi implements CollectorUi {
     finishedAt: null,
   };
 
-  private autoExitTimer: ReturnType<typeof setTimeout> | null = null;
   private displayedScanProgress = 0;
   private displayedImageProgress = 0;
   private exitResolver: (() => void) | null = null;
@@ -298,14 +343,15 @@ class InlineCollectorUi implements CollectorUi {
   private renderQueued = false;
   private renderedLineCount = 0;
   private shutdownComplete = false;
-  private readonly writeRaw = process.stdout.write.bind(process.stdout) as (text: string) => void;
+  private readonly writeRaw: RawWriter;
 
   needsExplicitExit = true;
 
-  constructor() {
+  constructor(options: { writeRaw?: RawWriter } = {}) {
     this.exitPromise = new Promise((resolve) => {
       this.exitResolver = resolve;
     });
+    this.writeRaw = options.writeRaw || defaultRawWriter;
 
     this.writeRaw(ANSI_CODE.hideCursor);
     this.queueRender();
@@ -382,14 +428,8 @@ class InlineCollectorUi implements CollectorUi {
       return;
     }
 
-    this.shutdownComplete = true;
-
-    if (this.autoExitTimer) {
-      clearTimeout(this.autoExitTimer);
-      this.autoExitTimer = null;
-    }
-
     this.flushRender();
+    this.shutdownComplete = true;
 
     if (!preserveOutput && this.renderedLineCount > 0) {
       let output = moveToFrameStart(this.renderedLineCount);
@@ -415,17 +455,7 @@ class InlineCollectorUi implements CollectorUi {
     this.state.phase = phase;
     this.state.finishedAt = Date.now();
     this.queueRender();
-    this.scheduleAutoExit();
-  }
-
-  private scheduleAutoExit() {
-    if (this.autoExitTimer) {
-      clearTimeout(this.autoExitTimer);
-    }
-
-    this.autoExitTimer = setTimeout(() => {
-      this.exitResolver?.();
-    }, 300);
+    this.exitResolver?.();
   }
 
   private queueRender() {
@@ -548,5 +578,7 @@ export async function createCollectorUi(isInteractiveTerminal: boolean): Promise
     return new ConsoleCollectorUi();
   }
 
-  return new InlineCollectorUi();
+  const writeRaw = await createPreferredRawWriter();
+
+  return new InlineCollectorUi({ writeRaw });
 }
