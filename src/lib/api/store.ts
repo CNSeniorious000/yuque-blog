@@ -1,7 +1,7 @@
 import type { Post } from "./frontmatter";
 
-import { postFromMarkdown, postsDir } from "./frontmatter";
-import { contentRepo, githubHeaders } from "$lib/serverConstants";
+import { fetchPostsFromGitHub } from "./github";
+import { githubToken } from "$lib/serverConstants";
 
 export type { Post, PostMeta } from "./frontmatter";
 
@@ -12,7 +12,7 @@ let cache: { at: number; posts: Promise<Map<string, Post>> } | undefined;
 export function loadPosts(): Promise<Map<string, Post>> {
   if (!cache || Date.now() - cache.at > ttl) {
     const prev = cache;
-    const posts = fetchAll().catch((error) => {
+    const posts = fetchPostsFromGitHub(githubToken).catch((error) => {
       // serve the previous snapshot on a failed refresh, and only drop the cache if it is still ours
       if (cache?.posts === posts) {
         cache = prev ? { at: 0, posts: prev.posts } : undefined;
@@ -22,28 +22,4 @@ export function loadPosts(): Promise<Map<string, Post>> {
     cache = { at: Date.now(), posts };
   }
   return cache.posts;
-}
-
-async function fetchAll(): Promise<Map<string, Post>> {
-  const [owner, name] = contentRepo.split("/");
-  const res = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: githubHeaders,
-    signal: AbortSignal.timeout(15_000),
-    body: JSON.stringify({ query: `{repository(owner:"${owner}",name:"${name}"){object(expression:"HEAD:${postsDir}"){...on Tree{entries{name object{...on Blob{text}}}}}}}` }),
-  });
-  const { data, errors } = await res.json() as { data?: { repository: { object: { entries: { name: string; object: { text: string } | null }[] } } }; errors?: unknown };
-  if (errors || !data?.repository?.object) {
-    throw new Error(`GitHub GraphQL failed: ${JSON.stringify(errors ?? data)}`);
-  }
-
-  const posts = new Map<string, Post>();
-  for (const entry of data.repository.object.entries) {
-    if (!entry.name.endsWith(".md") || !entry.object) {
-      continue;
-    }
-    const post = postFromMarkdown(entry.name, entry.object.text);
-    posts.set(post.meta.slug, post);
-  }
-  return posts;
 }

@@ -2,10 +2,11 @@ import type { Post } from "./api/frontmatter";
 import type { CollectorUi } from "./collect-image-sizes-ui";
 
 import { postFromMarkdown } from "./api/frontmatter";
+import { fetchPostsFromGitHub } from "./api/github";
 import { createCollectorUi } from "./collect-image-sizes-ui";
 import * as cheerio from "cheerio";
 import imageSize from "image-size";
-import { promises as fs } from "node:fs";
+import { existsSync, promises as fs } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -180,10 +181,14 @@ async function fetchImageSizeAttempt(url: string, signal: AbortSignal): Promise<
 
 async function listPosts(ui: CollectorUi): Promise<Post[]> {
   try {
-    ui.appendLog("info", `Reading docs from ${CONTENT_DIR}`);
-    const names = await fs.readdir(CONTENT_DIR);
-    return await Promise.all((names as string[]).filter((n: string) => n.endsWith(".md")).map(async (n: string) =>
-      postFromMarkdown(n, await fs.readFile(path.join(CONTENT_DIR, n), "utf8"))));
+    if (existsSync(CONTENT_DIR)) {
+      ui.appendLog("info", `Reading docs from ${CONTENT_DIR}`);
+      const names = await fs.readdir(CONTENT_DIR);
+      return await Promise.all((names as string[]).filter((n: string) => n.endsWith(".md")).map(async (n: string) =>
+        postFromMarkdown(n, await fs.readFile(path.join(CONTENT_DIR, n), "utf8"))));
+    }
+    ui.appendLog("info", "No local content checkout, fetching posts from GitHub");
+    return [...(await fetchPostsFromGitHub(process.env.GITHUB_TOKEN ?? "")).values()];
   } catch (error) {
     // abort instead of returning [] — an empty list would overwrite image-dimensions.json with {}
     ui.appendLog("error", `Failed to read posts: ${toErrorMessage(error)}`);
