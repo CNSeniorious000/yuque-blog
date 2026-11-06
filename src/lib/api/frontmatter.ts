@@ -27,7 +27,9 @@ export function parsePost(raw: string): Post {
   const fields: Record<string, unknown> = {};
   for (const line of (match?.[1] ?? "").split("\n")) {
     const i = line.indexOf(": ");
-    if (i > 0) fields[line.slice(0, i)] = JSON.parse(line.slice(i + 2));
+    if (i > 0) {
+      fields[line.slice(0, i)] = JSON.parse(line.slice(i + 2));
+    }
   }
   const body = match?.[2] ?? raw;
   const meta = {
