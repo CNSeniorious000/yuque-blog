@@ -4,7 +4,7 @@ import header from "../llms.txt/header.md?raw";
 import { text } from "@sveltejs/kit";
 import { getPost } from "$lib/api/each";
 import { listPosts } from "$lib/api/list";
-import { formatDate } from "$lib/utils";
+import { formatDate, toLocalNlark } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ url: { origin }, request: { headers } }) => {
   const language = headers.get("accept-language")?.split(",")[0];
@@ -12,11 +12,11 @@ export const GET: RequestHandler = async ({ url: { origin }, request: { headers 
   let blocks = [header.replace("{}", origin).trim()];
   const posts = await listPosts();
 
-  blocks.push(`## Posts / more like Random Thoughts (top ${posts.articles.length}/${posts.total})`);
+  blocks.push(`## Posts / more like Random Thoughts (top ${posts.length})`);
 
-  blocks = blocks.concat(...await Promise.all(posts.articles.map(async ({ slug, title, created_at }) => {
+  blocks = blocks.concat(...await Promise.all(posts.map(async ({ slug, title, created_at }) => {
     const article = await getPost(slug);
-    const md = article.body.replaceAll("https://cdn.nlark.com/", "/nlark/").trim();
+    const md = toLocalNlark(article.body).trim();
     return `# [${title}](/blog/${slug})` + ` (${formatDate(created_at, language)})` + `\n\n${md}`;
   })));
 

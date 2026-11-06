@@ -2,7 +2,7 @@ import type { RequestHandler } from "./$types";
 
 import { text } from "@sveltejs/kit";
 import { getPost } from "$lib/api/each";
-import { formatDate } from "$lib/utils";
+import { formatDate, toLocalNlark } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ params: { slug }, request: { headers } }) => {
   const language = headers.get("accept-language")?.split(",")[0];
@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ params: { slug }, request: { headers
 
 # ${title} (${formatDate(created_at, language)})
 
-${body.replaceAll("https://cdn.nlark.com/", "/nlark/")}
+${toLocalNlark(body)}
 
     `.trim(), { headers: {
     "Content-Type": "text/markdown; charset=utf-8",

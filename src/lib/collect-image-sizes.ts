@@ -9,33 +9,20 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { createFetch } from "xsfetch";
 
+import { postFromMarkdown, type Post } from "./api/frontmatter";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const OUTPUT_PATH = path.join(__dirname, "image-dimensions.json");
 
-const API_BASEURL = "https://yuque.com/api/v2";
-const NAMESPACE = "muspi_merol/blog";
+const CONTENT_DIR = process.env.CONTENT_DIR || path.resolve(__dirname, "../../../yuque-blog-content/posts");
 const POST_CONCURRENCY = 5;
 const IMAGE_CONCURRENCY = 20;
 const IMAGE_REQUEST_TIMEOUT_MS = 20000;
 const IMAGE_REQUEST_RETRIES = 2;
 
-const headers = {
-  "User-Agent": "yuque-blog-bot",
-  "Accept": "application/json",
-  "X-Auth-Token": process.env.ACCESS_TOKEN || "",
-};
 
 const fetch = createFetch({ debug: false });
-
-interface PostSummary {
-  slug: string;
-  title?: string;
-}
-
-interface PostDetail {
-  body_html?: string;
-}
 
 interface ImageSizeResult {
   url: string;
@@ -112,8 +99,8 @@ function isRetryableStatus(status: number) {
   return status === 408 || status === 425 || status === 429 || status >= 500;
 }
 
-function extractImageUrls(html: string): string[] {
-  const $ = cheerio.load(html);
+function extractImageUrls(body: string): string[] {
+  const $ = cheerio.load(body);
   const imageUrls = new Set<string>();
 
   $("img").each((_, elem) => {
@@ -122,6 +109,9 @@ function extractImageUrls(html: string): string[] {
       imageUrls.add(src);
     }
   });
+  for (const match of body.matchAll(/!\[[^\]]*\]\((\S+?)(?:\s+"[^"]*")?\)/g)) {
+    imageUrls.add(match[1]);
+  }
 
   return Array.from(imageUrls);
 }
@@ -189,37 +179,18 @@ async function fetchImageSizeAttempt(url: string, signal: AbortSignal): Promise<
   return { url, size: null, error: lastError };
 }
 
-async function listPosts(ui: CollectorUi): Promise<PostSummary[]> {
+async function listPosts(ui: CollectorUi): Promise<Post[]> {
   try {
-    ui.appendLog("info", `Fetching docs from ${API_BASEURL}/repos/${NAMESPACE}/docs`);
-    const res = await fetch(`${API_BASEURL}/repos/${NAMESPACE}/docs`, { headers });
-
-    if (!res.ok) {
-      ui.appendLog("error", `Docs API failed: ${res.status} ${res.statusText}`);
-      return [];
-    }
-
-    const data = await res.json() as { data?: PostSummary[] };
-    return data.data || [];
+    ui.appendLog("info", `Reading docs from ${CONTENT_DIR}`);
+    const names = await fs.readdir(CONTENT_DIR);
+    return await Promise.all((names as string[]).filter((n: string) => n.endsWith(".md")).map(async (n: string) =>
+      postFromMarkdown(n, await fs.readFile(path.join(CONTENT_DIR, n), "utf8"))));
   } catch (error) {
-    ui.appendLog("error", `Failed to fetch posts: ${toErrorMessage(error)}`);
+    ui.appendLog("error", `Failed to read posts: ${toErrorMessage(error)}`);
     return [];
   }
 }
 
-async function getPost(slug: string): Promise<PostDetail | null> {
-  try {
-    const res = await fetch(`${API_BASEURL}/repos/${NAMESPACE}/docs/${slug}`, { headers });
-    if (!res.ok) {
-      return null;
-    }
-
-    const data = await res.json() as { data?: PostDetail };
-    return data.data || null;
-  } catch {
-    return null;
-  }
-}
 
 async function writeDimensions(dimensions: Record<string, [number, number]>) {
   const nextContent = `${JSON.stringify(dimensions, null, 2)}\n`;
@@ -245,7 +216,7 @@ async function readDimensions(): Promise<Record<string, [number, number]>> {
 }
 
 async function collectImageSizes(
-  posts: PostSummary[],
+  posts: Post[],
   ui: CollectorUi,
   existingDimensions: Record<string, [number, number]>,
   postConcurrency = POST_CONCURRENCY,
@@ -253,7 +224,7 @@ async function collectImageSizes(
 ) {
   const dimensions: Record<string, [number, number]> = {};
   const seenImageUrls = new Set<string>();
-  const postQueue = new AsyncQueue<PostSummary>();
+  const postQueue = new AsyncQueue<Post>();
   const imageQueue = new AsyncQueue<string>();
   let postsProcessed = 0;
   let imagesProcessed = 0;
@@ -276,43 +247,38 @@ async function collectImageSizes(
         return;
       }
 
-      const postLabel = post.title || post.slug;
-      const fullPost = await getPost(post.slug);
-      if (!fullPost?.body_html) {
-        ui.appendLog("error", `${truncateMiddle(postLabel, 36)} body_html missing`);
-      } else {
-        const imageUrls = extractImageUrls(fullPost.body_html);
-        let cachedImageCount = 0;
-        let newImageCount = 0;
+      const postLabel = post.meta.title || post.meta.slug;
+      const imageUrls = extractImageUrls(post.body);
+      let cachedImageCount = 0;
+      let newImageCount = 0;
 
-        for (const imageUrl of imageUrls) {
-          if (seenImageUrls.has(imageUrl)) {
-            continue;
-          }
-
-          seenImageUrls.add(imageUrl);
-          const cachedSize = existingDimensions[imageUrl];
-          if (cachedSize) {
-            dimensions[imageUrl] = cachedSize;
-            imagesProcessed += 1;
-            successCount += 1;
-            cachedImageCount += 1;
-            continue;
-          }
-
-          imageQueue.push(imageUrl);
-          newImageCount += 1;
+      for (const imageUrl of imageUrls) {
+        if (seenImageUrls.has(imageUrl)) {
+          continue;
         }
 
-        if (newImageCount > 0 || cachedImageCount > 0) {
-          ui.appendLog("info", `${truncateMiddle(postLabel, 36)} ${newImageCount} new, ${cachedImageCount} cached`);
-          ui.setImageProgress({
-            processed: imagesProcessed,
-            total: seenImageUrls.size,
-            successCount,
-            failureCount,
-          });
+        seenImageUrls.add(imageUrl);
+        const cachedSize = existingDimensions[imageUrl];
+        if (cachedSize) {
+          dimensions[imageUrl] = cachedSize;
+          imagesProcessed += 1;
+          successCount += 1;
+          cachedImageCount += 1;
+          continue;
         }
+
+        imageQueue.push(imageUrl);
+        newImageCount += 1;
+      }
+
+      if (newImageCount > 0 || cachedImageCount > 0) {
+        ui.appendLog("info", `${truncateMiddle(postLabel, 36)} ${newImageCount} new, ${cachedImageCount} cached`);
+        ui.setImageProgress({
+          processed: imagesProcessed,
+          total: seenImageUrls.size,
+          successCount,
+          failureCount,
+        });
       }
 
       postsProcessed += 1;

@@ -6,23 +6,20 @@ import { HttpTransport } from "@tmcp/transport-http";
 import { getPost } from "$lib/api/each";
 import { listPosts } from "$lib/api/list";
 import { searchPosts } from "$lib/api/search";
-import { login, namespace, repo } from "$lib/utils";
+import { renderFrontmatter } from "$lib/api/frontmatter";
+import { login, repo } from "$lib/utils";
 import { McpServer } from "tmcp";
 import * as v from "valibot";
 
 const BASE_URI = `${login.replaceAll("_", "-")}://${repo}`;
 const serverDescription = header.match(/^> (.+)$/m)?.[1]?.replace(/\[(.*?)\]\([^)]+\)/g, "$1").replace(/\[\^[^\]]+\]/g, "").trim() ?? "I am Muspi Merol.";
 
-let cachedPosts: Awaited<ReturnType<typeof listPosts>> | undefined;
-let cachedAt = 0;
-let inflightPosts: Promise<Awaited<ReturnType<typeof listPosts>>> | undefined;
-
 const server = new McpServer(
   {
     name: "yuque-blog",
     version: "1.0.0",
     description: serverDescription,
-    get websiteUrl(): string | undefined {
+    get websiteUrl() {
       return server.ctx.custom?.origin;
     },
   },
@@ -41,46 +38,13 @@ function postUri(slug: string) {
   return `${BASE_URI}/${slug}`;
 }
 
-function renderFrontmatter(metadata: Record<string, number | string | undefined>) {
-  const lines = Object.entries(metadata)
-    .filter(([, value]) => value != null && value !== "")
-    .map(([key, value]) => `${key}: ${typeof value === "number" ? value : JSON.stringify(value)}`);
-
-  if (!lines.length) {
-    return "";
-  }
-
-  return ["---", ...lines, "---", ""].join("\n");
-}
-
-async function listPostsForMcp() {
-  const now = Date.now();
-  if (cachedPosts && now - cachedAt < 15_000) {
-    return cachedPosts;
-  }
-
-  if (inflightPosts) {
-    return inflightPosts;
-  }
-
-  inflightPosts = listPosts().then((result) => {
-    cachedPosts = result;
-    cachedAt = Date.now();
-    return result;
-  }).finally(() => {
-    inflightPosts = undefined;
-  });
-
-  return inflightPosts;
-}
-
 async function getListResource() {
-  const { total, articles } = await listPostsForMcp();
+  const articles = await listPosts();
   return {
     uri: BASE_URI,
     mimeType: "text/markdown",
     text: [
-      renderFrontmatter({ total }),
+      renderFrontmatter({ total: articles.length }),
       ...articles.map(({ slug, title, content_updated_at }) => `- [${title}](${postUrl(slug)}/llms.txt) - updated ${content_updated_at}`),
     ].join("\n"),
   };
@@ -105,11 +69,11 @@ async function getPostResource(slug: string) {
 }
 
 async function listPostResources() {
-  const { articles } = await listPostsForMcp();
-  return articles.map(({ slug, title, description }) => ({
+  const articles = await listPosts();
+  return articles.map(({ slug, title, summary }) => ({
     name: slug,
     title,
-    description,
+    description: summary,
     uri: postUri(slug),
     mimeType: "text/markdown",
   }));
@@ -117,7 +81,7 @@ async function listPostResources() {
 
 async function completeSlugs(query: string) {
   const needle = query.trim().toLowerCase();
-  const { articles } = await listPostsForMcp();
+  const articles = await listPosts();
   const matches = articles
     .map(({ slug }) => slug)
     .filter(slug => !needle || slug.toLowerCase().includes(needle));
@@ -136,14 +100,14 @@ server.tool(
     }),
     annotations: { destructiveHint: false, readOnlyHint: true },
   },
-  async ({ query }: { query: string }) => {
-    const { total, articles } = await searchPosts(query, { scope: namespace });
+  async ({ query }) => {
+    const articles = await searchPosts(query);
     return {
       content: [{
         type: "text",
         text: articles.length
           ? [
-              renderFrontmatter({ total }),
+              renderFrontmatter({ total: articles.length }),
               ...articles.map(({ slug, title, description }) => `- [${title}](${postUrl(slug)}/llms.txt)${description ? `\n  ${description}` : ""}`),
             ].join("\n")
           : "No results found.",
@@ -177,7 +141,7 @@ server.tool(
     }),
     annotations: { destructiveHint: false, readOnlyHint: true },
   },
-  async ({ slug }: { slug: string }) => ({ content: [{ type: "resource", resource: await getPostResource(slug) }] }),
+  async ({ slug }) => ({ content: [{ type: "resource", resource: await getPostResource(slug) }] }),
 );
 
 server.template(
@@ -190,12 +154,12 @@ server.template(
     complete: { slug: completeSlugs },
     list: listPostResources,
   },
-  async (_uri: string, params: Record<string, string | string[]>) => ({
+  async (_uri, params) => ({
     contents: [await getPostResource(Array.isArray(params.slug) ? params.slug[0] : params.slug)],
   }),
 );
 
-const transport = new HttpTransport<{ origin: string }>(server, { path: "/mcp", cors: true, disableSse: true });
+const transport = new HttpTransport(server, { path: "/mcp", cors: true, disableSse: true });
 
 const handler: RequestHandler = async ({ request, url }) => {
   return await transport.respond(request, { origin: url.origin }) ?? new Response("Not Found", { status: 404 });
