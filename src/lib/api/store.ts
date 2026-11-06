@@ -15,7 +15,7 @@ export function loadPosts(): Promise<Map<string, Post>> {
     const posts = fetchPostsFromGitHub(githubToken).catch((error) => {
       // serve the previous snapshot on a failed refresh, and only drop the cache if it is still ours
       if (cache?.posts === posts) {
-        cache = prev ? { at: 0, posts: prev.posts } : undefined;
+        cache = prev ? { at: Date.now() - ttl + 30_000, posts: prev.posts } : undefined; // 30s backoff before retrying
       }
       return prev ? prev.posts : Promise.reject(error);
     });
