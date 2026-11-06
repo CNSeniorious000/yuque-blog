@@ -19,11 +19,16 @@ export async function fetchPostsFromGitHub(token: string): Promise<Map<string, P
 
   const posts = new Map<string, Post>();
   for (const entry of data.repository.object.entries) {
-    if (!entry.name.endsWith(".md") || !entry.object) {
+    if (!entry.name.endsWith(".md") || typeof entry.object?.text !== "string") {
       continue;
     }
-    const post = postFromMarkdown(entry.name, entry.object.text);
-    posts.set(post.meta.slug, post);
+    try {
+      const post = postFromMarkdown(entry.name, entry.object.text);
+      posts.set(post.meta.slug, post);
+    } catch (error) {
+      // one malformed post must not take down every route that reads posts
+      console.error(`Skipping ${entry.name}: ${error}`);
+    }
   }
   return posts;
 }
