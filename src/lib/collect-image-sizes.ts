@@ -185,8 +185,9 @@ async function listPosts(ui: CollectorUi): Promise<Post[]> {
     return await Promise.all((names as string[]).filter((n: string) => n.endsWith(".md")).map(async (n: string) =>
       postFromMarkdown(n, await fs.readFile(path.join(CONTENT_DIR, n), "utf8"))));
   } catch (error) {
+    // abort instead of returning [] — an empty list would overwrite image-dimensions.json with {}
     ui.appendLog("error", `Failed to read posts: ${toErrorMessage(error)}`);
-    return [];
+    throw error;
   }
 }
 
