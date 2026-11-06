@@ -34,7 +34,7 @@
     } else {
       breadcrumb = [["/", login], ["/blog", repo]];
       editUrl = `${baseurl}/${namespace}`;
-      leftBottom = language.isChinese ? `共 ${data.list!.total} 篇文章` : `${data.list!.total} articles`;
+      leftBottom = language.isChinese ? `共 ${data.list!.length} 篇文章` : `${data.list!.length} articles`;
       rightTop = "";
     }
   }

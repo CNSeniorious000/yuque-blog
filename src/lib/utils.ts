@@ -4,6 +4,12 @@ export const namespace = "muspi_merol/blog";
 
 export const [login, repo] = namespace.split("/");
 
+const nlarkCdn = "https://cdn.nlark.com/";
+
+export function toLocalNlark(body: string, base = "/nlark/") {
+  return body.replaceAll(nlarkCdn, base);
+}
+
 export function formatDate(dateString: string, language: string | undefined) {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {

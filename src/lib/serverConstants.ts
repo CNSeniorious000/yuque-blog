@@ -1,9 +1,7 @@
 import * as env from "$env/static/private";
 
-const { ACCESS_TOKEN: ak = "", BASE_URL = "https://yuque.com" } = env as { ACCESS_TOKEN?: string; BASE_URL?: string };
+const { GITHUB_TOKEN = "" } = env as { GITHUB_TOKEN?: string };
 
-export const apiBaseurl = `${BASE_URL}/api/v2`;
+export const contentRepo = "CNSeniorious000/yuque-blog-content";
 
-export const baseurl = "https://www.yuque.com";
-
-export const headers = { "X-Auth-Token": ak };
+export const githubHeaders = { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/vnd.github+json", "User-Agent": "yuque-blog" };
