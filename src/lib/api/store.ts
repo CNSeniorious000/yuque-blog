@@ -11,10 +11,15 @@ let cache: { at: number; posts: Promise<Map<string, Post>> } | undefined;
 
 export function loadPosts(): Promise<Map<string, Post>> {
   if (!cache || Date.now() - cache.at > ttl) {
-    cache = { at: Date.now(), posts: fetchAll().catch((error) => {
-      cache = undefined;
-      throw error;
-    }) };
+    const prev = cache;
+    const posts = fetchAll().catch((error) => {
+      // serve the previous snapshot on a failed refresh, and only drop the cache if it is still ours
+      if (cache?.posts === posts) {
+        cache = prev ? { at: 0, posts: prev.posts } : undefined;
+      }
+      return prev ? prev.posts : Promise.reject(error);
+    });
+    cache = { at: Date.now(), posts };
   }
   return cache.posts;
 }
@@ -24,6 +29,7 @@ async function fetchAll(): Promise<Map<string, Post>> {
   const res = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: githubHeaders,
+    signal: AbortSignal.timeout(15_000),
     body: JSON.stringify({ query: `{repository(owner:"${owner}",name:"${name}"){object(expression:"HEAD:${postsDir}"){...on Tree{entries{name object{...on Blob{text}}}}}}}` }),
   });
   const { data, errors } = await res.json() as { data?: { repository: { object: { entries: { name: string; object: { text: string } | null }[] } } }; errors?: unknown };
