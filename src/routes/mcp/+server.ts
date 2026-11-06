@@ -62,6 +62,7 @@ async function getPostResource(slug: string) {
         source: postUrl(post.slug),
         updated: post.updated_at,
         description: post.description,
+        summary: post.summary,
       }),
       post.body,
     ].filter(Boolean).join("\n"),
