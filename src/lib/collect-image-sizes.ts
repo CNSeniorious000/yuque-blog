@@ -1,5 +1,7 @@
+import type { Post } from "./api/frontmatter";
 import type { CollectorUi } from "./collect-image-sizes-ui";
 
+import { postFromMarkdown } from "./api/frontmatter";
 import { createCollectorUi } from "./collect-image-sizes-ui";
 import * as cheerio from "cheerio";
 import imageSize from "image-size";
@@ -8,8 +10,6 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { createFetch } from "xsfetch";
-
-import { postFromMarkdown, type Post } from "./api/frontmatter";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +20,6 @@ const POST_CONCURRENCY = 5;
 const IMAGE_CONCURRENCY = 20;
 const IMAGE_REQUEST_TIMEOUT_MS = 20000;
 const IMAGE_REQUEST_RETRIES = 2;
-
 
 const fetch = createFetch({ debug: false });
 
@@ -190,7 +189,6 @@ async function listPosts(ui: CollectorUi): Promise<Post[]> {
     return [];
   }
 }
-
 
 async function writeDimensions(dimensions: Record<string, [number, number]>) {
   const nextContent = `${JSON.stringify(dimensions, null, 2)}\n`;

@@ -3,8 +3,8 @@ import type { RequestHandler } from "./$types";
 import { text } from "@sveltejs/kit";
 import { getPost } from "$lib/api/each";
 import { listPosts } from "$lib/api/list";
-import { escape } from "$lib/xml";
 import { toLocalNlark } from "$lib/utils";
+import { escape } from "$lib/xml";
 import { marked } from "marked";
 
 export const GET: RequestHandler = async ({ url: { origin } }) => {
