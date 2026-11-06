@@ -14,7 +14,7 @@
   import Footer from "$lib/Footer.svelte";
   import Header from "$lib/Header.svelte";
   import Main from "$lib/Main.svelte";
-  import { baseurl, formatDate, login, namespace, repo } from "$lib/utils";
+  import { formatDate, login, repo } from "$lib/utils";
 
   const { data, children }: Props = $props();
 
@@ -27,13 +27,13 @@
     if (page.route.id === "/blog/[slug]") {
       const { slug } = page.params as { slug: string };
       breadcrumb = [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]];
-      editUrl = `${baseurl}/${namespace}/${slug}/edit`;
+      editUrl = `https://github.com/CNSeniorious000/yuque-blog-content/edit/main/posts/${slug}.md`;
       const { title, updated_at } = data.article!;
       leftBottom = title;
       rightTop = (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language);
     } else {
       breadcrumb = [["/", login], ["/blog", repo]];
-      editUrl = `${baseurl}/${namespace}`;
+      editUrl = "https://github.com/CNSeniorious000/yuque-blog-content";
       leftBottom = language.isChinese ? `共 ${data.list!.length} 篇文章` : `${data.list!.length} articles`;
       rightTop = "";
     }
