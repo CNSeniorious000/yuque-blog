@@ -4,6 +4,10 @@ export function postPath(slug: string) {
   return `${postsDir}/${slug}.md`;
 }
 
+export function isPostFile(name: string) {
+  return name.endsWith(".md");
+}
+
 export interface PostMeta {
   id: number;
   title: string;
@@ -54,7 +58,7 @@ export function postFromMarkdown(fileName: string, raw: string): Post {
 export function postsFromFiles(files: Iterable<readonly [string, string]>): Post[] {
   const posts: Post[] = [];
   for (const [name, text] of files) {
-    if (!name.endsWith(".md")) {
+    if (!isPostFile(name)) {
       continue;
     }
     try {

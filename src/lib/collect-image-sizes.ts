@@ -1,7 +1,7 @@
 import type { Post } from "./api/frontmatter";
 import type { CollectorUi } from "./collect-image-sizes-ui";
 
-import { postsDir, postsFromFiles } from "./api/frontmatter";
+import { isPostFile, postsDir, postsFromFiles } from "./api/frontmatter";
 import { contentRepo, fetchPostsFromGitHub } from "./api/github";
 import { createCollectorUi } from "./collect-image-sizes-ui";
 import * as cheerio from "cheerio";
@@ -182,7 +182,7 @@ async function listPosts(ui: CollectorUi): Promise<Post[]> {
     if (existsSync(CONTENT_DIR)) {
       ui.appendLog("info", `Reading docs from ${CONTENT_DIR}`);
       const names = await fs.readdir(CONTENT_DIR);
-      return postsFromFiles(await Promise.all(names.map(async name => [name, await fs.readFile(path.join(CONTENT_DIR, name), "utf8")] as [string, string])));
+      return postsFromFiles(await Promise.all(names.filter(isPostFile).map(async (name: string) => [name, await fs.readFile(path.join(CONTENT_DIR, name), "utf8")] as [string, string])));
     }
     ui.appendLog("info", "No local content checkout, fetching posts from GitHub");
     return [...(await fetchPostsFromGitHub(process.env)).values()];
