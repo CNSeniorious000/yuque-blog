@@ -25,7 +25,7 @@ export async function loadPosts(): Promise<Map<string, Post>> {
 }
 
 function revalidate(): Promise<Map<string, Post>> {
-  return fetchPostsFromGitHub(env).then(
+  return fetchPostsFromGitHub(env.GITHUB_TOKEN).then(
     (posts) => {
       snapshot = { posts, freshUntil: Date.now() + ttl };
       failure = undefined;

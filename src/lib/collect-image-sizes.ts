@@ -185,7 +185,7 @@ async function listPosts(ui: CollectorUi): Promise<Post[]> {
       return postsFromFiles(await Promise.all(names.filter(isPostFile).map(async (name: string) => [name, await fs.readFile(path.join(CONTENT_DIR, name), "utf8")] as [string, string])));
     }
     ui.appendLog("info", "No local content checkout, fetching posts from GitHub");
-    return [...(await fetchPostsFromGitHub(process.env)).values()];
+    return [...(await fetchPostsFromGitHub(process.env.GITHUB_TOKEN)).values()];
   } catch (error) {
     // abort instead of returning [] — an empty list would overwrite image-dimensions.json with {}
     ui.appendLog("error", `Failed to read posts: ${toErrorMessage(error)}`);
