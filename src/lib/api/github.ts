@@ -4,8 +4,7 @@ import { postsDir, postsFromFiles } from "./frontmatter";
 
 export const contentRepo = "CNSeniorious000/yuque-blog-content";
 
-export async function fetchPostsFromGitHub(env: { GITHUB_TOKEN?: string }): Promise<Map<string, Post>> {
-  const token = env.GITHUB_TOKEN;
+export async function fetchPostsFromGitHub(token: string | undefined): Promise<Map<string, Post>> {
   if (!token) {
     throw new Error("GITHUB_TOKEN is not set (see README)");
   }
