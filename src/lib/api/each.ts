@@ -1,16 +1,12 @@
-import type { PostMeta } from "./store";
+import type { PostMeta } from "./frontmatter";
 
 import { loadPosts } from "./store";
 
-export interface Document extends PostMeta {
-  body: string;
-}
-
-export async function getPost(slug: string): Promise<Document> {
+export async function getPost(slug: string): Promise<PostMeta & { body: string }> {
   const posts = await loadPosts();
   const post = posts.get(slug);
   if (!post) {
-    throw new Error(`Failed to fetch post ${slug}: not found`);
+    throw new Error(`Post not found: ${slug}`);
   }
   return { ...post.meta, body: post.body };
 }

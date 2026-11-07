@@ -10,6 +10,8 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/state";
+  import { postPath } from "$lib/api/frontmatter";
+  import { contentRepo } from "$lib/api/github";
   import { language } from "$lib/Chinese.svelte";
   import Footer from "$lib/Footer.svelte";
   import Header from "$lib/Header.svelte";
@@ -27,13 +29,13 @@
     if (page.route.id === "/blog/[slug]") {
       const { slug } = page.params as { slug: string };
       breadcrumb = [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]];
-      editUrl = `https://github.com/CNSeniorious000/yuque-blog-content/edit/main/posts/${slug}.md`;
+      editUrl = `https://github.com/${contentRepo}/edit/main/${postPath(slug)}`;
       const { title, updated_at } = data.article!;
       leftBottom = title;
       rightTop = (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language);
     } else {
       breadcrumb = [["/", login], ["/blog", repo]];
-      editUrl = "https://github.com/CNSeniorious000/yuque-blog-content";
+      editUrl = `https://github.com/${contentRepo}`;
       leftBottom = language.isChinese ? `共 ${data.list!.length} 篇文章` : `${data.list!.length} articles`;
       rightTop = "";
     }

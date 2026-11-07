@@ -1,4 +1,4 @@
-import type { PostMeta } from "./store";
+import type { PostMeta } from "./frontmatter";
 
 import { loadPosts } from "./store";
 
