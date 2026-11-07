@@ -19,7 +19,7 @@ const server = new McpServer(
     name: "yuque-blog",
     version: "1.0.0",
     description: serverDescription,
-    get websiteUrl() {
+    get websiteUrl(): string | undefined {
       return server.ctx.custom?.origin;
     },
   },
@@ -101,7 +101,7 @@ server.tool(
     }),
     annotations: { destructiveHint: false, readOnlyHint: true },
   },
-  async ({ query }) => {
+  async ({ query }: { query: string }) => {
     const articles = await searchPosts(query);
     return {
       content: [{
@@ -142,7 +142,7 @@ server.tool(
     }),
     annotations: { destructiveHint: false, readOnlyHint: true },
   },
-  async ({ slug }) => ({ content: [{ type: "resource", resource: await getPostResource(slug) }] }),
+  async ({ slug }: { slug: string }) => ({ content: [{ type: "resource", resource: await getPostResource(slug) }] }),
 );
 
 server.template(
@@ -155,12 +155,12 @@ server.template(
     complete: { slug: completeSlugs },
     list: listPostResources,
   },
-  async (_uri, params) => ({
+  async (_uri: string, params: Record<string, string | string[]>) => ({
     contents: [await getPostResource(Array.isArray(params.slug) ? params.slug[0] : params.slug)],
   }),
 );
 
-const transport = new HttpTransport(server, { path: "/mcp", cors: true, disableSse: true });
+const transport = new HttpTransport<{ origin: string }>(server, { path: "/mcp", cors: true, disableSse: true });
 
 const handler: RequestHandler = async ({ request, url }) => {
   return await transport.respond(request, { origin: url.origin }) ?? new Response("Not Found", { status: 404 });
