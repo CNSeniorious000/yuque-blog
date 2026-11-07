@@ -2,6 +2,7 @@
   import type { ImageSnippetProps } from "@humanspeak/svelte-markdown";
 
   import imageDimensions from "./image-dimensions.json";
+  import { nlarkCdn } from "./utils";
 
   type ImageDimensions = [number, number];
   type ImageDimensionsMap = Record<string, ImageDimensions>;
@@ -10,8 +11,8 @@
 
   let error = $state(false);
 
-  const dimensionsMap = imageDimensions as unknown as ImageDimensionsMap;
-  const dimensions = $derived(!href ? undefined : dimensionsMap[href] || dimensionsMap[`https://cdn.nlark.com/${href.replace(/^\/nlark\//, "")}`]);
+  const dimensionsMap = imageDimensions as ImageDimensionsMap;
+  const dimensions = $derived(!href ? undefined : dimensionsMap[href] || dimensionsMap[nlarkCdn + href.replace(/^\/nlark\//, "")]);
 
   const handleLoad = (event: Event) => {
     error = (event.currentTarget as HTMLImageElement | null)?.naturalWidth === 0;

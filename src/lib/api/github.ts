@@ -1,10 +1,14 @@
 import type { Post } from "./frontmatter";
 
-import { postFromMarkdown, postsDir } from "./frontmatter";
+import { postsDir, postsFromFiles } from "./frontmatter";
 
 export const contentRepo = "CNSeniorious000/yuque-blog-content";
 
-export async function fetchPostsFromGitHub(token: string): Promise<Map<string, Post>> {
+export async function fetchPostsFromGitHub(env: { GITHUB_TOKEN?: string }): Promise<Map<string, Post>> {
+  const token = env.GITHUB_TOKEN;
+  if (!token) {
+    throw new Error("GITHUB_TOKEN is not set (see README)");
+  }
   const [owner, name] = contentRepo.split("/");
   const res = await fetch("https://api.github.com/graphql", {
     method: "POST",
@@ -17,18 +21,15 @@ export async function fetchPostsFromGitHub(token: string): Promise<Map<string, P
     throw new Error(`GitHub GraphQL failed: ${JSON.stringify(errors ?? data)}`);
   }
 
-  const posts = new Map<string, Post>();
+  const files: [string, string][] = [];
   for (const entry of data.repository.object.entries) {
-    if (!entry.name.endsWith(".md") || typeof entry.object?.text !== "string") {
-      continue;
+    if (typeof entry.object?.text === "string") {
+      files.push([entry.name, entry.object.text]);
     }
-    try {
-      const post = postFromMarkdown(entry.name, entry.object.text);
-      posts.set(post.meta.slug, post);
-    } catch (error) {
-      // one malformed post must not take down every route that reads posts
-      console.error(`Skipping ${entry.name}: ${error}`);
-    }
+  }
+  const posts = new Map<string, Post>();
+  for (const post of postsFromFiles(files)) {
+    posts.set(post.meta.slug, post);
   }
   return posts;
 }

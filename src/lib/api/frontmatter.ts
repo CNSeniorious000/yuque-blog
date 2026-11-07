@@ -1,5 +1,9 @@
 export const postsDir = "posts";
 
+export function postPath(slug: string) {
+  return `${postsDir}/${slug}.md`;
+}
+
 export interface PostMeta {
   id: number;
   title: string;
@@ -22,7 +26,7 @@ export interface Post {
 }
 
 // front matter is machine-generated: `key: <json value>` per line
-export function parsePost(raw: string): Post {
+function parsePost(raw: string): Post {
   const match = raw.match(/^---\n([\s\S]*?)\n---\n\n?([\s\S]*)$/);
   const fields: Record<string, unknown> = {};
   for (const line of (match?.[1] ?? "").split("\n")) {
@@ -36,7 +40,7 @@ export function parsePost(raw: string): Post {
     ...fields,
     description: fields.custom_description ?? "",
     summary: (fields.custom_description as string) || (fields.description as string) || "",
-  } as unknown as PostMeta;
+  } as PostMeta;
   return { meta, body, searchable: `${meta.title}\n${meta.summary}\n${body}`.toLowerCase() };
 }
 
@@ -44,6 +48,22 @@ export function postFromMarkdown(fileName: string, raw: string): Post {
   const post = parsePost(raw);
   post.meta.slug ??= fileName.replace(/\.md$/, "");
   return post;
+}
+
+// one malformed file must not take down the rest of the corpus
+export function postsFromFiles(files: Iterable<readonly [string, string]>): Post[] {
+  const posts: Post[] = [];
+  for (const [name, text] of files) {
+    if (!name.endsWith(".md")) {
+      continue;
+    }
+    try {
+      posts.push(postFromMarkdown(name, text));
+    } catch (error) {
+      console.error(`Skipping ${name}: ${error}`);
+    }
+  }
+  return posts;
 }
 
 export function renderFrontmatter(metadata: Record<string, number | string | undefined>) {

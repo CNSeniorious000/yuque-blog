@@ -4,7 +4,7 @@ export const namespace = "muspi_merol/blog";
 
 export const [login, repo] = namespace.split("/");
 
-const nlarkCdn = "https://cdn.nlark.com/";
+export const nlarkCdn = "https://cdn.nlark.com/";
 
 export function toLocalNlark(body: string, base = "/nlark/") {
   return body.replaceAll(nlarkCdn, base);

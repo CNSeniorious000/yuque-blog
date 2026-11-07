@@ -1,11 +1,12 @@
 import type { Post } from "./api/frontmatter";
 import type { CollectorUi } from "./collect-image-sizes-ui";
 
-import { postFromMarkdown } from "./api/frontmatter";
-import { fetchPostsFromGitHub } from "./api/github";
+import { postsDir, postsFromFiles } from "./api/frontmatter";
+import { contentRepo, fetchPostsFromGitHub } from "./api/github";
 import { createCollectorUi } from "./collect-image-sizes-ui";
 import * as cheerio from "cheerio";
 import imageSize from "image-size";
+import { marked } from "marked";
 import { existsSync, promises as fs } from "node:fs";
 import path from "node:path";
 import process from "node:process";
@@ -16,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const OUTPUT_PATH = path.join(__dirname, "image-dimensions.json");
 
-const CONTENT_DIR = process.env.CONTENT_DIR || path.resolve(__dirname, "../../../yuque-blog-content/posts");
+const CONTENT_DIR = process.env.CONTENT_DIR || path.resolve(__dirname, "../../../", contentRepo.split("/")[1], postsDir);
 const POST_CONCURRENCY = 5;
 const IMAGE_CONCURRENCY = 20;
 const IMAGE_REQUEST_TIMEOUT_MS = 20000;
@@ -100,7 +101,7 @@ function isRetryableStatus(status: number) {
 }
 
 function extractImageUrls(body: string): string[] {
-  const $ = cheerio.load(body);
+  const $ = cheerio.load(marked.parse(body, { async: false }));
   const imageUrls = new Set<string>();
 
   $("img").each((_, elem) => {
@@ -109,9 +110,6 @@ function extractImageUrls(body: string): string[] {
       imageUrls.add(src);
     }
   });
-  for (const match of body.matchAll(/!\[[^\]]*\]\((\S+?)(?:\s+"[^"]*")?\)/g)) {
-    imageUrls.add(match[1]);
-  }
 
   return Array.from(imageUrls);
 }
@@ -184,11 +182,10 @@ async function listPosts(ui: CollectorUi): Promise<Post[]> {
     if (existsSync(CONTENT_DIR)) {
       ui.appendLog("info", `Reading docs from ${CONTENT_DIR}`);
       const names = await fs.readdir(CONTENT_DIR);
-      return await Promise.all((names as string[]).filter((n: string) => n.endsWith(".md")).map(async (n: string) =>
-        postFromMarkdown(n, await fs.readFile(path.join(CONTENT_DIR, n), "utf8"))));
+      return postsFromFiles(await Promise.all(names.map(async name => [name, await fs.readFile(path.join(CONTENT_DIR, name), "utf8")] as [string, string])));
     }
     ui.appendLog("info", "No local content checkout, fetching posts from GitHub");
-    return [...(await fetchPostsFromGitHub(process.env.GITHUB_TOKEN ?? "")).values()];
+    return [...(await fetchPostsFromGitHub(process.env)).values()];
   } catch (error) {
     // abort instead of returning [] — an empty list would overwrite image-dimensions.json with {}
     ui.appendLog("error", `Failed to read posts: ${toErrorMessage(error)}`);
