@@ -4,6 +4,8 @@ import { getPost } from "$lib/api/each.js";
 import { listPosts } from "$lib/api/list.js";
 import { toLocalNlark } from "$lib/utils";
 
+export const config = { isr: { expiration: 300 } };
+
 export const load = (async ({ route: { id }, params: { slug } }) => {
   if (id === "/blog") {
     const articles = await listPosts();
