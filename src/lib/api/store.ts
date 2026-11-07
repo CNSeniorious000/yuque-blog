@@ -3,21 +3,38 @@ import type { Post } from "./frontmatter";
 import { fetchPostsFromGitHub } from "./github";
 import * as env from "$env/static/private";
 
-// one GraphQL call loads every doc; the cache doubles as in-flight dedup and revalidates by TTL
+// one GraphQL call loads every doc; the last snapshot keeps serving while a TTL revalidation runs in the background
 const ttl = 60_000;
-let cache: { at: number; posts: Promise<Map<string, Post>> } | undefined;
+const retryDelay = 30_000;
+let snapshot: { posts: Map<string, Post>; freshUntil: number } | undefined;
+let failure: { until: number; error: unknown } | undefined; // shared so a cold outage costs one fetch per window, not one fetch per request
+let refreshing: Promise<Map<string, Post>> | undefined;
 
-export function loadPosts(): Promise<Map<string, Post>> {
-  if (!cache || Date.now() - cache.at > ttl) {
-    const prev = cache;
-    const posts = fetchPostsFromGitHub(env).catch((error) => {
-      // serve the previous snapshot on a failed refresh, and only drop the cache if it is still ours
-      if (cache?.posts === posts) {
-        cache = prev ? { at: Date.now() - ttl + 30_000, posts: prev.posts } : undefined; // 30s backoff before retrying
-      }
-      return prev ? prev.posts : Promise.reject(error);
-    });
-    cache = { at: Date.now(), posts };
+export async function loadPosts(): Promise<Map<string, Post>> {
+  const now = Date.now();
+  if (snapshot && (now < snapshot.freshUntil || now < (failure?.until ?? 0))) {
+    return snapshot.posts;
   }
-  return cache.posts;
+  if (!snapshot && failure && now < failure.until) {
+    throw failure.error;
+  }
+  const attempt = (refreshing ??= revalidate().finally(() => {
+    refreshing = undefined;
+  }));
+  return snapshot?.posts ?? attempt;
+}
+
+function revalidate(): Promise<Map<string, Post>> {
+  return fetchPostsFromGitHub(env).then(
+    (posts) => {
+      snapshot = { posts, freshUntil: Date.now() + ttl };
+      failure = undefined;
+      return posts;
+    },
+    (error) => {
+      // an outage keeps the last snapshot serving; with nothing to fall back on, fail fast within the window
+      failure = { until: Date.now() + retryDelay, error };
+      return snapshot?.posts ?? Promise.reject(error);
+    },
+  );
 }
