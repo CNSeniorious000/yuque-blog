@@ -1,7 +1,7 @@
 import type { Post } from "./frontmatter";
 
 import { fetchPostsFromGitHub } from "./github";
-import * as env from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 // one GraphQL call loads every doc; the last snapshot keeps serving while a TTL revalidation runs in the background
 const ttl = 60_000;
