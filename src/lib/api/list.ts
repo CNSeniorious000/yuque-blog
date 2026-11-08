@@ -1,18 +1,7 @@
-import { apiBaseurl, headers } from "$lib/serverConstants";
-import { namespace } from "$lib/utils";
+import type { PostMeta } from "./frontmatter";
 
-interface Document {
-  id: number;
-  slug: string;
-  title: string;
-  word_count: number;
-  description: string;
-  created_at: string;
-  content_updated_at: string;
-}
+import { loadPosts } from "./store";
 
-export async function listPosts() { // TODO: pagination support
-  const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs`, { headers });
-  const { data, meta: { total } } = await res.json() as { data: Document[]; meta: { total: number } };
-  return { total, articles: data };
+export async function listPosts(): Promise<PostMeta[]> {
+  return [...(await loadPosts()).values()].map(({ meta }) => meta).sort((a, b) => (a.content_updated_at < b.content_updated_at ? 1 : -1));
 }

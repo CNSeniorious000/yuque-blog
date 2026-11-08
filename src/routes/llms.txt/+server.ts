@@ -11,9 +11,9 @@ export const GET: RequestHandler = async ({ url: { origin }, request: { headers 
   const blocks = [header.replace("{}", origin).trim()];
   const posts = await listPosts();
 
-  blocks.push(`## Posts / more like Random Thoughts (top ${posts.articles.length}/${posts.total})`);
+  blocks.push(`## Posts / more like Random Thoughts (top ${posts.length})`);
 
-  blocks.push(posts.articles.map(({ slug, title, created_at }) => {
+  blocks.push(posts.map(({ slug, title, created_at }) => {
     return `- [${title}](/blog/${slug}/llms.txt)` + ` (${formatDate(created_at, language)})`;
   }).join("\n"));
 

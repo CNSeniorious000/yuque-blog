@@ -1,21 +1,10 @@
 import type { RequestHandler } from "./$types";
 
 import { text } from "@sveltejs/kit";
-import { apiBaseurl, headers } from "$lib/serverConstants";
-import { namespace } from "$lib/utils";
+import { listPosts } from "$lib/api/list";
 
-interface Document {
-  id: number;
-  slug: string;
-  title: string;
-  description: string;
-  created_at: string;
-  content_updated_at: string;
-}
-
-export const GET: RequestHandler = async ({ fetch, url: { origin } }) => {
-  const res = await fetch(`${apiBaseurl}/repos/${namespace}/docs`, { headers });
-  const { data: articles }: { data: Document[] } = await res.json();
+export const GET: RequestHandler = async ({ url: { origin } }) => {
+  const articles = await listPosts();
 
   const entries = articles.map(({ slug, content_updated_at }) => `
     <url>
@@ -34,7 +23,7 @@ export const GET: RequestHandler = async ({ fetch, url: { origin } }) => {
       </url>
       <url>
         <loc>${origin}/blog</loc>
-        <lastmod>${articles.map(({ content_updated_at: date }) => date).reduce((a, b) => a > b ? a : b)}</lastmod>
+        ${articles.length ? `<lastmod>${articles.map(({ content_updated_at: date }) => date).reduce((a, b) => (a > b ? a : b))}</lastmod>` : ""}
         <priority>1.0</priority>
         <changefreq>daily</changefreq>
       </url>

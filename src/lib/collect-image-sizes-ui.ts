@@ -276,7 +276,7 @@ class ConsoleCollectorUi implements CollectorUi {
   private lastImageProcessed = -1;
 
   setBootInfo() {
-    writeStdout(ansiColorize("brightBlack", `TTY unavailable, fallback to console mode. ACCESS_TOKEN ${process.env.ACCESS_TOKEN ? "present" : "missing"}`));
+    writeStdout(ansiColorize("brightBlack", `TTY unavailable, fallback to console mode. GITHUB_TOKEN ${process.env.GITHUB_TOKEN ? "present" : "missing"}`));
   }
 
   setPhase(phase: string, status: string) {
