@@ -7,7 +7,7 @@
 
   const { href = "", title, children }: LinkSnippetProps = $props();
 
-  const isUrl = $derived(URL.canParse(href, page.url));
+  const isUrl = $derived(URL.canParse(href, page.url.href));
   const children_render = $derived(children);
 </script>
 
@@ -17,7 +17,7 @@
   {/snippet}
   {#snippet tips()}
     {#if isUrl}
-      <UrlHighlighter url={new URL(href, page.url)} />
+      <UrlHighlighter url={new URL(href, page.url.href)} />
     {:else}
       {title || href}
     {/if}

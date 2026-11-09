@@ -18,6 +18,14 @@ export function formatDate(dateString: string, acceptLanguage: string | null | u
   return date.toLocaleDateString(pickLocale(acceptLanguage), options);
 }
 
+export const updatedLabel = (dateString: string, acceptLanguage: string | null | undefined, isChinese: boolean) => (isChinese ? "最后更新于：" : "Updated on ") + formatDate(dateString, acceptLanguage);
+
+export const countLabel = (n: number, isChinese: boolean) => (isChinese ? `共 ${n} 篇文章` : `${n} articles`);
+
+export const markdownResponse = (body: string) => new Response(body, { headers: { "Content-Type": "text/markdown; charset=utf-8" } });
+
+export const xmlResponse = (body: string) => new Response(body, { headers: { "Content-Type": "application/xml; charset=utf-8" } });
+
 // Accept-Language arrives raw: rank ranges by quality, keep only tags Intl accepts, treat "*" as absent
 export function pickLocale(acceptLanguage: string | null | undefined) {
   const ranges = (acceptLanguage ?? "").split(",").map((range) => {

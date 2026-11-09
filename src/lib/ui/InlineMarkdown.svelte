@@ -8,7 +8,7 @@
 <script lang="ts">
   import Link from "../Link.svelte";
   import SvelteMarkdown from "@humanspeak/svelte-markdown";
-  import { language } from "$lib/Chinese.svelte";
+  import { language } from "#lib/Chinese.svelte";
 
   const { markdown, omitLeftMargin = false }: Props = $props();
 </script>

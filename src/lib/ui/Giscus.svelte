@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import Giscus from "@giscus/svelte";
-  import { dev } from "$app/environment";
+  import { dev } from "$app/env";
   import { mode } from "mode-watcher";
 
   const {

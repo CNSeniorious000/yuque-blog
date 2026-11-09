@@ -1,9 +1,8 @@
 import type { RequestHandler } from "./$types";
 
-import { text } from "@sveltejs/kit";
-import { loadPosts } from "$lib/api/store";
-import { toLocalNlark } from "$lib/utils";
-import { escape } from "$lib/xml";
+import { loadPosts } from "#lib/api/store.js";
+import { toLocalNlark, xmlResponse } from "#lib/utils.js";
+import { escape } from "#lib/xml.js";
 import { marked } from "marked";
 
 export const GET: RequestHandler = async ({ url: { origin } }) => {
@@ -27,7 +26,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
       </entry>`;
   }).join("\n");
 
-  return text(`
+  return xmlResponse(`
     <?xml version="1.0" encoding="UTF-8" ?>
     <feed xmlns="http://www.w3.org/2005/Atom">
       <title>Muspi Merol</title>
@@ -37,5 +36,5 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
       <id>${escape(origin)}</id>
       ${entries}
     </feed>
-  `.trim(), { headers: { "Content-Type": "application/xml; charset=utf-8" } });
+  `.trim());
 };

@@ -5,13 +5,17 @@ import { isPostFile, postsDir, postsFromFiles } from "./frontmatter";
 export const contentRepo = "CNSeniorious000/yuque-blog-content";
 export const [contentRepoOwner, contentRepoName] = contentRepo.split("/");
 
-async function graphql<T>(token: string | undefined, query: string): Promise<T> {
+export function requireGithubToken(token: string | undefined): string {
   if (!token) {
     throw new Error("GITHUB_TOKEN is not set (see README)");
   }
+  return token;
+}
+
+async function graphql<T>(token: string | undefined, query: string): Promise<T> {
   const res = await fetch("https://api.github.com/graphql", {
     method: "POST",
-    headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json", "User-Agent": "yuque-blog", "content-type": "application/json" },
+    headers: { "Authorization": `Bearer ${requireGithubToken(token)}`, "Accept": "application/vnd.github+json", "User-Agent": "yuque-blog", "content-type": "application/json" },
     signal: AbortSignal.timeout(15_000),
     body: JSON.stringify({ query }),
   });

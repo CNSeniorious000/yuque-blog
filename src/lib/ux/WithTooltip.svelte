@@ -6,8 +6,8 @@
 </script>
 
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import InlineMarkdown from "$lib/ui/InlineMarkdown.svelte";
+  import InlineMarkdown from "#lib/ui/InlineMarkdown.svelte";
+  import { browser } from "$app/env";
   import { Popover } from "bits-ui";
   import { fly } from "svelte/transition";
 

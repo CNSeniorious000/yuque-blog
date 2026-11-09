@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { language as lang } from "$lib/Chinese.svelte";
-  import { formatDate } from "$lib/utils";
+  import { language as lang } from "#lib/Chinese.svelte";
+  import { formatDate } from "#lib/utils.js";
 
   const { slug, title, word_count, lastUpdate, language } = $props();
 </script>
