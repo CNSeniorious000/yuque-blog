@@ -1,6 +1,14 @@
 name: code-review
 
 on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created, edited, deleted]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  pull_request_review_comment:
+    types: [created, edited, deleted]
   push:
     branches: [master]
   workflow_dispatch:
@@ -10,12 +18,23 @@ permissions:
   id-token: write
 
 concurrency:
-  group: code-review-${{ github.ref }}
+  # Comments and reviews from bots cannot steer a review, yet their runs would evict a review that waits for a runner when queued after it.
+  group: code-review-${{ github.event.pull_request.number || github.event.issue.number || github.event.client_payload.pr || github.ref }}${{ endsWith(github.event.sender.login, '[bot]') && github.event_name != 'pull_request_target' && github.event_name != 'repository_dispatch' && format('-{0}', github.run_id) || '' }}
 
 jobs:
   review:
+    # Same-repository PRs, plus pushes to master so merged work is reviewed too; the App's own PRs wait until they leave draft.
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/master')
+      || (github.event_name == 'workflow_dispatch'
+          || github.event_name == 'issue_comment' && github.event.issue.pull_request != null && github.event.issue.state == 'open'
+          || github.event_name != 'issue_comment' && github.event.pull_request.state == 'open' && github.event.pull_request.head.repo.full_name == github.repository
+             && (github.event.pull_request.user.login == 'muspi-merol-review[bot]' && !github.event.pull_request.draft
+                 || github.event.pull_request.user.login != 'muspi-merol-review[bot]' && github.event.action != 'ready_for_review'))
+      && (github.event.sender.login != 'muspi-merol-review[bot]' || github.event_name == 'pull_request_target')
     runs-on: ubuntu-latest
     steps:
       - uses: promplate/code-review@main
         with:
           codex-config: ${{ secrets.CODEX_CONFIG }}
+          codex-auth: ${{ secrets.CODEX_AUTH }}
