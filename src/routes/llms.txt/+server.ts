@@ -6,7 +6,7 @@ import { listPosts } from "$lib/api/list";
 import { formatDate } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ url: { origin }, request: { headers } }) => {
-  const language = headers.get("accept-language")?.split(",")[0];
+  const language = headers.get("accept-language");
 
   const blocks = [header.replace("{}", origin).trim()];
   const posts = await listPosts();

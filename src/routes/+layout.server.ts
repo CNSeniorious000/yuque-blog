@@ -15,6 +15,6 @@ export const load = (async ({ cookies, request: { headers }, route, params }) =>
     }
   }
   const mode = cookies.get("mode") as "dark" | "light" | undefined;
-  const language = headers.get("accept-language")?.split(",")[0];
+  const language = headers.get("accept-language") ?? undefined;
   return { mode, language };
 }) satisfies LayoutServerLoad;
