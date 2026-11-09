@@ -3,7 +3,7 @@ import type { Post } from "./frontmatter";
 import { fetchHeadOid, fetchPostsFromGitHub } from "./github";
 import { env } from "$env/dynamic/private";
 
-// one GraphQL call loads every doc; the last snapshot keeps serving while a TTL revalidation runs in the background
+// one GraphQL call loads every doc; a HEAD probe extends the snapshot cheaply when upstream is unchanged
 const ttl = 60_000;
 const retryDelay = 30_000;
 let snapshot: { posts: Map<string, Post>; freshUntil: number; oid: string } | undefined;
@@ -21,7 +21,7 @@ export async function loadPosts(): Promise<Map<string, Post>> {
   const attempt = (refreshing ??= revalidate().finally(() => {
     refreshing = undefined;
   }));
-  return snapshot?.posts ?? attempt;
+  return attempt; // await instead of serving stale: post-response background work is not guaranteed to survive on serverless
 }
 
 async function revalidate(): Promise<Map<string, Post>> {
