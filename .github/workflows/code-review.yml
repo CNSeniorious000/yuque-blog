@@ -25,13 +25,12 @@ jobs:
   review:
     # Same-repository PRs, plus pushes to master so merged work is reviewed too; the App's own PRs wait until they leave draft.
     if: >
-      (github.event_name == 'push' && github.ref == 'refs/heads/master')
-      || (github.event_name == 'workflow_dispatch'
-          || github.event_name == 'issue_comment' && github.event.issue.pull_request != null && github.event.issue.state == 'open'
-          || github.event_name != 'issue_comment' && github.event.pull_request.state == 'open' && github.event.pull_request.head.repo.full_name == github.repository
-             && (github.event.pull_request.user.login == 'muspi-merol-review[bot]' && !github.event.pull_request.draft
-                 || github.event.pull_request.user.login != 'muspi-merol-review[bot]' && github.event.action != 'ready_for_review'))
-      && (github.event.sender.login != 'muspi-merol-review[bot]' || github.event_name == 'pull_request_target')
+      github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      || (github.event.issue.pull_request != null && github.event.issue.state == 'open' && github.event.sender.login != 'muspi-merol-review[bot]')
+      || (github.event.pull_request.state == 'open' && github.event.pull_request.head.repo.full_name == github.repository
+          && (github.event.pull_request.user.login == 'muspi-merol-review[bot]' && !github.event.pull_request.draft
+              || github.event.pull_request.user.login != 'muspi-merol-review[bot]' && github.event.action != 'ready_for_review')
+          && (github.event.sender.login != 'muspi-merol-review[bot]' || github.event_name == 'pull_request_target'))
     runs-on: ubuntu-latest
     steps:
       - uses: promplate/code-review@main
