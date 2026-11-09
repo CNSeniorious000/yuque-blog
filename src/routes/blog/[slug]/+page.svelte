@@ -10,7 +10,7 @@
   import { language } from "$lib/Chinese.svelte";
   import Marked from "$lib/Marked.svelte";
   import Giscus from "$lib/ui/Giscus.svelte";
-  import { formatDate } from "$lib/utils";
+  import { formatDate, pickLocale } from "$lib/utils";
   import Seo from "sk-seo";
 
   const { data }: Props = $props();
@@ -24,5 +24,5 @@
 
   <Seo {title} description={description || (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language)} />
 
-  <Giscus {id} lang={data.language} />
+  <Giscus {id} lang={pickLocale(data.language)} />
 {/if}
