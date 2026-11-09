@@ -8,7 +8,6 @@
 </script>
 
 <script lang="ts">
-  import { afterNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { postPath } from "$lib/api/frontmatter";
   import { contentRepo } from "$lib/api/github";
@@ -32,7 +31,7 @@
       editUrl = `https://github.com/${contentRepo}/edit/main/${postPath(slug)}`;
       const { title, updated_at } = data.article!;
       leftBottom = title;
-      rightTop = (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language);
+      rightTop = (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, language.locale);
     } else {
       breadcrumb = [["/", login], ["/blog", repo]];
       editUrl = `https://github.com/${contentRepo}`;
@@ -42,12 +41,7 @@
   }
 
   update();
-
-  afterNavigate(({ from }) => {
-    if (from?.route.id?.startsWith("/blog")) {
-      update(); // don't trigger twice if navigating from other routes
-    }
-  });
+  $effect(update); // recomputes the header when the visitor switches language
 </script>
 
 <Header {breadcrumb} {rightTop} />

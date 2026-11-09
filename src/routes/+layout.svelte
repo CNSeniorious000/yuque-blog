@@ -1,8 +1,5 @@
 <script module>
-  import type { LayoutServerData } from "./$types";
-
   interface Props {
-    data: LayoutServerData;
     children?: import("svelte").Snippet;
   }
 </script>
@@ -15,16 +12,32 @@
 
   import { finishBar, startBar } from "../lib/progressFunction";
   import Progress from "./Progress.svelte";
+  import { browser } from "$app/environment";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { language } from "$lib/Chinese.svelte";
   import { mode, ModeWatcher, setMode, systemPrefersMode, userPrefersMode } from "mode-watcher";
   import { untrack } from "svelte";
+  import { isAIBot } from "ua-parser-js/helpers";
 
-  const { data, children }: Props = $props();
+  const { children }: Props = $props();
 
-  // svelte-ignore state_referenced_locally
-  language.init(data.language);
+  language.init();
+
+  // the ISR-cached HTML must stay request-independent, so the llms.txt redirect for AI crawlers runs client-side
+  if (browser && isAIBot(navigator.userAgent)) {
+    switch (page.route.id) {
+      case "/":
+        location.replace("/llms-full.txt");
+        break;
+      case "/blog":
+        location.replace("/llms.txt");
+        break;
+      case "/blog/[slug]":
+        location.replace(`/blog/${page.params.slug}/llms.txt`);
+        break;
+    }
+  }
 
   beforeNavigate(({ willUnload }) => {
     !willUnload && startBar();
