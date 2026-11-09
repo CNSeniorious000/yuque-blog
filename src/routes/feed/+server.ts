@@ -17,16 +17,16 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
 
     return `
       <entry>
-        <id>${id}</id>
+        <id>${escape(id)}</id>
         <title>${escape(title)}</title>
-        <link href="${origin}/blog/${slug}" />
+        <link href="${escape(`${origin}/blog/${slug}`)}" />
         <author>
           <name>Muspi Merol 庄毅辉</name>
         </author>
         <summary>${escape(summary)}</summary>
         <content type="html">${escape(content)}</content>
-        <published>${created_at}</published>
-        <updated>${content_updated_at}</updated>
+        <published>${escape(created_at)}</published>
+        <updated>${escape(content_updated_at)}</updated>
       </entry>`;
   }))).join("\n");
 
@@ -35,9 +35,9 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
     <feed xmlns="http://www.w3.org/2005/Atom">
       <title>Muspi Merol</title>
       <subtitle>Muspi Merol's Blog</subtitle>
-      <link href="${origin}/blog" />
+      <link href="${escape(`${origin}/blog`)}" />
       <updated>${new Date().toISOString()}</updated>
-      <id>${origin}</id>
+      <id>${escape(origin)}</id>
       ${entries}
     </feed>
   `.trim(), { headers: { "Content-Type": "application/xml; charset=utf-8" } });
