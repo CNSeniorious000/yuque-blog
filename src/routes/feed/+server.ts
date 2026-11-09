@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
 
     return `
       <entry>
-        <id>${escape(String(id))}</id>
+        <id>${escape(id)}</id>
         <title>${escape(title)}</title>
         <link href="${escape(`${origin}/blog/${slug}`)}" />
         <author>

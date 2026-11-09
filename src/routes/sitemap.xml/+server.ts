@@ -24,7 +24,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
       </url>
       <url>
         <loc>${escape(`${origin}/blog`)}</loc>
-        ${articles.length ? `<lastmod>${articles.map(({ content_updated_at: date }) => date).reduce((a, b) => (a > b ? a : b))}</lastmod>` : ""}
+        ${articles.length ? `<lastmod>${escape(articles.map(({ content_updated_at: date }) => date).reduce((a, b) => (a > b ? a : b)))}</lastmod>` : ""}
         <priority>1.0</priority>
         <changefreq>daily</changefreq>
       </url>
