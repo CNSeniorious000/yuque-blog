@@ -43,16 +43,22 @@ function parsePost(raw: string): Post {
     }
   }
   const body = match[2];
+  const custom = fields.custom_description;
+  const excerpt = fields.description;
+  if ((custom != null && typeof custom !== "string") || (excerpt != null && typeof excerpt !== "string")) {
+    throw new TypeError("description fields must be strings"); // escaped into feeds and pages
+  }
   const meta = {
     ...fields,
-    description: fields.custom_description ?? "",
-    summary: (fields.custom_description as string) || (fields.description as string) || "",
+    description: custom ?? "",
+    summary: custom || excerpt || "",
   } as PostMeta;
   if (typeof meta.title !== "string") {
     throw new TypeError("missing title"); // feeds and lists format titles unconditionally
   }
-  if (typeof meta.updated_at !== "string" || typeof meta.content_updated_at !== "string") {
-    throw new TypeError("missing update date"); // formatted for display and sitemap lastmod
+  const isDate = (v: unknown) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v) && !Number.isNaN(Date.parse(v));
+  if (!isDate(meta.updated_at) || !isDate(meta.content_updated_at)) {
+    throw new TypeError("invalid update date"); // display formatting and sitemap lastmod need parseable dates
   }
   return { meta, body, searchable: `${meta.title}\n${meta.summary}\n${body}`.toLowerCase() };
 }
