@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   import type { LayoutParentData, LayoutServerData } from "./$types";
 
   interface Props {

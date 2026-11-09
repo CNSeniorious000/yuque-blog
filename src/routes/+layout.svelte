@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   import type { LayoutServerData } from "./$types";
 
   interface Props {

@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   interface Props {
     children?: import("svelte").Snippet;
   }

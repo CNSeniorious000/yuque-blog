@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   interface Props {
     tips: string | import("svelte").Snippet;
     children?: import("svelte").Snippet<[{ props: Record<string, any> }]>;

@@ -1,4 +1,4 @@
-<script module>
+<script module lang="ts">
   interface Props {
     breadcrumb: [string, string][];
   }
