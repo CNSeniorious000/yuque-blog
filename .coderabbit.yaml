@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+knowledge_base:
+  linked_repositories:
+    - repository: CNSeniorious000/yuque-blog-content
+      instructions: >-
+        Content backend for this blog. Every post lives as posts/<slug>.md with
+        machine-generated front matter (`key: <json value>` per line: id, title,
+        slug, description, custom_description, cover, timestamps) exported 1:1
+        from Yuque. That repo is the source of truth for post metadata and file
+        layout; this codebase only reads it over the GitHub GraphQL API, so
+        front matter conventions and content layout belong to the content repo,
+        not here.
+  code_guidelines:
+    filePatterns:
+      - "CNSeniorious000/yuque-blog-content:README.md"
