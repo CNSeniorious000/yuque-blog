@@ -36,3 +36,4 @@ jobs:
         with:
           codex-config: ${{ secrets.CODEX_CONFIG }}
           codex-auth: ${{ secrets.CODEX_AUTH }}
+          service-tier: ultrafast
