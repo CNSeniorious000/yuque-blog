@@ -2,23 +2,21 @@ import type { RequestHandler } from "./$types";
 
 import header from "../llms.txt/header.md?raw";
 import { text } from "@sveltejs/kit";
-import { getPost } from "$lib/api/each";
-import { listPosts } from "$lib/api/list";
+import { loadPosts } from "$lib/api/store";
 import { formatDate, toLocalNlark } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ url: { origin }, request: { headers } }) => {
   const language = headers.get("accept-language")?.split(",")[0];
 
   let blocks = [header.replace("{}", origin).trim()];
-  const posts = await listPosts();
+  const posts = [...(await loadPosts()).values()].sort((a, b) => (a.meta.content_updated_at < b.meta.content_updated_at ? 1 : -1));
 
   blocks.push(`## Posts / more like Random Thoughts (top ${posts.length})`);
 
-  blocks = blocks.concat(...await Promise.all(posts.map(async ({ slug, title, created_at }) => {
-    const article = await getPost(slug);
-    const md = toLocalNlark(article.body).trim();
+  blocks = blocks.concat(posts.map(({ meta: { slug, title, created_at }, body }) => {
+    const md = toLocalNlark(body).trim();
     return `# [${title}](/blog/${slug})` + ` (${formatDate(created_at, language)})` + `\n\n${md}`;
-  })));
+  }));
 
   const markdownOutput = blocks.join("\n\n");
 

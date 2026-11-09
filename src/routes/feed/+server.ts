@@ -1,18 +1,15 @@
 import type { RequestHandler } from "./$types";
 
 import { text } from "@sveltejs/kit";
-import { getPost } from "$lib/api/each";
-import { listPosts } from "$lib/api/list";
+import { loadPosts } from "$lib/api/store";
 import { toLocalNlark } from "$lib/utils";
 import { escape } from "$lib/xml";
 import { marked } from "marked";
 
 export const GET: RequestHandler = async ({ url: { origin } }) => {
-  const articles = await listPosts();
+  const articles = [...(await loadPosts()).values()].sort((a, b) => (a.meta.content_updated_at < b.meta.content_updated_at ? 1 : -1));
 
-  const entries = (await Promise.all(articles.map(async ({ id, slug, title, summary, created_at, content_updated_at }) => {
-    const { body } = await getPost(slug);
-
+  const entries = articles.map(({ meta: { id, slug, title, summary, created_at, content_updated_at }, body }) => {
     const content = marked.parse(toLocalNlark(body, `${origin}/nlark/`), { async: false });
 
     return `
@@ -28,7 +25,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
         <published>${escape(created_at)}</published>
         <updated>${escape(content_updated_at)}</updated>
       </entry>`;
-  }))).join("\n");
+  }).join("\n");
 
   return text(`
     <?xml version="1.0" encoding="UTF-8" ?>
