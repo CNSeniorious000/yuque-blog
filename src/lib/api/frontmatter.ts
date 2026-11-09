@@ -56,9 +56,18 @@ function parsePost(raw: string): Post {
   if (typeof meta.title !== "string") {
     throw new TypeError("missing title"); // feeds and lists format titles unconditionally
   }
-  const isDate = (v: unknown) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v) && !Number.isNaN(Date.parse(v));
-  if (!isDate(meta.updated_at) || !isDate(meta.content_updated_at)) {
-    throw new TypeError("invalid update date"); // display formatting and sitemap lastmod need parseable dates
+  // full datetime; the calendar probe rejects values Date.parse silently normalizes, e.g. 2024-02-31
+  const isDate = (v: unknown) => {
+    const m = typeof v === "string" ? /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.exec(v) : null;
+    if (!m || Number.isNaN(Date.parse(m.input))) {
+      return false;
+    }
+    const [y, mo, d] = [+m[1], +m[2], +m[3]];
+    const probe = new Date(Date.UTC(y, mo - 1, d));
+    return probe.getUTCFullYear() === y && probe.getUTCMonth() === mo - 1 && probe.getUTCDate() === d;
+  };
+  if (!isDate(meta.created_at) || !isDate(meta.updated_at) || !isDate(meta.content_updated_at)) {
+    throw new TypeError("invalid date field"); // feed <published>/<updated>, display formatting and sitemap lastmod
   }
   return { meta, body, searchable: `${meta.title}\n${meta.summary}\n${body}`.toLowerCase() };
 }
