@@ -352,10 +352,7 @@ async function runCollection(ui: CollectorUi) {
   const posts = await listPosts(ui);
 
   if (posts.length === 0) {
-    ui.appendLog("info", "No posts found. Writing empty dimensions file.");
-    await writeDimensions({});
-    ui.finish("0 posts, empty output written");
-    return;
+    throw new Error("no posts found, refusing to overwrite image-dimensions.json"); // an empty or mispointed corpus must not wipe recorded sizes
   }
 
   ui.appendLog("info", `Found ${posts.length} posts`);
@@ -440,15 +437,9 @@ async function main() {
   await ui.waitForExit();
   await ui.shutdown(true);
 
-  if (exitCode !== 0) {
-    if (ui.needsExplicitExit) {
-      process.exit(exitCode);
-    }
-    return;
-  }
-
+  process.exitCode = exitCode; // console mode has no explicit exit; propagate through the natural exit
   if (ui.needsExplicitExit) {
-    process.exit(0);
+    process.exit(exitCode);
   }
 }
 
