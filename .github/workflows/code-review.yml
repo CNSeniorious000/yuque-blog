@@ -1,0 +1,21 @@
+name: code-review
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  id-token: write
+
+concurrency:
+  group: code-review-${{ github.ref }}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: promplate/code-review@main
+        with:
+          codex-config: ${{ secrets.CODEX_CONFIG }}
