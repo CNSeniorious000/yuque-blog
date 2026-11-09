@@ -20,7 +20,7 @@
 <div class="relative flex flex-row">
   <Title {title} {description} />
   <div class="absolute right-0 mx-6 mt-6 sm:mx-10 sm:mt-10">
-    <Clipboard content={() => markdown.replaceAll("/nlark/", new URL("/nlark/", location.origin).href)} />
+    <Clipboard content={markdown} />
   </div>
 </div>
 

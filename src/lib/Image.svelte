@@ -11,7 +11,7 @@
   let error = $state(false);
 
   const dimensionsMap = imageDimensions as unknown as ImageDimensionsMap;
-  const dimensions = $derived(!href ? undefined : dimensionsMap[href] || dimensionsMap[`https://cdn.nlark.com/${href.replace(/^\/nlark\//, "")}`]);
+  const dimensions = $derived(!href ? undefined : dimensionsMap[href]);
 
   const handleLoad = (event: Event) => {
     error = (event.currentTarget as HTMLImageElement | null)?.naturalWidth === 0;

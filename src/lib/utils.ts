@@ -2,12 +2,6 @@ export const login = "muspi_merol";
 
 export const repo = "blog";
 
-const nlarkCdn = "https://cdn.nlark.com/";
-
-export function toLocalNlark(body: string, base = "/nlark/") {
-  return body.replaceAll(nlarkCdn, base);
-}
-
 export function formatDate(dateString: string, language: string | undefined) {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {

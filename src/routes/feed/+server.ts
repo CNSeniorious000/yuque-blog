@@ -3,7 +3,6 @@ import type { RequestHandler } from "./$types";
 import { text } from "@sveltejs/kit";
 import { getPost } from "$lib/api/each";
 import { listPosts } from "$lib/api/list";
-import { toLocalNlark } from "$lib/utils";
 import { escape } from "$lib/xml";
 import { marked } from "marked";
 
@@ -13,7 +12,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
   const entries = (await Promise.all(articles.map(async ({ id, slug, title, summary, created_at, content_updated_at }) => {
     const { body } = await getPost(slug);
 
-    const content = marked.parse(toLocalNlark(body, `${origin}/nlark/`), { async: false });
+    const content = marked.parse(body, { async: false });
 
     return `
       <entry>
