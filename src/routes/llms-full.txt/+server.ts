@@ -6,7 +6,7 @@ import { loadPosts } from "$lib/api/store";
 import { formatDate, toLocalNlark } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ url: { origin }, request: { headers } }) => {
-  const language = headers.get("accept-language")?.split(",")[0];
+  const language = headers.get("accept-language");
 
   let blocks = [header.replace("{}", origin).trim()];
   const posts = [...(await loadPosts()).values()].sort((a, b) => (a.meta.content_updated_at < b.meta.content_updated_at ? 1 : -1));
