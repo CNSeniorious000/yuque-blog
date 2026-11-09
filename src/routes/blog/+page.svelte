@@ -14,7 +14,7 @@
 
   const { data }: Props = $props();
   // svelte-ignore state_referenced_locally
-  const { articles, total } = data.list!;
+  const articles = data.list!;
 </script>
 
 <div class="p-4 transition md:p-2 sm:p-8">
@@ -23,4 +23,4 @@
   {/each}
 </div>
 
-<Seo title="Muspi Merol's Blog" description={language.isChinese ? `共 ${total} 篇文章` : `${total} articles`} />
+<Seo title="Muspi Merol's Blog" description={language.isChinese ? `共 ${articles.length} 篇文章` : `${articles.length} articles`} />

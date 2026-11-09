@@ -1,8 +1,12 @@
-export const baseurl = "https://www.yuque.com";
+export const login = "muspi_merol";
 
-export const namespace = "muspi_merol/blog";
+export const repo = "blog";
 
-export const [login, repo] = namespace.split("/");
+const nlarkCdn = "https://cdn.nlark.com/";
+
+export function toLocalNlark(body: string, base = "/nlark/") {
+  return body.replaceAll(nlarkCdn, base);
+}
 
 export function formatDate(dateString: string, language: string | undefined) {
   const date = new Date(dateString);

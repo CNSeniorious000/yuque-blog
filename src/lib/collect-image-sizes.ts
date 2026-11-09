@@ -1,9 +1,13 @@
+import type { Post } from "./api/frontmatter";
 import type { CollectorUi } from "./collect-image-sizes-ui";
 
+import { isPostFile, postFromMarkdown, postsDir } from "./api/frontmatter";
+import { contentRepoName, fetchCorpus } from "./api/github";
 import { createCollectorUi } from "./collect-image-sizes-ui";
 import * as cheerio from "cheerio";
 import imageSize from "image-size";
-import { promises as fs } from "node:fs";
+import { marked } from "marked";
+import { existsSync, promises as fs } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
@@ -13,29 +17,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const OUTPUT_PATH = path.join(__dirname, "image-dimensions.json");
 
-const API_BASEURL = "https://yuque.com/api/v2";
-const NAMESPACE = "muspi_merol/blog";
+const CONTENT_DIR = process.env.CONTENT_DIR || path.resolve(__dirname, "../../../", contentRepoName, postsDir);
 const POST_CONCURRENCY = 5;
 const IMAGE_CONCURRENCY = 20;
 const IMAGE_REQUEST_TIMEOUT_MS = 20000;
 const IMAGE_REQUEST_RETRIES = 2;
 
-const headers = {
-  "User-Agent": "yuque-blog-bot",
-  "Accept": "application/json",
-  "X-Auth-Token": process.env.ACCESS_TOKEN || "",
-};
-
 const fetch = createFetch({ debug: false });
-
-interface PostSummary {
-  slug: string;
-  title?: string;
-}
-
-interface PostDetail {
-  body_html?: string;
-}
 
 interface ImageSizeResult {
   url: string;
@@ -112,8 +100,8 @@ function isRetryableStatus(status: number) {
   return status === 408 || status === 425 || status === 429 || status >= 500;
 }
 
-function extractImageUrls(html: string): string[] {
-  const $ = cheerio.load(html);
+function extractImageUrls(body: string): string[] {
+  const $ = cheerio.load(marked.parse(body, { async: false }));
   const imageUrls = new Set<string>();
 
   $("img").each((_, elem) => {
@@ -189,35 +177,21 @@ async function fetchImageSizeAttempt(url: string, signal: AbortSignal): Promise<
   return { url, size: null, error: lastError };
 }
 
-async function listPosts(ui: CollectorUi): Promise<PostSummary[]> {
+async function listPosts(ui: CollectorUi): Promise<Post[]> {
   try {
-    ui.appendLog("info", `Fetching docs from ${API_BASEURL}/repos/${NAMESPACE}/docs`);
-    const res = await fetch(`${API_BASEURL}/repos/${NAMESPACE}/docs`, { headers });
-
-    if (!res.ok) {
-      ui.appendLog("error", `Docs API failed: ${res.status} ${res.statusText}`);
-      return [];
+    if (existsSync(CONTENT_DIR)) {
+      ui.appendLog("info", `Reading docs from ${CONTENT_DIR}`);
+      const names = await fs.readdir(CONTENT_DIR);
+      // strict on purpose: a malformed local corpus must not overwrite the recorded sizes with a partial map
+      return await Promise.all(names.filter(isPostFile).map(async (name: string) => postFromMarkdown(name, await fs.readFile(path.join(CONTENT_DIR, name), "utf8"))));
     }
-
-    const data = await res.json() as { data?: PostSummary[] };
-    return data.data || [];
+    ui.appendLog("info", "No local content checkout, fetching posts from GitHub");
+    const { files } = await fetchCorpus(process.env.GITHUB_TOKEN);
+    return files.map(([name, text]) => postFromMarkdown(name, text));
   } catch (error) {
-    ui.appendLog("error", `Failed to fetch posts: ${toErrorMessage(error)}`);
-    return [];
-  }
-}
-
-async function getPost(slug: string): Promise<PostDetail | null> {
-  try {
-    const res = await fetch(`${API_BASEURL}/repos/${NAMESPACE}/docs/${slug}`, { headers });
-    if (!res.ok) {
-      return null;
-    }
-
-    const data = await res.json() as { data?: PostDetail };
-    return data.data || null;
-  } catch {
-    return null;
+    // abort instead of returning [] — an empty list would overwrite image-dimensions.json with {}
+    ui.appendLog("error", `Failed to read posts: ${toErrorMessage(error)}`);
+    throw error;
   }
 }
 
@@ -245,7 +219,7 @@ async function readDimensions(): Promise<Record<string, [number, number]>> {
 }
 
 async function collectImageSizes(
-  posts: PostSummary[],
+  posts: Post[],
   ui: CollectorUi,
   existingDimensions: Record<string, [number, number]>,
   postConcurrency = POST_CONCURRENCY,
@@ -253,7 +227,7 @@ async function collectImageSizes(
 ) {
   const dimensions: Record<string, [number, number]> = {};
   const seenImageUrls = new Set<string>();
-  const postQueue = new AsyncQueue<PostSummary>();
+  const postQueue = new AsyncQueue<Post>();
   const imageQueue = new AsyncQueue<string>();
   let postsProcessed = 0;
   let imagesProcessed = 0;
@@ -276,43 +250,38 @@ async function collectImageSizes(
         return;
       }
 
-      const postLabel = post.title || post.slug;
-      const fullPost = await getPost(post.slug);
-      if (!fullPost?.body_html) {
-        ui.appendLog("error", `${truncateMiddle(postLabel, 36)} body_html missing`);
-      } else {
-        const imageUrls = extractImageUrls(fullPost.body_html);
-        let cachedImageCount = 0;
-        let newImageCount = 0;
+      const postLabel = post.meta.title || post.meta.slug;
+      const imageUrls = extractImageUrls(post.body);
+      let cachedImageCount = 0;
+      let newImageCount = 0;
 
-        for (const imageUrl of imageUrls) {
-          if (seenImageUrls.has(imageUrl)) {
-            continue;
-          }
-
-          seenImageUrls.add(imageUrl);
-          const cachedSize = existingDimensions[imageUrl];
-          if (cachedSize) {
-            dimensions[imageUrl] = cachedSize;
-            imagesProcessed += 1;
-            successCount += 1;
-            cachedImageCount += 1;
-            continue;
-          }
-
-          imageQueue.push(imageUrl);
-          newImageCount += 1;
+      for (const imageUrl of imageUrls) {
+        if (seenImageUrls.has(imageUrl)) {
+          continue;
         }
 
-        if (newImageCount > 0 || cachedImageCount > 0) {
-          ui.appendLog("info", `${truncateMiddle(postLabel, 36)} ${newImageCount} new, ${cachedImageCount} cached`);
-          ui.setImageProgress({
-            processed: imagesProcessed,
-            total: seenImageUrls.size,
-            successCount,
-            failureCount,
-          });
+        seenImageUrls.add(imageUrl);
+        const cachedSize = existingDimensions[imageUrl];
+        if (cachedSize) {
+          dimensions[imageUrl] = cachedSize;
+          imagesProcessed += 1;
+          successCount += 1;
+          cachedImageCount += 1;
+          continue;
         }
+
+        imageQueue.push(imageUrl);
+        newImageCount += 1;
+      }
+
+      if (newImageCount > 0 || cachedImageCount > 0) {
+        ui.appendLog("info", `${truncateMiddle(postLabel, 36)} ${newImageCount} new, ${cachedImageCount} cached`);
+        ui.setImageProgress({
+          processed: imagesProcessed,
+          total: seenImageUrls.size,
+          successCount,
+          failureCount,
+        });
       }
 
       postsProcessed += 1;
