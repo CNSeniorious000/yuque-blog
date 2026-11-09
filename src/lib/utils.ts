@@ -8,6 +8,16 @@ export function toLocalNlark(body: string, base = "/nlark/") {
   return body.replaceAll(nlarkCdn, base);
 }
 
+export function llmsUrl(routeId: string | null, slug?: string) {
+  if (routeId === "/") {
+    return "/llms-full.txt";
+  }
+  if (routeId === "/blog/[slug]") {
+    return `/blog/${encodeURIComponent(slug ?? "")}/llms.txt`;
+  }
+  return "/llms.txt";
+}
+
 export function formatDate(dateString: string, language: string | undefined) {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {

@@ -1,8 +1,5 @@
 <script module>
-  import type { LayoutServerData } from "./$types";
-
   interface Props {
-    data: LayoutServerData;
     children?: import("svelte").Snippet;
   }
 </script>
@@ -15,16 +12,24 @@
 
   import { finishBar, startBar } from "../lib/progressFunction";
   import Progress from "./Progress.svelte";
+  import { browser } from "$app/environment";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { page } from "$app/state";
-  import { language } from "$lib/Chinese.svelte";
+  import { llmsUrl } from "$lib/utils";
   import { mode, ModeWatcher, setMode, systemPrefersMode, userPrefersMode } from "mode-watcher";
   import { untrack } from "svelte";
+  import { isAIBot } from "ua-parser-js/helpers";
 
-  const { data, children }: Props = $props();
+  const { children }: Props = $props();
 
-  // svelte-ignore state_referenced_locally
-  language.init(data.language);
+  const isBot = browser && isAIBot(navigator.userAgent);
+
+  // the ISR-cached HTML must stay request-independent, so the llms.txt redirect for AI crawlers runs client-side; re-checked on navigation because the root layout stays mounted across SPA routes
+  $effect(() => {
+    if (isBot) {
+      location.replace(llmsUrl(page.route.id, page.params.slug));
+    }
+  });
 
   beforeNavigate(({ willUnload }) => {
     !willUnload && startBar();
@@ -47,5 +52,5 @@
 
 <svelte:head>
   <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed" />
-  <link rel="alternate" type="text/markdown" title="LLM-friendly version of this page" href={page.route.id === "/blog/[slug]" ? `/blog/${page.params.slug}/llms.txt` : "/llms.txt"} />
+  <link rel="alternate" type="text/markdown" title="LLM-friendly version of this page" href={llmsUrl(page.route.id, page.params.slug)} />
 </svelte:head>

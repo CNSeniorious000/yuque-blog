@@ -1,14 +1,13 @@
 <script module>
-  import type { LayoutParentData, LayoutServerData } from "./$types";
+  import type { LayoutServerData } from "./$types";
 
   interface Props {
-    data: LayoutServerData & LayoutParentData;
+    data: LayoutServerData;
     children?: import("svelte").Snippet;
   }
 </script>
 
 <script lang="ts">
-  import { afterNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { postPath } from "$lib/api/frontmatter";
   import { contentRepo } from "$lib/api/github";
@@ -20,40 +19,29 @@
 
   const { data, children }: Props = $props();
 
-  let breadcrumb = $state<[string, string][]>()!;
-  let editUrl = $state<string>()!;
-  let leftBottom = $state<string>()!;
-  let rightTop = $state<string>()!;
-
-  function update() {
+  const header = $derived.by(() => {
     if (page.route.id === "/blog/[slug]") {
       const { slug } = page.params as { slug: string };
-      breadcrumb = [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]];
-      editUrl = `https://github.com/${contentRepo}/edit/main/${postPath(slug)}`;
-      const { title, updated_at } = data.article!;
-      leftBottom = title;
-      rightTop = (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language);
-    } else {
-      breadcrumb = [["/", login], ["/blog", repo]];
-      editUrl = `https://github.com/${contentRepo}`;
-      leftBottom = language.isChinese ? `共 ${data.list!.length} 篇文章` : `${data.list!.length} articles`;
-      rightTop = "";
+      return {
+        breadcrumb: [["/", login], ["/blog", repo], [`/blog/${slug}`, slug]] as [string, string][],
+        editUrl: `https://github.com/${contentRepo}/edit/main/${postPath(slug)}`,
+        leftBottom: data.article!.title,
+        rightTop: (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(data.article!.updated_at, language.locale),
+      };
     }
-  }
-
-  update();
-
-  afterNavigate(({ from }) => {
-    if (from?.route.id?.startsWith("/blog")) {
-      update(); // don't trigger twice if navigating from other routes
-    }
+    return {
+      breadcrumb: [["/", login], ["/blog", repo]] as [string, string][],
+      editUrl: `https://github.com/${contentRepo}`,
+      leftBottom: language.isChinese ? `共 ${data.list!.length} 篇文章` : `${data.list!.length} articles`,
+      rightTop: "",
+    };
   });
 </script>
 
-<Header {breadcrumb} {rightTop} />
+<Header breadcrumb={header.breadcrumb} rightTop={header.rightTop} />
 
 <Main>
   {@render children?.()}
 </Main>
 
-<Footer {editUrl} {leftBottom} />
+<Footer editUrl={header.editUrl} leftBottom={header.leftBottom} />

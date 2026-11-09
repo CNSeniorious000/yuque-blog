@@ -1,8 +1,8 @@
 <script module>
-  import type { LayoutParentData, LayoutServerData } from "../$types";
+  import type { LayoutServerData } from "../$types";
 
   interface Props {
-    data: LayoutServerData & LayoutParentData;
+    data: LayoutServerData;
   }
 </script>
 
@@ -22,7 +22,7 @@
 
   <Marked {title} {description} {markdown} />
 
-  <Seo {title} description={description || (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, data.language)} />
+  <Seo {title} description={description || (language.isChinese ? "最后更新于：" : "Updated on ") + formatDate(updated_at, language.locale)} />
 
-  <Giscus {id} lang={data.language} />
+  <Giscus {id} lang={language.locale} />
 {/if}

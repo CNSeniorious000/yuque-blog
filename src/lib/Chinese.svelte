@@ -1,14 +1,15 @@
 <script module lang="ts">
   import { browser } from "$app/environment";
 
+  const prefersChinese = browser && navigator.languages.join().includes("zh");
+
   export const language = $state({
     forceEnglish: null as boolean | null,
-    defaultIsChinese: false,
     get isChinese() {
-      return this.forceEnglish === null ? this.defaultIsChinese : !this.forceEnglish;
+      return this.forceEnglish === null ? prefersChinese : !this.forceEnglish;
     },
-    init(acceptLanguage: string | undefined) {
-      this.defaultIsChinese = Boolean(browser ? navigator.languages.join().includes("zh") : acceptLanguage?.includes("zh"));
+    get locale() {
+      return this.isChinese ? "zh-CN" : "en-US";
     },
   });
 </script>
