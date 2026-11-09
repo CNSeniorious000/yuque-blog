@@ -8,7 +8,6 @@
 </script>
 
 <script lang="ts">
-  import { afterNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { postPath } from "$lib/api/frontmatter";
   import { contentRepo } from "$lib/api/github";
@@ -42,12 +41,7 @@
   }
 
   update();
-
-  afterNavigate(({ from }) => {
-    if (from?.route.id?.startsWith("/blog")) {
-      update(); // don't trigger twice if navigating from other routes
-    }
-  });
+  $effect(update); // recomputes the header when the visitor switches language
 </script>
 
 <Header {breadcrumb} {rightTop} />

@@ -17,12 +17,11 @@
   import { page } from "$app/state";
   import { language } from "$lib/Chinese.svelte";
   import { mode, ModeWatcher, setMode, systemPrefersMode, userPrefersMode } from "mode-watcher";
-  import { isAIBot } from "ua-parser-js/helpers";
   import { untrack } from "svelte";
+  import { isAIBot } from "ua-parser-js/helpers";
 
   const { children }: Props = $props();
 
-  // svelte-ignore state_referenced_locally
   language.init();
 
   // the ISR-cached HTML must stay request-independent, so the llms.txt redirect for AI crawlers runs client-side
