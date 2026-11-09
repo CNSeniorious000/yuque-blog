@@ -23,5 +23,3 @@ export const GET: RequestHandler = async ({ url: { origin }, request: { headers 
     "Content-Type": "text/markdown; charset=utf-8",
   } });
 };
-
-export const config = { isr: { expiration: 10 } };
