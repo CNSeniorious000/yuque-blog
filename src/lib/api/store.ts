@@ -10,6 +10,15 @@ let snapshot: { posts: Map<string, Post>; freshUntil: number; oid: string } | un
 let failure: { until: number; error: unknown } | undefined; // shared so a cold outage costs one fetch per window, not one fetch per request
 let refreshing: Promise<Map<string, Post>> | undefined;
 
+export async function lookupPost(slug: string): Promise<Post | undefined> {
+  const post = (await loadPosts()).get(slug);
+  if (!post && failure && Date.now() < failure.until) {
+    // the serving snapshot may predate a newer post — surface the refresh failure instead of claiming absence
+    throw failure.error;
+  }
+  return post;
+}
+
 export async function loadPosts(): Promise<Map<string, Post>> {
   const now = Date.now();
   if (snapshot && (now < snapshot.freshUntil || now < (failure?.until ?? 0))) {
