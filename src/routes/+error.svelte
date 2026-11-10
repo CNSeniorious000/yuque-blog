@@ -7,6 +7,7 @@
 
 <div class="grid h-screen w-full place-items-center">
   <main class="flex flex-row items-center">
+    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
     <a class="group flex flex-row items-center gap-1.5" href="/">
       <Icon icon={arrowBack} class="op-30 group-not-hover:op-0" />
       <img class="aspect-1 w-8" src="/svelte-lark.svg" alt="logo" />

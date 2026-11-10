@@ -50,6 +50,7 @@
     </div>
 
     <div class="flex flex-row gap-3 md:(absolute bottom-0 left-0) <md:mt-8">
+      <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
       <a href="/blog"><code>/blog</code> 碎碎念</a>
       <a href="mailto:me@promplate.dev"><code>@email</code> 联系</a>
     </div>

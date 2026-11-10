@@ -12,6 +12,7 @@
   const { word = "", config = { y: 10, duration: 500 }, interval = 50 }: Props = $props();
 </script>
 
+<!-- eslint-disable-next-line svelte/require-each-key -->
 {#each word as letter, index}
   <span in:fly|global={{ ...config, opacity: 0, delay: interval * index }} out:fade|global={config}>{letter}</span>
 {/each}
