@@ -49,7 +49,7 @@ async function revalidate(): Promise<Map<string, Post>> {
   } catch (error) {
     // an outage keeps the last snapshot serving; with nothing to fall back on, fail fast within the window
     failure = { until: Date.now() + retryDelay, error };
-    console.error("Failed to refresh blog posts", { error, snapshotOid: snapshot?.oid, staleForMs: snapshot ? Date.now() - snapshot.freshUntil : undefined });
+    console.error("Failed to refresh blog posts", { error: error instanceof Error ? { message: error.message, stack: error.stack } : error, snapshotOid: snapshot?.oid, staleForMs: snapshot ? Date.now() - snapshot.freshUntil : undefined });
     return snapshot?.posts ?? Promise.reject(error);
   }
 }
