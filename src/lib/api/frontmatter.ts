@@ -64,7 +64,7 @@ export function postFromMarkdown(fileName: string, raw: string): Post {
 }
 
 // one malformed file must not take down the rest of the corpus
-export function postsFromFiles(files: Iterable<readonly [string, string]>): Post[] {
+export function postsFromFiles(files: Iterable<readonly [string, string]>, onError?: (error: Error) => void): Post[] {
   const posts: Post[] = [];
   for (const [name, text] of files) {
     if (!isPostFile(name)) {
@@ -74,6 +74,7 @@ export function postsFromFiles(files: Iterable<readonly [string, string]>): Post
       posts.push(postFromMarkdown(name, text));
     } catch (error) {
       console.error(`Skipping ${name}: ${error}`);
+      onError?.(new Error(`Failed to parse ${name}`, { cause: error }));
     }
   }
   return posts;

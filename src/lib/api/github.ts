@@ -57,11 +57,12 @@ export async function fetchCorpus(token: string | undefined): Promise<{ oid: str
   return { oid, files };
 }
 
-export async function fetchPostsFromGitHub(token: string | undefined): Promise<{ oid: string; posts: Map<string, Post> }> {
+export async function fetchPostsFromGitHub(token: string | undefined): Promise<{ oid: string; posts: Map<string, Post>; parseError?: AggregateError }> {
   const { oid, files } = await fetchCorpus(token);
   const posts = new Map<string, Post>();
-  for (const post of postsFromFiles(files)) {
+  const errors: Error[] = [];
+  for (const post of postsFromFiles(files, error => errors.push(error))) {
     posts.set(post.meta.slug, post);
   }
-  return { oid, posts };
+  return { oid, posts, parseError: errors.length ? new AggregateError(errors, "Some blog posts could not be parsed") : undefined };
 }

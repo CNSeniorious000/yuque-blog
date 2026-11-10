@@ -6,7 +6,7 @@ import { GITHUB_TOKEN } from "$app/env/private";
 // one GraphQL call loads every doc; a HEAD probe extends the snapshot cheaply when upstream is unchanged
 const ttl = 60_000;
 const retryDelay = 30_000;
-let snapshot: { posts: Map<string, Post>; freshUntil: number; oid: string } | undefined;
+let snapshot: { posts: Map<string, Post>; freshUntil: number; oid: string; parseError?: AggregateError } | undefined;
 let failure: { until: number; error: unknown } | undefined; // shared so a cold outage costs one fetch per window, not one fetch per request
 let refreshing: Promise<Map<string, Post>> | undefined;
 
@@ -15,6 +15,10 @@ export async function lookupPost(slug: string): Promise<Post | undefined> {
   if (!post && failure && Date.now() < failure.until) {
     // the serving snapshot may predate a newer post — surface the refresh failure instead of claiming absence
     throw failure.error;
+  }
+  if (!post && snapshot?.parseError) {
+    // 损坏文件可能声明任意 slug，只有完整快照才能证明文章不存在。
+    throw snapshot.parseError;
   }
   return post;
 }
@@ -42,8 +46,8 @@ async function revalidate(): Promise<Map<string, Post>> {
       return snapshot.posts;
     }
     // cold start goes straight to the corpus fetch; the probe only pays off once a snapshot exists
-    const { oid, posts } = await fetchPostsFromGitHub(GITHUB_TOKEN);
-    snapshot = { posts, oid, freshUntil: Date.now() + ttl };
+    const { oid, posts, parseError } = await fetchPostsFromGitHub(GITHUB_TOKEN);
+    snapshot = { posts, oid, parseError, freshUntil: Date.now() + ttl };
     failure = undefined;
     return posts;
   } catch (error) {

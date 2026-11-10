@@ -169,3 +169,32 @@ test("distinguishes a missing slug during a stale outage from a confirmed absenc
   expect(fetchHeadOid).toHaveBeenCalledTimes(2);
   expect(fetchPostsFromGitHub).toHaveBeenCalledTimes(1);
 });
+
+test("keeps partial snapshots usable without claiming missing slugs are absent", async () => {
+  const parseError = new AggregateError([new Error("invalid front matter")], "partial corpus");
+  fetchPostsFromGitHub.mockResolvedValueOnce({ oid: "original", posts: originalPosts, parseError });
+  expect(await lookupPost("existing")).toBe(originalPosts.get("existing"));
+  await expect(lookupPost("missing")).rejects.toBe(parseError);
+  now += 60_000;
+  await expect(lookupPost("missing")).rejects.toBe(parseError);
+  expect(fetchPostsFromGitHub).toHaveBeenCalledTimes(1);
+
+  now += 60_000;
+  const outage = new Error("upstream unavailable");
+  fetchHeadOid.mockRejectedValueOnce(outage);
+  await expect(lookupPost("missing")).rejects.toBe(outage);
+  expect(await lookupPost("existing")).toBe(originalPosts.get("existing"));
+  now += 30_000;
+  await expect(lookupPost("missing")).rejects.toBe(parseError);
+});
+
+test.each([originalPosts, new Map()])("clears parse errors only after a complete replacement snapshot (%#)", async (posts) => {
+  const parseError = new AggregateError([], "partial corpus");
+  fetchPostsFromGitHub.mockResolvedValueOnce({ oid: "original", posts: originalPosts, parseError });
+  await expect(lookupPost("missing")).rejects.toBe(parseError);
+  now += 60_000;
+  fetchHeadOid.mockResolvedValue("fixed");
+  fetchPostsFromGitHub.mockResolvedValueOnce({ oid: "fixed", posts });
+  expect(await lookupPost("missing")).toBeUndefined();
+  expect(await loadPosts()).toBe(posts);
+});
