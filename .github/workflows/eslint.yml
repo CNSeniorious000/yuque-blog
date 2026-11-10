@@ -11,6 +11,8 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - name: Install dependencies
         run: bun install
+      - name: Run Tests
+        run: bun test
       - name: Run Svelte Check
         run: bun check
       - name: Run ESLint

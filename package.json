@@ -10,6 +10,7 @@
     "dev": "vite dev",
     "fix": "eslint . --fix",
     "lint": "eslint .",
+    "test": "bun test",
     "build": "vite build",
     "collect": "bun run src/lib/collect-image-sizes.ts",
     "preview": "vite preview",
