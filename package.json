@@ -25,7 +25,7 @@
     "@promplate/pattern": "^0.0.3",
     "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/adapter-netlify": "6",
-    "@sveltejs/adapter-vercel": "6",
+    "@sveltejs/adapter-vercel": "7",
     "@sveltejs/kit": "^2.17.2",
     "@sveltejs/vite-plugin-svelte": "^6.0.0",
     "@tmcp/adapter-valibot": "^0.1.5",
