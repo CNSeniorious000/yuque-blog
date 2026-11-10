@@ -13,6 +13,7 @@
 
 <WithTooltip>
   {#snippet children({ props })}
+    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
     <a {href} {...props}>{@render children_render?.()}</a>
   {/snippet}
   {#snippet tips()}

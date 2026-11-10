@@ -28,6 +28,7 @@
     {hostname}
   </span>
   {#if segments.length}
+    <!-- eslint-disable-next-line svelte/require-each-key -->
     {#each segments as segment, index}
       <span class="op-30">
         /
@@ -38,6 +39,7 @@
     {/each}
   {/if}
   {#if entries.length}
+    <!-- eslint-disable-next-line svelte/require-each-key -->
     {#each entries as [k, v], i}
       <span class="op-30">
         {i ? "&" : "?"}

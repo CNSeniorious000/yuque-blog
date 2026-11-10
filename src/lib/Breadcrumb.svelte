@@ -37,6 +37,7 @@
 
 {#each breadcrumb as [href, title], index (href)}
   <li class:z-1={ready} class="flex gap-1.5">
+    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
     <a in:fade={{ delay: 150, duration: 500 }} out:fade {href} class="ws-nowrap transition hover:text-teal-600 dark:hover:text-teal-400">
       {title}
     </a>

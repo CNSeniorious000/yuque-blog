@@ -11,9 +11,11 @@
 {#if title}
   <WithTooltip tips={title}>
     {#snippet children({ props })}
+      <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
       <a {href} {...props}>{@render children_render?.()}</a>
     {/snippet}
   </WithTooltip>
 {:else}
+  <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
   <a {href}>{@render children?.()}</a>
 {/if}
