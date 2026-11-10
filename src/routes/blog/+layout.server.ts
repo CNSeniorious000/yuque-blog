@@ -1,8 +1,8 @@
 import type { LayoutServerLoad } from "./$types";
 
-import { getPost } from "$lib/api/each.js";
-import { listPosts } from "$lib/api/list.js";
-import { toLocalNlark } from "$lib/utils";
+import { getPost } from "#lib/api/each.js";
+import { listPosts } from "#lib/api/list.js";
+import { toLocalNlark } from "#lib/utils.js";
 
 export const load = (async ({ route: { id }, params: { slug } }) => {
   if (id === "/blog") {

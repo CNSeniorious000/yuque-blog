@@ -3,14 +3,16 @@ import type { RequestHandler } from "./$types";
 import header from "../llms.txt/header.md?raw";
 import { ValibotJsonSchemaAdapter } from "@tmcp/adapter-valibot";
 import { HttpTransport } from "@tmcp/transport-http";
-import { getPost } from "$lib/api/each";
-import { renderFrontmatter } from "$lib/api/frontmatter";
-import { listPosts } from "$lib/api/list";
-import { searchPosts } from "$lib/api/search";
-import { login, repo } from "$lib/utils";
+import { getPost } from "#lib/api/each.js";
+import { renderFrontmatter } from "#lib/api/frontmatter.js";
+import { listPosts } from "#lib/api/list.js";
+import { searchPosts } from "#lib/api/search.js";
+import { login, repo } from "#lib/utils.js";
 import { McpServer } from "tmcp";
 import * as v from "valibot";
 
+// the form-CSRF gate is compiled out (vite.config.js `csrf.trustedOrigins`) because MCP's terminateSession()
+// sends a bodyless DELETE with no Origin — re-enable it before adding any cookie-authenticated mutation
 const BASE_URI = `${login.replaceAll("_", "-")}://${repo}`;
 const serverDescription = header.match(/^> (.+)$/m)?.[1]?.replace(/\[(.*?)\]\([^)]+\)/g, "$1").replace(/\[\^[^\]]+\]/g, "").trim() ?? "I am Muspi Merol.";
 

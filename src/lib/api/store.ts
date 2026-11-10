@@ -1,7 +1,7 @@
 import type { Post } from "./frontmatter";
 
 import { fetchHeadOid, fetchPostsFromGitHub } from "./github";
-import { env } from "$env/dynamic/private";
+import { GITHUB_TOKEN } from "$app/env/private";
 
 // one GraphQL call loads every doc; a HEAD probe extends the snapshot cheaply when upstream is unchanged
 const ttl = 60_000;
@@ -26,15 +26,14 @@ export async function loadPosts(): Promise<Map<string, Post>> {
 
 async function revalidate(): Promise<Map<string, Post>> {
   try {
-    const token = env.GITHUB_TOKEN;
-    if (snapshot && (await fetchHeadOid(token)) === snapshot.oid) {
+    if (snapshot && (await fetchHeadOid(GITHUB_TOKEN)) === snapshot.oid) {
       // upstream unchanged — extend the snapshot instead of re-downloading the corpus
       snapshot = { ...snapshot, freshUntil: Date.now() + ttl };
       failure = undefined;
       return snapshot.posts;
     }
     // cold start goes straight to the corpus fetch; the probe only pays off once a snapshot exists
-    const { oid, posts } = await fetchPostsFromGitHub(token);
+    const { oid, posts } = await fetchPostsFromGitHub(GITHUB_TOKEN);
     snapshot = { posts, oid, freshUntil: Date.now() + ttl };
     failure = undefined;
     return posts;

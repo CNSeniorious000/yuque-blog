@@ -1,10 +1,10 @@
 <script>
+  import GitHub from "./GitHub.svelte";
   import Inline from "./InlineMarkdown.svelte";
+  import LanguageSwitch from "./LanguageSwitch.svelte";
   import { TokenSquare } from "@promplate/pattern";
-  import { language } from "$lib/Chinese.svelte";
-  import GitHub from "$lib/ui/GitHub.svelte";
-  import LanguageSwitch from "$lib/ui/LanguageSwitch.svelte";
-  import WithTooltip from "$lib/ux/WithTooltip.svelte";
+  import { language } from "#lib/Chinese.svelte";
+  import WithTooltip from "#lib/ux/WithTooltip.svelte";
 
   const chinese = $derived(language.isChinese);
 </script>

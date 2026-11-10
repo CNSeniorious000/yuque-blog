@@ -1,9 +1,8 @@
 import type { RequestHandler } from "./$types";
 
 import header from "../llms.txt/header.md?raw";
-import { text } from "@sveltejs/kit";
-import { loadPosts } from "$lib/api/store";
-import { formatDate, toLocalNlark } from "$lib/utils";
+import { loadPosts } from "#lib/api/store.js";
+import { formatDate, markdownResponse, toLocalNlark } from "#lib/utils.js";
 
 export const GET: RequestHandler = async ({ url: { origin }, request: { headers } }) => {
   const language = headers.get("accept-language");
@@ -20,7 +19,5 @@ export const GET: RequestHandler = async ({ url: { origin }, request: { headers 
 
   const markdownOutput = blocks.join("\n\n");
 
-  return text(markdownOutput, { headers: {
-    "Content-Type": "text/markdown; charset=utf-8",
-  } });
+  return markdownResponse(markdownOutput);
 };

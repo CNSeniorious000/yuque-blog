@@ -10,14 +10,14 @@
 <script lang="ts">
   import "@unocss/reset/tailwind.css";
   import "uno.css";
-  import "$lib/global.css";
+  import "#lib/global.css";
   import "@fontsource-variable/fira-code";
 
-  import { finishBar, startBar } from "../lib/progressFunction";
   import Progress from "./Progress.svelte";
+  import { language } from "#lib/Chinese.svelte";
+  import { finishBar, startBar } from "#lib/progressFunction.js";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { page } from "$app/state";
-  import { language } from "$lib/Chinese.svelte";
   import { mode, ModeWatcher, setMode, systemPrefersMode, userPrefersMode } from "mode-watcher";
   import { untrack } from "svelte";
 

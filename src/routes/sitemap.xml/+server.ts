@@ -1,8 +1,8 @@
 import type { RequestHandler } from "./$types";
 
-import { text } from "@sveltejs/kit";
-import { listPosts } from "$lib/api/list";
-import { escape } from "$lib/xml";
+import { listPosts } from "#lib/api/list.js";
+import { xmlResponse } from "#lib/utils.js";
+import { escape } from "#lib/xml.js";
 
 export const GET: RequestHandler = async ({ url: { origin } }) => {
   const articles = await listPosts();
@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
       <priority>0.8</priority>
     </url>`).join("\n");
 
-  return text(`
+  return xmlResponse(`
     <?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
       <url>
@@ -30,5 +30,5 @@ export const GET: RequestHandler = async ({ url: { origin } }) => {
       </url>
       ${entries}
     </urlset>
-  `.trim(), { headers: { "Content-Type": "application/xml; charset=utf-8" } });
+  `.trim());
 };

@@ -5,8 +5,8 @@
 <script lang="ts">
   import pulse from "@iconify-icons/svg-spinners/pulse-multiple";
   import Icon from "@iconify/svelte";
-  import { progressStore } from "$lib/store";
-  import Typewriter from "$lib/Typewriter.svelte";
+  import { progressStore } from "#lib/store.js";
+  import Typewriter from "#lib/Typewriter.svelte";
   import { untrack } from "svelte";
 
   let blur = $state(false); // delay 1s after loading turing true
