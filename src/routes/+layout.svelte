@@ -14,7 +14,7 @@
   import "@fontsource-variable/fira-code";
 
   import Progress from "./Progress.svelte";
-  import { language } from "#lib/Chinese.svelte";
+  import { createLanguage, setLanguage } from "#lib/language.svelte.js";
   import { finishBar, startBar } from "#lib/progressFunction.js";
   import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { page } from "$app/state";
@@ -23,8 +23,9 @@
 
   const { data, children }: Props = $props();
 
+  // Use the serialized server preference for hydration; each layout owns its language state.
   // svelte-ignore state_referenced_locally
-  language.init(data.language);
+  setLanguage(createLanguage(data.language));
 
   beforeNavigate(({ willUnload }) => {
     !willUnload && startBar();

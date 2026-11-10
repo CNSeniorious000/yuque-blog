@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { language as lang } from "#lib/Chinese.svelte";
+  import { getLanguage } from "#lib/language.svelte.js";
   import { formatDate } from "#lib/utils.js";
 
-  const { slug, title, word_count, lastUpdate, language } = $props();
+  const lang = getLanguage();
+  const { slug, title, word_count, lastUpdate } = $props();
 </script>
 
 <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
@@ -12,7 +13,7 @@
     <p class="text-xs text-zinc-900/30 dark:text-zinc-200/30">{word_count} {lang.isChinese ? "字" : "words"}</p>
   </div>
   <div class="date hidden h-full items-center rounded-md px-2 text-sm text-zinc-400 transition duration-50 sm:flex dark:text-zinc-600">
-    <div>{formatDate(lastUpdate, language)}</div>
+    <div>{formatDate(lastUpdate, lang.locale)}</div>
   </div>
 </a>
 

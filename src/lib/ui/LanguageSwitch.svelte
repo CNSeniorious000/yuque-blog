@@ -1,5 +1,7 @@
 <script>
-  import { language } from "#lib/Chinese.svelte";
+  import { getLanguage } from "#lib/language.svelte.js";
+
+  const language = getLanguage();
 </script>
 
 <button class="ml-auto h-6 w-10 select-none rounded-full text-xs text-teal-7 font-bold ring-(1.2 teal-7/30 inset) transition-shadow dark:text-zinc-2 dark:ring-zinc-1/30" onclick={() => language.forceEnglish = language.isChinese}>

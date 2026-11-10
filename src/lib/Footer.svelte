@@ -6,8 +6,9 @@
 </script>
 
 <script lang="ts">
-  import { language } from "./Chinese.svelte";
+  import { getLanguage } from "./language.svelte";
 
+  const language = getLanguage();
   const { editUrl, leftBottom }: Props = $props();
 </script>
 
