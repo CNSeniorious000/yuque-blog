@@ -17,6 +17,10 @@ export default antfu({
     "sort-imports": "off",
     "import/order": "off",
     "svelte/no-at-html-tags": "off",
+    // Url/Link render arbitrary markdown hrefs — resolve() would mangle external URLs
+    "svelte/no-navigation-without-resolve": "off",
+    // each blocks here iterate static lists with no natural unique keys, and index keys are worse
+    "svelte/require-each-key": "off",
     "style/brace-style": ["error", "1tbs"],
   },
 });
