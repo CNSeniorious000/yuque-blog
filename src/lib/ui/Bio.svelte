@@ -3,9 +3,10 @@
   import Inline from "./InlineMarkdown.svelte";
   import LanguageSwitch from "./LanguageSwitch.svelte";
   import { TokenSquare } from "@promplate/pattern";
-  import { language } from "#lib/Chinese.svelte";
+  import { getLanguage } from "#lib/language.svelte.js";
   import WithTooltip from "#lib/ux/WithTooltip.svelte";
 
+  const language = getLanguage();
   const chinese = $derived(language.isChinese);
 </script>
 

@@ -8,8 +8,9 @@
 <script lang="ts">
   import Link from "../Link.svelte";
   import SvelteMarkdown from "@humanspeak/svelte-markdown";
-  import { language } from "#lib/Chinese.svelte";
+  import { getLanguage } from "#lib/language.svelte.js";
 
+  const language = getLanguage();
   const { markdown, omitLeftMargin = false }: Props = $props();
 </script>
 

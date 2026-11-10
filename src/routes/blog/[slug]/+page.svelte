@@ -7,12 +7,13 @@
 </script>
 
 <script lang="ts">
-  import { language } from "#lib/Chinese.svelte";
+  import { getLanguage } from "#lib/language.svelte.js";
   import Marked from "#lib/Marked.svelte";
   import Seo from "#lib/Seo.svelte";
   import Giscus from "#lib/ui/Giscus.svelte";
-  import { pickLocale, updatedLabel } from "#lib/utils.js";
+  import { updatedLabel } from "#lib/utils.js";
 
+  const language = getLanguage();
   const { data }: Props = $props();
 </script>
 
@@ -22,7 +23,7 @@
 
   <Marked {title} {description} {markdown} />
 
-  <Seo {title} description={description || updatedLabel(updated_at, data.language, language.isChinese)} />
+  <Seo {title} description={description || updatedLabel(updated_at, language.locale, language.isChinese)} />
 
-  <Giscus {id} lang={pickLocale(data.language)} />
+  <Giscus {id} lang={language.locale} />
 {/if}
