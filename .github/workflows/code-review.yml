@@ -17,10 +17,6 @@ permissions:
   actions: write
   id-token: write
 
-concurrency:
-  # Comments and reviews from bots cannot steer a review, yet their runs would evict a review that waits for a runner when queued after it.
-  group: code-review-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}${{ github.event.sender.type == 'Bot' && github.event_name != 'pull_request_target' && format('-{0}', github.run_id) || '' }}
-
 jobs:
   review:
     # Same-repository PRs, plus pushes to master so merged work is reviewed too; the App's own PRs wait until they leave draft.
@@ -30,11 +26,9 @@ jobs:
       || (github.event.pull_request.state == 'open' && github.event.pull_request.head.repo.full_name == github.repository
           && (github.event.action != 'ready_for_review' || github.event.pull_request.user.type == 'Bot')
           && (github.event_name == 'pull_request_target' || github.event.sender.type != 'Bot'))
-    cache-mode: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: promplate/code-review@main
-        with:
-          codex-config: ${{ secrets.CODEX_CONFIG }}
-          codex-auth: ${{ secrets.CODEX_AUTH }}
-          service-tier: ultrafast
+    uses: promplate/code-review/.github/workflows/review.yml@main
+    with:
+      service-tier: ultrafast
+    secrets:
+      codex-config: ${{ secrets.CODEX_CONFIG }}
+      codex-auth: ${{ secrets.CODEX_AUTH }}
