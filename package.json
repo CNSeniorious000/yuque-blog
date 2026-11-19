@@ -54,6 +54,7 @@
     "@sveltejs/kit": "^3",
     "@types/node": "^26.6.6",
     "@unocss/eslint-plugin": "^66.0.0",
+    "adapter-cloudflare-pages": "npm:@sveltejs/adapter-cloudflare@^8.0.0",
     "eslint": "^10.0.0",
     "eslint-plugin-format": "^2.0.0",
     "eslint-plugin-svelte": "^3.0.0",
